@@ -16,70 +16,96 @@
       padding: 1rem;
     }
 
-    h1 { font-size: 1.3rem; color: #a78bfa; margin-bottom: 1.5rem; text-align: center; }
+    h1 { font-size: 1.1rem; color: #a78bfa; margin-bottom: 1.2rem; text-align: center; letter-spacing: 0.08em; }
 
     #card {
       background: #16213e; border: 2px solid #a78bfa;
       border-radius: 1.5rem; width: 100%; max-width: 420px;
-      padding: 2rem 1.5rem; text-align: center;
+      padding: 1.5rem 1.5rem 2rem;
       box-shadow: 0 8px 40px rgba(167,139,250,0.15);
     }
 
     .screen { display: none; }
     .screen.active { display: block; }
 
-    #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1rem; }
+    /* ── Start ── */
+    #screen-start { text-align: center; }
+    #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1.2rem; }
+
+    /* ── Quiz topbar: progress left, timer right ── */
+    #quiz-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
 
     #progress {
-      font-size: 0.78rem; color: #6b7280;
-      text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.06em;
-    }
-    #word {
-      font-size: 2rem; font-weight: 700;
-      color: #f9fafb; margin-bottom: 1.2rem; min-height: 2.5rem;
+      font-size: 0.72rem; color: #6b7280;
+      text-transform: uppercase; letter-spacing: 0.07em;
     }
 
-    #timer-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
     #timer-display {
-      width: 60px; height: 60px; border-radius: 50%;
-      border: 5px solid #a78bfa;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 3px solid #a78bfa;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; font-weight: 700; color: #a78bfa;
+      font-size: 0.95rem; font-weight: 700; color: #a78bfa;
       transition: border-color 0.3s, color 0.3s;
+      flex-shrink: 0;
     }
     #timer-display.warn   { border-color: #fbbf24; color: #fbbf24; }
     #timer-display.urgent { border-color: #f87171; color: #f87171; }
-    #timer-display.grace  { border-color: #374151; color: #6b7280; font-size: 1rem; }
+    #timer-display.grace  { border-color: #374151; color: #6b7280; font-size: 0.7rem; }
 
-    #mic-status { font-size: 0.8rem; margin-bottom: 0.8rem; min-height: 1.1em; }
+    /* ── Dots ── */
+    #dots { display: flex; gap: 0.4rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #374151; transition: background 0.3s; }
+    .dot.done    { background: #34d399; }
+    .dot.current { background: #a78bfa; }
 
-    #input-row { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
+    /* ── The big word ── */
+    #word {
+      font-size: 2.6rem; font-weight: 800;
+      color: #f9fafb; text-align: center;
+      margin: 1.8rem 0 1.6rem;
+      line-height: 1.15;
+      min-height: 4rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Mic & input ── */
+    #mic-status {
+      font-size: 0.72rem; color: #6b7280;
+      text-align: center; margin-bottom: 0.7rem; min-height: 1em;
+    }
+
     #answer-input {
-      flex: 1; background: #0f172a;
+      width: 100%; background: #0f172a;
       border: 1.5px solid #374151; border-radius: 0.6rem;
-      color: #f9fafb; font-size: 1rem; padding: 0.65rem 0.8rem; outline: none;
+      color: #f9fafb; font-size: 1.05rem;
+      padding: 0.7rem 1rem; outline: none;
+      margin-bottom: 0.6rem;
     }
     #answer-input:focus { border-color: #a78bfa; }
     #answer-input::placeholder { color: #4b5563; }
-    #send-btn {
-      background: #7c3aed; border: none; border-radius: 0.6rem;
-      color: white; font-size: 0.9rem; font-weight: 700;
-      padding: 0 1.1rem; cursor: pointer; -webkit-appearance: none;
-    }
 
-    #heard    { font-size: 0.85rem; color: #9ca3af; min-height: 1.1em; font-style: italic; margin-bottom: 0.4rem; }
-    #feedback { font-size: 1.05rem; font-weight: 700; min-height: 1.3em; }
+    #heard    { font-size: 0.82rem; color: #9ca3af; min-height: 1.1em; font-style: italic; text-align: center; margin-bottom: 0.4rem; }
+    #feedback { font-size: 1.1rem; font-weight: 700; min-height: 1.3em; text-align: center; }
     .correct  { color: #34d399; }
     .wrong    { color: #f87171; }
 
+    /* ── Shared button ── */
     .btn {
-      display: inline-block; background: #a78bfa; color: white; border: none;
-      border-radius: 0.75rem; padding: 0.8rem 2rem;
+      display: block; width: 100%;
+      background: #a78bfa; color: white; border: none;
+      border-radius: 0.75rem; padding: 0.85rem;
       font-size: 1rem; font-weight: 700; cursor: pointer;
       margin-top: 0.5rem; -webkit-appearance: none;
+      text-align: center;
     }
 
-    #result-box { text-align: left; margin-bottom: 1rem; }
+    /* ── Results ── */
+    #result-box { margin-bottom: 1rem; }
     #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
     .ri {
       display: flex; justify-content: space-between; align-items: center;
@@ -87,54 +113,68 @@
     }
     .ri.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
     .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
-    .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; }
+    .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; white-space: nowrap; }
 
-    #dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.1rem; flex-wrap: wrap; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; background: #374151; transition: background 0.3s; }
-    .dot.done    { background: #34d399; }
-    .dot.current { background: #a78bfa; }
-
-    #joker-row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
-    #joker-btn {
-      background: #0f172a; border: 1.5px solid #fbbf24; border-radius: 2rem;
-      color: #fbbf24; font-size: 0.85rem; font-weight: 700;
-      padding: 0.35rem 0.9rem; cursor: pointer; -webkit-appearance: none;
-      transition: background 0.2s, opacity 0.2s;
+    /* ── Joker FAB (fixed bottom-right) ── */
+    #joker-fab {
+      position: fixed;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: #fbbf24;
+      border: none;
+      cursor: pointer;
+      display: none;               /* hidden until quiz starts */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: 0 6px 24px rgba(251,191,36,0.35);
+      transition: opacity 0.2s, transform 0.15s, background 0.2s;
+      -webkit-appearance: none;
+      z-index: 100;
     }
-    #joker-btn:active { background: #1e293b; }
-    #joker-btn:disabled { opacity: 0.3; cursor: default; border-color: #374151; color: #6b7280; }
-    #joker-pips { display: flex; gap: 0.35rem; align-items: center; }
-    .pip { width: 10px; height: 10px; border-radius: 50%; background: #fbbf24; transition: background 0.3s; }
-    .pip.used { background: #374151; }
+    #joker-fab.visible  { display: flex; }
+    #joker-fab:active   { transform: scale(0.93); }
+    #joker-fab:disabled {
+      background: #374151;
+      box-shadow: none;
+      cursor: default;
+      opacity: 0.5;
+    }
+
+    #joker-label {
+      font-size: 1rem; font-weight: 800;
+      color: #1a1a2e; line-height: 1;
+    }
+    #joker-pips { display: flex; gap: 3px; }
+    .pip { width: 7px; height: 7px; border-radius: 50%; background: rgba(26,26,46,0.5); }
+    .pip.active { background: rgba(26,26,46,0.85); }
   </style>
 </head>
 <body>
-  <h1>&#127470;&#127481; Impara Italiano</h1>
+  <h1>Impara Italiano</h1>
   <div id="card">
 
     <div id="screen-start" class="screen active">
-      <p>5 Vokabeln auf Deutsch &mdash; sprich oder tippe die italienische &Uuml;bersetzung.<br>
+      <p>5 Vokabeln auf Deutsch — sprich oder tippe<br>
+         die italienische Übersetzung.<br>
          Du hast jeweils <strong style="color:#a78bfa">5 Sekunden</strong>.<br>
-         Falsche Antworten werden wiederholt, bis alle richtig sind.</p>
-      <br>
+         Falsche Antworten werden wiederholt.</p>
       <button class="btn" id="start-btn">Starten</button>
     </div>
 
     <div id="screen-quiz" class="screen">
-      <div id="progress"></div>
+      <div id="quiz-topbar">
+        <div id="progress"></div>
+        <div id="timer-display">5</div>
+      </div>
       <div id="dots"></div>
       <div id="word"></div>
-      <div id="timer-wrap"><div id="timer-display">5</div></div>
-      <div id="joker-row">
-        <button id="joker-btn">+3s</button>
-        <div id="joker-pips"></div>
-      </div>
       <div id="mic-status"></div>
-      <div id="input-row">
-        <input id="answer-input" type="text" placeholder="Italiano&hellip;"
-               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-        <button id="send-btn">OK</button>
-      </div>
+      <input id="answer-input" type="text" placeholder="Italiano …"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
       <div id="heard"></div>
       <div id="feedback"></div>
     </div>
@@ -145,6 +185,13 @@
     </div>
 
   </div>
+
+  <!-- Floating joker button, outside card -->
+  <button id="joker-fab" disabled>
+    <span id="joker-label">+3s</span>
+    <div id="joker-pips"></div>
+  </button>
+
 <script>
 (function () {
   'use strict';
@@ -161,8 +208,8 @@
   var queue = [], correctSet = {}, wrongCounts = {}, current = null;
   var timerInterval = null, timeLeft = 5;
   var recognition = null, quizActive = false, answered = false;
-  var wordToken = 0;   // increments with every new word; stale results carry old token
-  var jokersLeft = 3;  // Zeit-Joker per round
+  var wordToken = 0;
+  var jokersLeft = 3;
 
   // ── DOM ───────────────────────────────────────────────────────────────
   var elProgress  = document.getElementById('progress');
@@ -175,7 +222,7 @@
   var elFeedback  = document.getElementById('feedback');
   var elResult    = document.getElementById('result-box');
   var elNext      = document.getElementById('next-btn');
-  var elJokerBtn  = document.getElementById('joker-btn');
+  var elJoker     = document.getElementById('joker-fab');
   var elJokerPips = document.getElementById('joker-pips');
 
   // ── Speech API ────────────────────────────────────────────────────────
@@ -184,11 +231,10 @@
 
   // ── Buttons ───────────────────────────────────────────────────────────
   document.getElementById('start-btn').onclick = startQuiz;
-  document.getElementById('send-btn').onclick  = onSend;
-  elJokerBtn.onclick = useJoker;
-  elNext.onclick = startQuiz;
+  elJoker.onclick  = useJoker;
+  elNext.onclick   = startQuiz;
   elInput.addEventListener('keydown', function (e) {
-    if (e.keyCode === 13 || e.key === 'Enter') onSend();
+    if (e.keyCode === 13 || e.key === 'Enter') onEnter();
   });
 
   // ── Quiz control ──────────────────────────────────────────────────────
@@ -198,28 +244,32 @@
     VOCAB.forEach(function (v) { wrongCounts[v.de] = 0; });
     jokersLeft = 3;
     quizActive = true;
-    showScreen('quiz');
+    elJoker.classList.add('visible');
     renderJokers();
+    showScreen('quiz');
     nextWord();
   }
 
   function nextWord() {
     if (!quizActive) return;
-    wordToken++;                   // new token — makes all in-flight results invalid
+    wordToken++;
     var token = wordToken;
     answered = false;
 
-    stopRecognition();             // clean up previous recognition cleanly
-    elInput.value = ''; elHeard.textContent = '';
-    elFeedback.textContent = ''; elFeedback.className = '';
+    stopRecognition();
+    elInput.value          = '';
+    elHeard.textContent    = '';
+    elFeedback.textContent = '';
+    elFeedback.className   = '';
 
     if (queue.length === 0) { finishQuiz(); return; }
 
     current = queue.shift();
     elWord.textContent = current.de;
-    updateDots(); updateProgress();
+    updateDots();
+    updateProgress();
     startTimer(token);
-    startWordRecognition(token);   // fresh recognition tied to this token
+    startWordRecognition(token);
   }
 
   // ── Joker ─────────────────────────────────────────────────────────────
@@ -236,10 +286,10 @@
   function renderJokers() {
     var html = '';
     for (var i = 0; i < 3; i++) {
-      html += '<div class="pip' + (i >= jokersLeft ? ' used' : '') + '"></div>';
+      html += '<div class="pip' + (i < jokersLeft ? ' active' : '') + '"></div>';
     }
     elJokerPips.innerHTML = html;
-    elJokerBtn.disabled = jokersLeft <= 0;
+    elJoker.disabled = jokersLeft <= 0;
   }
 
   // ── Timer ─────────────────────────────────────────────────────────────
@@ -255,8 +305,7 @@
         renderTimer(timeLeft, timeLeft <= 2 ? 'urgent' : timeLeft <= 3 ? 'warn' : '');
       } else {
         clearInterval(timerInterval);
-        renderTimer('…', 'grace');   // show grace indicator
-        // Give recognition 1.5 s to deliver an in-flight result before timing out
+        renderTimer('...', 'grace');
         setTimeout(function () {
           if (wordToken === token && !answered) timeOut();
         }, 1500);
@@ -269,19 +318,19 @@
     elTimer.className   = cls || '';
   }
 
-  // ── Answer handling ───────────────────────────────────────────────────
+  // ── Answers ───────────────────────────────────────────────────────────
   function timeOut() {
     if (answered) return;
     answered = true;
     stopRecognition();
     wrongCounts[current.de]++;
     queue.push(current);
-    elFeedback.textContent = '⏱ Zeit! → ' + current.it;
+    elFeedback.textContent = 'Zeit! – ' + current.it;
     elFeedback.className   = 'wrong';
     setTimeout(nextWord, 1900);
   }
 
-  function onSend() {
+  function onEnter() {
     if (answered) return;
     var val = elInput.value.replace(/^\s+|\s+$/g, '').toLowerCase();
     if (!val) return;
@@ -297,12 +346,12 @@
 
     if (ok) {
       correctSet[current.de] = true;
-      elFeedback.textContent = '✓ Richtig!';
+      elFeedback.textContent = 'Richtig!';
       elFeedback.className   = 'correct';
     } else {
       wrongCounts[current.de]++;
       queue.push(current);
-      elFeedback.textContent = '✗ Falsch → ' + current.it;
+      elFeedback.textContent = 'Falsch – ' + current.it;
       elFeedback.className   = 'wrong';
     }
     updateDots();
@@ -314,12 +363,13 @@
     quizActive = false;
     stopRecognition();
     clearInterval(timerInterval);
+    elJoker.classList.remove('visible');
 
-    var html = '<h2>Geschafft! &#127881;</h2>';
+    var html = '<h2>Geschafft!</h2>';
     VOCAB.forEach(function (v) {
       var c = wrongCounts[v.de], cls = c === 0 ? 'ok' : 'some';
       html += '<div class="ri ' + cls + '"><span>' + v.de + '</span><span>' + v.it;
-      if (c > 0) html += '<span class="wrong-count">' + c + '&times; falsch</span>';
+      if (c > 0) html += '<span class="wrong-count">(' + c + 'x falsch)</span>';
       html += '</span></div>';
     });
     elResult.innerHTML = html;
@@ -343,18 +393,16 @@
   }
 
   // ── Recognition ───────────────────────────────────────────────────────
-  // Each word gets its own `token`. Results arriving after a token change
-  // are silently discarded — this prevents ANY stale-result cross-contamination.
   function startWordRecognition(token) {
-    if (!SpeechAPI) { setMicStatus('text'); return; }
+    if (!SpeechAPI) { setMicStatus('Texteingabe'); return; }
     try {
       var rec = new SpeechAPI();
-      rec.lang = 'it-IT';
-      rec.continuous     = false;   // single-utterance: stops automatically after speech
+      rec.lang           = 'it-IT';
+      rec.continuous     = false;
       rec.interimResults = true;
 
       rec.onresult = function (e) {
-        if (wordToken !== token || answered) return;   // wrong word → discard
+        if (wordToken !== token || answered) return;
         var last = e.results[e.results.length - 1];
         var t    = last[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
         elInput.value       = t;
@@ -369,17 +417,14 @@
 
       rec.onerror = function (e) {
         if (wordToken !== token || answered) return;
-        // no-speech / aborted are harmless — onend will restart
-        if (e.error !== 'no-speech' && e.error !== 'aborted') setMicStatus('error');
+        if (e.error !== 'no-speech' && e.error !== 'aborted') setMicStatus('Mikrofon-Fehler');
       };
 
       rec.onend = function () {
         if (wordToken !== token || answered) return;
-        // Session ended without a final result — restart immediately to keep listening
         try {
-          rec.start();       // try restarting same object (stays in audio session on iOS)
+          rec.start();
         } catch (ex) {
-          // Fallback: create a fresh instance
           setTimeout(function () {
             if (wordToken === token && !answered) startWordRecognition(token);
           }, 150);
@@ -388,27 +433,23 @@
 
       rec.start();
       recognition = rec;
-      setMicStatus('on');
+      setMicStatus('Mikrofon aktiv');
     } catch (e) {
       SpeechAPI = null;
-      setMicStatus('text');
+      setMicStatus('Texteingabe');
     }
   }
 
   function stopRecognition() {
     if (recognition) {
       var r = recognition;
-      recognition = null;          // clear first so onend restart is a no-op
+      recognition = null;
       try { r.stop(); } catch (e) {}
     }
   }
 
-  function setMicStatus(state) {
-    var map = { on: ['#34d399', '🎙️ Mikrofon aktiv'], text: ['#6b7280', '⌨️ Texteingabe'],
-                error: ['#f87171', '⚠️ Mikrofon-Fehler'], off: ['', ''] };
-    var s = map[state] || map.off;
-    elMicStatus.style.color = s[0];
-    elMicStatus.textContent = s[1];
+  function setMicStatus(msg) {
+    elMicStatus.textContent = msg;
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────
