@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Impara Italiano – Vokabeltrainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Impara Italiano</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,7 +11,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #1a1a2e;
       color: #eee;
-      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -20,10 +20,10 @@
     }
 
     h1 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       letter-spacing: 0.05em;
       color: #a78bfa;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       text-align: center;
     }
 
@@ -33,19 +33,25 @@
       border-radius: 1.5rem;
       width: 100%;
       max-width: 420px;
-      padding: 2.5rem 2rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       box-shadow: 0 8px 40px rgba(167,139,250,0.15);
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.2rem;
     }
 
+    /* ── Screens ── */
+    .screen { display: none; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .screen.active { display: flex; }
+
+    /* ── Start ── */
+    #screen-start p {
+      color: #9ca3af;
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Quiz ── */
     #progress {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #6b7280;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -55,79 +61,71 @@
       font-size: 2rem;
       font-weight: 700;
       color: #f9fafb;
+      min-height: 2.5rem;
     }
 
-    #timer-ring {
-      position: relative;
-      width: 72px;
-      height: 72px;
-    }
-
-    #timer-ring svg {
-      transform: rotate(-90deg);
-    }
-
-    #timer-ring circle {
-      fill: none;
-      stroke-width: 5;
-    }
-
+    /* Timer ring */
+    #timer-ring { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
+    #timer-ring svg { transform: rotate(-90deg); display: block; }
+    #timer-ring circle { fill: none; stroke-width: 5; }
     #timer-track { stroke: #374151; }
-    #timer-bar   { stroke: #a78bfa; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
-
+    #timer-bar   { stroke: #a78bfa; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
     #timer-label {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #a78bfa;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 700; color: #a78bfa;
     }
+
+    /* Input row */
+    #input-row {
+      display: flex;
+      gap: 0.6rem;
+      width: 100%;
+      align-items: center;
+    }
+
+    #answer-input {
+      flex: 1;
+      background: #0f172a;
+      border: 1.5px solid #374151;
+      border-radius: 0.6rem;
+      color: #f9fafb;
+      font-size: 1rem;
+      padding: 0.6rem 0.8rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    #answer-input:focus { border-color: #a78bfa; }
+    #answer-input::placeholder { color: #4b5563; }
 
     #mic-btn {
       background: #a78bfa;
       border: none;
       border-radius: 50%;
-      width: 70px;
-      height: 70px;
+      width: 48px; height: 48px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: background 0.2s, transform 0.1s;
       flex-shrink: 0;
     }
-
-    #mic-btn:active { transform: scale(0.94); }
+    #mic-btn:active { transform: scale(0.92); }
     #mic-btn.listening { background: #ef4444; animation: pulse 1s infinite; }
-    #mic-btn.disabled { background: #374151; cursor: default; }
+    #mic-btn.hidden { display: none; }
 
     @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
-      50%       { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.45); }
+      50%       { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
     }
+    #mic-icon { width: 22px; height: 22px; fill: white; }
 
-    #mic-icon { width: 30px; height: 30px; fill: white; }
+    #heard { font-size: 0.9rem; color: #9ca3af; min-height: 1.2em; font-style: italic; }
 
-    #heard {
-      font-size: 1rem;
-      color: #9ca3af;
-      min-height: 1.4em;
-      font-style: italic;
-    }
-
-    #feedback {
-      font-size: 1.1rem;
-      font-weight: 600;
-      min-height: 1.4em;
-    }
-
+    #feedback { font-size: 1.05rem; font-weight: 600; min-height: 1.3em; }
     .correct { color: #34d399; }
     .wrong   { color: #f87171; }
 
-    #start-btn, #next-btn {
+    /* ── Buttons ── */
+    .btn {
       background: #a78bfa;
       color: white;
       border: none;
@@ -137,222 +135,198 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
-    }
-
-    #start-btn:hover, #next-btn:hover { background: #7c3aed; }
-    #start-btn:active, #next-btn:active { transform: scale(0.97); }
-
-    #result-box {
       width: 100%;
-      text-align: left;
+      max-width: 260px;
     }
+    .btn:active { transform: scale(0.97); background: #7c3aed; }
 
-    #result-box h2 {
-      font-size: 1.1rem;
-      color: #a78bfa;
-      margin-bottom: 1rem;
-      text-align: center;
+    #send-btn {
+      background: #7c3aed;
+      border: none;
+      border-radius: 0.6rem;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.6rem 0.9rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
     }
+    #send-btn:active { background: #5b21b6; }
+
+    /* ── Results ── */
+    #result-box { width: 100%; text-align: left; }
+    #result-box h2 { font-size: 1rem; color: #a78bfa; margin-bottom: 0.8rem; text-align: center; }
 
     .result-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.5rem;
-      margin-bottom: 0.4rem;
-      font-size: 0.95rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 0.45rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
     }
-
     .result-item.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
     .result-item.fail { background: rgba(248,113,113,0.12); color: #f87171; }
 
-    #no-speech-hint {
-      font-size: 0.78rem;
-      color: #6b7280;
-      margin-top: 0.4rem;
-      text-align: center;
-    }
+    #mode-hint { font-size: 0.75rem; color: #4b5563; }
   </style>
 </head>
 <body>
   <h1>🇮🇹 Impara Italiano</h1>
 
   <div id="card">
-    <!-- Startscreen -->
-    <div id="screen-start">
-      <p style="color:#9ca3af;margin-bottom:1.5rem;line-height:1.6">
-        5 Vokabeln werden nacheinander auf Deutsch angezeigt.<br>
-        Du hast <strong style="color:#a78bfa">5 Sekunden</strong>, die italienische Übersetzung zu sagen.<br>
-        Nicht gewusste Wörter werden am Ende wiederholt.
+
+    <!-- Start -->
+    <div id="screen-start" class="screen active">
+      <p>
+        5 Vokabeln werden auf Deutsch angezeigt.<br>
+        Du hast <strong style="color:#a78bfa">5 Sekunden</strong>, die<br>
+        italienische Übersetzung einzugeben.
       </p>
-      <button id="start-btn" onclick="startQuiz()">Starten</button>
-      <p id="no-speech-hint" style="margin-top:1rem"></p>
+      <p id="mode-hint"></p>
+      <button class="btn" id="start-btn">Starten</button>
     </div>
 
-    <!-- Quiz screen -->
-    <div id="screen-quiz" style="display:none;flex-direction:column;align-items:center;gap:1.1rem;width:100%">
+    <!-- Quiz -->
+    <div id="screen-quiz" class="screen">
       <div id="progress"></div>
       <div id="word"></div>
+
       <div id="timer-ring">
-        <svg width="72" height="72" viewBox="0 0 72 72">
-          <circle class="" id="timer-track" cx="36" cy="36" r="31"/>
-          <circle id="timer-bar" cx="36" cy="36" r="31"/>
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle id="timer-track" cx="34" cy="34" r="29"/>
+          <circle id="timer-bar"   cx="34" cy="34" r="29"/>
         </svg>
         <div id="timer-label">5</div>
       </div>
-      <button id="mic-btn" onclick="toggleMic()">
-        <svg id="mic-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm6.94 7A7 7 0 0 1 5.06 10H3.05A9.004 9.004 0 0 0 11 18.94V21H9v2h6v-2h-2v-2.06A9.004 9.004 0 0 0 20.95 10h-2.01z"/>
-        </svg>
-      </button>
+
+      <div id="input-row">
+        <input id="answer-input" type="text" placeholder="Italiano…" autocomplete="off"
+               autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <button id="send-btn">OK</button>
+        <button id="mic-btn" class="hidden" aria-label="Mikrofon">
+          <svg id="mic-icon" viewBox="0 0 24 24">
+            <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm6.94 7A7 7 0 0 1 5.06 10H3.05A9.004 9.004 0 0 0 11 18.94V21H9v2h6v-2h-2v-2.06A9.004 9.004 0 0 0 20.95 10h-2.01z"/>
+          </svg>
+        </button>
+      </div>
+
       <div id="heard"></div>
       <div id="feedback"></div>
     </div>
 
-    <!-- Result screen -->
-    <div id="screen-result" style="display:none;flex-direction:column;align-items:center;gap:1rem;width:100%">
+    <!-- Result -->
+    <div id="screen-result" class="screen">
       <div id="result-box"></div>
-      <button id="next-btn" onclick="nextPhase()"></button>
+      <button class="btn" id="next-btn"></button>
     </div>
+
   </div>
 
 <script>
-// ── Vocabulary (A2 level) ─────────────────────────────────────────────────
-const ALL_VOCAB = [
-  { de: "die Reise",      it: "il viaggio",      alt: ["viaggio"] },
-  { de: "der Urlaub",     it: "la vacanza",       alt: ["vacanza"] },
-  { de: "das Wetter",     it: "il tempo",         alt: ["tempo"] },
-  { de: "die Gesundheit", it: "la salute",        alt: ["salute"] },
-  { de: "der Beruf",      it: "la professione",   alt: ["professione"] },
+const VOCAB = [
+  { de: "die Reise",      it: "il viaggio",    alt: ["viaggio"] },
+  { de: "der Urlaub",     it: "la vacanza",    alt: ["vacanza"] },
+  { de: "das Wetter",     it: "il tempo",      alt: ["tempo"] },
+  { de: "die Gesundheit", it: "la salute",     alt: ["salute"] },
+  { de: "der Beruf",      it: "la professione",alt: ["professione"] },
 ];
 
-// ── State ────────────────────────────────────────────────────────────────
-let queue       = [];   // words left in current round
-let missed      = [];   // wrong answers for repeat
-let results     = [];   // [{word, ok}]
-let current     = null;
-let timerInterval = null;
-let timeLeft    = 5;
-let recognition = null;
-let listening   = false;
-let answered    = false;
-let repeatRound = false;
+let queue = [], missed = [], results = [], current = null;
+let timerInterval = null, timeLeft = 5;
+let recognition = null, listening = false, answered = false, repeatRound = false;
 
-// ── Circumference for SVG ring ───────────────────────────────────────────
-const CIRC = 2 * Math.PI * 31; // r=31
-document.getElementById("timer-bar").style.strokeDasharray  = CIRC;
-document.getElementById("timer-bar").style.strokeDashoffset = 0;
+const R = 29, CIRC = +(2 * Math.PI * R).toFixed(2);
+const barEl = document.getElementById("timer-bar");
+barEl.style.strokeDasharray  = CIRC;
+barEl.style.strokeDashoffset = 0;
 
-// ── Speech recognition setup ─────────────────────────────────────────────
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-let speechSupported = !!SpeechRecognition;
+let speechOk = false;
+try {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) { new SR(); speechOk = true; }
+} catch(e) {}
 
-if (!speechSupported) {
-  document.getElementById("no-speech-hint").textContent =
-    "⚠️ Dein Browser unterstützt keine Spracheingabe (empfohlen: Chrome).";
+document.getElementById("mode-hint").textContent =
+  speechOk ? "🎤 Spracheingabe aktiv" : "⌨️ Texteingabe (Mikrofon nicht verfügbar)";
+
+if (speechOk) {
+  document.getElementById("mic-btn").classList.remove("hidden");
 }
 
-function buildRecognition() {
-  if (!speechSupported) return null;
-  const r = new SpeechRecognition();
-  r.lang = "it-IT";
-  r.continuous = false;
-  r.interimResults = true;
+document.getElementById("start-btn").addEventListener("click", startQuiz);
+document.getElementById("send-btn").addEventListener("click", submitText);
+document.getElementById("mic-btn").addEventListener("click", toggleMic);
+document.getElementById("answer-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") submitText();
+});
 
-  r.onresult = (e) => {
-    const transcript = Array.from(e.results)
-      .map(res => res[0].transcript)
-      .join(" ")
-      .trim()
-      .toLowerCase();
-    document.getElementById("heard").textContent = "„" + transcript + """;
-    if (e.results[e.results.length - 1].isFinal) {
-      stopMic();
-      checkAnswer(transcript);
-    }
-  };
-
-  r.onerror = (e) => {
-    if (e.error === "no-speech") { stopMic(); timeOut(); }
-    else { stopMic(); }
-  };
-
-  r.onend = () => {
-    if (listening) { listening = false; setMicState("idle"); }
-  };
-
-  return r;
-}
-
-// ── Quiz control ─────────────────────────────────────────────────────────
 function startQuiz() {
-  queue      = shuffle([...ALL_VOCAB]);
-  missed     = [];
-  results    = [];
-  repeatRound = false;
+  queue = shuffle([...VOCAB]);
+  missed = []; results = []; repeatRound = false;
   showScreen("quiz");
   nextWord();
 }
 
 function nextWord() {
   answered = false;
-  if (queue.length === 0) {
-    showRoundResult();
-    return;
-  }
-  current = queue.shift();
-  document.getElementById("word").textContent     = current.de;
+  stopMic();
+  document.getElementById("answer-input").value = "";
   document.getElementById("heard").textContent    = "";
   document.getElementById("feedback").textContent = "";
   document.getElementById("feedback").className   = "";
+
+  if (queue.length === 0) { showRoundResult(); return; }
+
+  current = queue.shift();
+  document.getElementById("word").textContent = current.de;
   setProgress();
   startTimer();
-  autoStartMic();
+  document.getElementById("answer-input").focus();
 }
 
 function startTimer() {
   clearInterval(timerInterval);
   timeLeft = 5;
-  updateRing(5);
-  document.getElementById("timer-label").textContent = "5";
+  setRing(5);
 
   timerInterval = setInterval(() => {
     timeLeft--;
-    updateRing(timeLeft);
-    document.getElementById("timer-label").textContent = timeLeft;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      if (!answered) timeOut();
-    }
+    setRing(timeLeft);
+    if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
   }, 1000);
 }
 
-function updateRing(t) {
-  const offset = CIRC - (t / 5) * CIRC;
-  document.getElementById("timer-bar").style.strokeDashoffset = offset;
-  document.getElementById("timer-bar").style.stroke =
-    t <= 2 ? "#f87171" : t <= 3 ? "#fbbf24" : "#a78bfa";
-  document.getElementById("timer-label").style.color =
-    t <= 2 ? "#f87171" : t <= 3 ? "#fbbf24" : "#a78bfa";
+function setRing(t) {
+  barEl.style.strokeDashoffset = CIRC - (t / 5) * CIRC;
+  const col = t <= 2 ? "#f87171" : t <= 3 ? "#fbbf24" : "#a78bfa";
+  barEl.style.stroke = col;
+  document.getElementById("timer-label").style.color = col;
+  document.getElementById("timer-label").textContent = t;
 }
 
 function timeOut() {
   if (answered) return;
-  answered = true;
-  stopMic();
+  answered = true; stopMic();
   markWrong("⏱ Zeit! → " + current.it);
-  setTimeout(nextWord, 1800);
+  setTimeout(nextWord, 1900);
+}
+
+function submitText() {
+  if (answered) return;
+  const val = document.getElementById("answer-input").value.trim().toLowerCase();
+  if (!val) return;
+  answered = true;
+  clearInterval(timerInterval);
+  stopMic();
+  checkAnswer(val);
 }
 
 function checkAnswer(transcript) {
-  if (answered) return;
-  answered = true;
-  clearInterval(timerInterval);
-
   const acceptable = [current.it.toLowerCase(), ...current.alt.map(a => a.toLowerCase())];
   const ok = acceptable.some(a => transcript.includes(a));
-
   if (ok) {
     document.getElementById("feedback").textContent = "✓ Richtig!";
     document.getElementById("feedback").className   = "correct";
@@ -360,7 +334,7 @@ function checkAnswer(transcript) {
   } else {
     markWrong("✗ Falsch → " + current.it);
   }
-  setTimeout(nextWord, 1600);
+  setTimeout(nextWord, 1700);
 }
 
 function markWrong(msg) {
@@ -370,17 +344,14 @@ function markWrong(msg) {
   results.push({ word: current, ok: false });
 }
 
-// ── Round result ─────────────────────────────────────────────────────────
 function showRoundResult() {
-  stopMic();
   const box = document.getElementById("result-box");
   const btn = document.getElementById("next-btn");
 
   let html = `<h2>${repeatRound ? "Wiederholung" : "Runde"} abgeschlossen</h2>`;
   results.forEach(r => {
     html += `<div class="result-item ${r.ok ? "ok" : "fail"}">
-      <span>${r.word.de}</span>
-      <span>${r.word.it}</span>
+      <span>${r.word.de}</span><span>${r.word.it}</span>
     </div>`;
   });
   box.innerHTML = html;
@@ -392,68 +363,67 @@ function showRoundResult() {
     btn.textContent = "Neu starten";
     btn.onclick = startQuiz;
   }
-
   showScreen("result");
 }
 
 function startRepeat() {
-  queue       = shuffle([...missed]);
-  missed      = [];
-  results     = [];
-  repeatRound = true;
+  queue = shuffle([...missed]);
+  missed = []; results = []; repeatRound = true;
   showScreen("quiz");
   nextWord();
 }
 
-function nextPhase() {} // overwritten dynamically above
-
-// ── Mic controls ─────────────────────────────────────────────────────────
-function autoStartMic() {
-  if (!speechSupported) return;
-  setTimeout(() => { if (!answered) startMic(); }, 300);
-}
-
-function toggleMic() {
-  if (!speechSupported) return;
-  if (listening) stopMic(); else startMic();
-}
+function toggleMic() { listening ? stopMic() : startMic(); }
 
 function startMic() {
-  if (!speechSupported || listening) return;
-  recognition = buildRecognition();
+  if (!speechOk || listening || answered) return;
   try {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = "it-IT";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onresult = e => {
+      const t = Array.from(e.results).map(r => r[0].transcript).join(" ").trim().toLowerCase();
+      document.getElementById("answer-input").value = t;
+      document.getElementById("heard").textContent  = "„" + t + "“";
+      if (e.results[e.results.length - 1].isFinal) { stopMic(); submitText(); }
+    };
+    recognition.onerror = e => {
+      stopMic();
+      if (e.error === "no-speech" && !answered) timeOut();
+    };
+    recognition.onend = () => { listening = false; setMicUI(false); };
+
     recognition.start();
     listening = true;
-    setMicState("listening");
-  } catch(e) {}
+    setMicUI(true);
+  } catch(e) {
+    speechOk = false;
+    document.getElementById("mic-btn").classList.add("hidden");
+  }
 }
 
 function stopMic() {
-  if (!recognition) return;
-  try { recognition.stop(); } catch(e) {}
+  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
   listening = false;
-  setMicState("idle");
+  setMicUI(false);
 }
 
-function setMicState(state) {
-  const btn = document.getElementById("mic-btn");
-  btn.className = state === "listening" ? "listening"
-                : state === "disabled"  ? "disabled" : "";
-}
-
-// ── Helpers ──────────────────────────────────────────────────────────────
-function setProgress() {
-  const total = ALL_VOCAB.length;
-  const done  = total - queue.length;
-  document.getElementById("progress").textContent =
-    `Wort ${done} / ${total}${repeatRound ? " · Wiederholung" : ""}`;
+function setMicUI(on) {
+  document.getElementById("mic-btn").className = on ? "listening" : "";
 }
 
 function showScreen(name) {
-  ["start","quiz","result"].forEach(s => {
-    const el = document.getElementById("screen-" + s);
-    el.style.display = s === name ? "flex" : "none";
-  });
+  document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
+  document.getElementById("screen-" + name).classList.add("active");
+}
+
+function setProgress() {
+  const done = VOCAB.length - queue.length;
+  document.getElementById("progress").textContent =
+    `Wort ${done} / ${VOCAB.length}${repeatRound ? " · Wiederholung" : ""}`;
 }
 
 function shuffle(arr) {
