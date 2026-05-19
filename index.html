@@ -9,48 +9,37 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #1a1a2e;
-      color: #eee;
+      background: #1a1a2e; color: #eee;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       padding: 1rem;
     }
 
     h1 { font-size: 1.3rem; color: #a78bfa; margin-bottom: 1.5rem; text-align: center; }
 
     #card {
-      background: #16213e;
-      border: 2px solid #a78bfa;
-      border-radius: 1.5rem;
-      width: 100%;
-      max-width: 420px;
-      padding: 2rem 1.5rem;
-      text-align: center;
+      background: #16213e; border: 2px solid #a78bfa;
+      border-radius: 1.5rem; width: 100%; max-width: 420px;
+      padding: 2rem 1.5rem; text-align: center;
       box-shadow: 0 8px 40px rgba(167,139,250,0.15);
     }
 
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* ── Start ── */
     #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1rem; }
 
-    /* ── Quiz ── */
     #progress {
       font-size: 0.78rem; color: #6b7280;
-      text-transform: uppercase; margin-bottom: 1rem;
-      letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 0.06em;
     }
-
     #word {
       font-size: 2rem; font-weight: 700;
       color: #f9fafb; margin-bottom: 1.2rem; min-height: 2.5rem;
     }
 
-    #timer-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; }
+    #timer-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
     #timer-display {
       width: 60px; height: 60px; border-radius: 50%;
       border: 5px solid #a78bfa;
@@ -60,11 +49,9 @@
     }
     #timer-display.warn   { border-color: #fbbf24; color: #fbbf24; }
     #timer-display.urgent { border-color: #f87171; color: #f87171; }
+    #timer-display.grace  { border-color: #374151; color: #6b7280; font-size: 1rem; }
 
-    #mic-status {
-      font-size: 0.8rem; margin-bottom: 0.8rem; min-height: 1.1em;
-      transition: color 0.3s;
-    }
+    #mic-status { font-size: 0.8rem; margin-bottom: 0.8rem; min-height: 1.1em; }
 
     #input-row { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
     #answer-input {
@@ -74,12 +61,10 @@
     }
     #answer-input:focus { border-color: #a78bfa; }
     #answer-input::placeholder { color: #4b5563; }
-
     #send-btn {
       background: #7c3aed; border: none; border-radius: 0.6rem;
       color: white; font-size: 0.9rem; font-weight: 700;
-      padding: 0 1.1rem; cursor: pointer;
-      -webkit-appearance: none;
+      padding: 0 1.1rem; cursor: pointer; -webkit-appearance: none;
     }
 
     #heard    { font-size: 0.85rem; color: #9ca3af; min-height: 1.1em; font-style: italic; margin-bottom: 0.4rem; }
@@ -87,40 +72,31 @@
     .correct  { color: #34d399; }
     .wrong    { color: #f87171; }
 
-    /* ── Shared button ── */
     .btn {
-      display: inline-block;
-      background: #a78bfa; color: white; border: none;
+      display: inline-block; background: #a78bfa; color: white; border: none;
       border-radius: 0.75rem; padding: 0.8rem 2rem;
       font-size: 1rem; font-weight: 700; cursor: pointer;
       margin-top: 0.5rem; -webkit-appearance: none;
     }
 
-    /* ── Results ── */
     #result-box { text-align: left; margin-bottom: 1rem; }
     #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
     .ri {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 0.5rem 0.7rem; border-radius: 0.45rem;
-      margin-bottom: 0.35rem; font-size: 0.9rem;
+      padding: 0.5rem 0.7rem; border-radius: 0.45rem; margin-bottom: 0.35rem; font-size: 0.9rem;
     }
     .ri.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
     .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
     .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; }
 
-    /* ── Dots ── */
     #dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.1rem; flex-wrap: wrap; }
-    .dot {
-      width: 12px; height: 12px; border-radius: 50%;
-      background: #374151; transition: background 0.3s;
-    }
-    .dot.done { background: #34d399; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: #374151; transition: background 0.3s; }
+    .dot.done    { background: #34d399; }
     .dot.current { background: #a78bfa; }
   </style>
 </head>
 <body>
   <h1>&#127470;&#127481; Impara Italiano</h1>
-
   <div id="card">
 
     <div id="screen-start" class="screen active">
@@ -152,7 +128,6 @@
     </div>
 
   </div>
-
 <script>
 (function () {
   'use strict';
@@ -166,14 +141,10 @@
   ];
 
   // ── State ─────────────────────────────────────────────────────────────
-  var queue       = [];   // words still to answer correctly
-  var correctSet  = {};   // de -> true when correctly answered
-  var wrongCounts = {};   // de -> number of wrong/timeout attempts
-  var current     = null;
+  var queue = [], correctSet = {}, wrongCounts = {}, current = null;
   var timerInterval = null, timeLeft = 5;
-  var recognition   = null, quizActive = false, answered = false;
-  var processedIdx  = 0;
-  var acceptAfter   = 0;  // timestamp: ignore speech results before this
+  var recognition = null, quizActive = false, answered = false;
+  var wordToken = 0;   // increments with every new word; stale results carry old token
 
   // ── DOM ───────────────────────────────────────────────────────────────
   var elProgress  = document.getElementById('progress');
@@ -191,7 +162,7 @@
   var SpeechAPI = null;
   try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch (e) {}
 
-  // ── Button wiring ─────────────────────────────────────────────────────
+  // ── Buttons ───────────────────────────────────────────────────────────
   document.getElementById('start-btn').onclick = startQuiz;
   document.getElementById('send-btn').onclick  = onSend;
   elNext.onclick = startQuiz;
@@ -201,53 +172,65 @@
 
   // ── Quiz control ──────────────────────────────────────────────────────
   function startQuiz() {
-    queue      = shuffle(VOCAB.slice());
-    correctSet = {};
-    wrongCounts = {};
+    queue = shuffle(VOCAB.slice());
+    correctSet = {}; wrongCounts = {};
     VOCAB.forEach(function (v) { wrongCounts[v.de] = 0; });
     quizActive = true;
     showScreen('quiz');
-    startRecognition();   // must be called directly from user gesture
     nextWord();
   }
 
   function nextWord() {
     if (!quizActive) return;
+    wordToken++;                   // new token — makes all in-flight results invalid
+    var token = wordToken;
     answered = false;
-    elInput.value          = '';
-    elHeard.textContent    = '';
-    elFeedback.textContent = '';
-    elFeedback.className   = '';
+
+    stopRecognition();             // clean up previous recognition cleanly
+    elInput.value = ''; elHeard.textContent = '';
+    elFeedback.textContent = ''; elFeedback.className = '';
 
     if (queue.length === 0) { finishQuiz(); return; }
 
     current = queue.shift();
     elWord.textContent = current.de;
-    updateDots();
-    updateProgress();
-    acceptAfter = Date.now() + 600; // ignore stale speech for 600ms after word change
-    startTimer();
+    updateDots(); updateProgress();
+    startTimer(token);
+    startWordRecognition(token);   // fresh recognition tied to this token
   }
 
-  function startTimer() {
+  // ── Timer ─────────────────────────────────────────────────────────────
+  function startTimer(token) {
     clearInterval(timerInterval);
     timeLeft = 5;
-    renderTimer(5);
+    renderTimer(5, '');
+
     timerInterval = setInterval(function () {
+      if (wordToken !== token) { clearInterval(timerInterval); return; }
       timeLeft--;
-      renderTimer(timeLeft);
-      if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
+      if (timeLeft > 0) {
+        renderTimer(timeLeft, timeLeft <= 2 ? 'urgent' : timeLeft <= 3 ? 'warn' : '');
+      } else {
+        clearInterval(timerInterval);
+        renderTimer('…', 'grace');   // show grace indicator
+        // Give recognition 1.5 s to deliver an in-flight result before timing out
+        setTimeout(function () {
+          if (wordToken === token && !answered) timeOut();
+        }, 1500);
+      }
     }, 1000);
   }
 
-  function renderTimer(t) {
-    elTimer.textContent = t;
-    elTimer.className   = t <= 2 ? 'urgent' : t <= 3 ? 'warn' : '';
+  function renderTimer(val, cls) {
+    elTimer.textContent = val;
+    elTimer.className   = cls || '';
   }
 
+  // ── Answer handling ───────────────────────────────────────────────────
   function timeOut() {
     if (answered) return;
     answered = true;
+    stopRecognition();
     wrongCounts[current.de]++;
     queue.push(current);
     elFeedback.textContent = '⏱ Zeit! → ' + current.it;
@@ -283,6 +266,7 @@
     setTimeout(nextWord, 1700);
   }
 
+  // ── Finish ────────────────────────────────────────────────────────────
   function finishQuiz() {
     quizActive = false;
     stopRecognition();
@@ -290,12 +274,9 @@
 
     var html = '<h2>Geschafft! &#127881;</h2>';
     VOCAB.forEach(function (v) {
-      var c = wrongCounts[v.de];
-      var cls = c === 0 ? 'ok' : 'some';
+      var c = wrongCounts[v.de], cls = c === 0 ? 'ok' : 'some';
       html += '<div class="ri ' + cls + '"><span>' + v.de + '</span><span>' + v.it;
-      if (c > 0) {
-        html += '<span class="wrong-count">' + c + '&times; falsch</span>';
-      }
+      if (c > 0) html += '<span class="wrong-count">' + c + '&times; falsch</span>';
       html += '</span></div>';
     });
     elResult.innerHTML = html;
@@ -303,74 +284,67 @@
     showScreen('result');
   }
 
-  // ── Progress & dots ───────────────────────────────────────────────────
+  // ── Progress ──────────────────────────────────────────────────────────
   function updateProgress() {
-    var done = Object.keys(correctSet).length;
-    elProgress.textContent = done + ' / ' + VOCAB.length + ' richtig';
+    elProgress.textContent = Object.keys(correctSet).length + ' / ' + VOCAB.length + ' richtig';
   }
 
   function updateDots() {
     var html = '';
     VOCAB.forEach(function (v) {
-      var cls = correctSet[v.de]
-        ? 'dot done'
-        : (current && v.de === current.de ? 'dot current' : 'dot');
+      var cls = correctSet[v.de] ? 'dot done'
+              : (current && v.de === current.de ? 'dot current' : 'dot');
       html += '<div class="' + cls + '" title="' + v.de + '"></div>';
     });
     elDots.innerHTML = html;
   }
 
-  // ── Recognition (continuous, auto-restart) ────────────────────────────
-  function startRecognition() {
+  // ── Recognition ───────────────────────────────────────────────────────
+  // Each word gets its own `token`. Results arriving after a token change
+  // are silently discarded — this prevents ANY stale-result cross-contamination.
+  function startWordRecognition(token) {
     if (!SpeechAPI) { setMicStatus('text'); return; }
-    processedIdx = 0;
-    launchRecognition();
-  }
-
-  function launchRecognition() {
-    if (!quizActive || !SpeechAPI) return;
     try {
-      recognition = new SpeechAPI();
-      recognition.lang = 'it-IT';
-      recognition.continuous     = true;
-      recognition.interimResults = true;
+      var rec = new SpeechAPI();
+      rec.lang = 'it-IT';
+      rec.continuous     = false;   // single-utterance: stops automatically after speech
+      rec.interimResults = true;
 
-      recognition.onresult = function (e) {
-        if (answered || !quizActive) return;
-        for (var i = processedIdx; i < e.results.length; i++) {
-          var r = e.results[i];
-          var t = r[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
-          if (r.isFinal) {
-            processedIdx = i + 1;
-            if (Date.now() < acceptAfter) break; // stale result from previous word → discard
-            elInput.value       = t;
-            elHeard.textContent = '„' + t + '”';
-            if (!answered) { answered = true; clearInterval(timerInterval); evaluate(t); }
-            break;
-          } else {
-            // Interim: only show once grace period is over
-            if (Date.now() >= acceptAfter) {
-              elInput.value       = t;
-              elHeard.textContent = '„' + t + '”';
-            }
-          }
+      rec.onresult = function (e) {
+        if (wordToken !== token || answered) return;   // wrong word → discard
+        var last = e.results[e.results.length - 1];
+        var t    = last[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
+        elInput.value       = t;
+        elHeard.textContent = '„' + t + '"';
+        if (last.isFinal) {
+          answered = true;
+          clearInterval(timerInterval);
+          stopRecognition();
+          evaluate(t);
         }
       };
 
-      recognition.onerror = function (e) {
-        if (e.error === 'no-speech' || e.error === 'aborted') return;
-        setMicStatus('error');
+      rec.onerror = function (e) {
+        if (wordToken !== token || answered) return;
+        // no-speech / aborted are harmless — onend will restart
+        if (e.error !== 'no-speech' && e.error !== 'aborted') setMicStatus('error');
       };
 
-      recognition.onend = function () {
-        if (quizActive) {
-          processedIdx = 0;
-          // Small delay prevents rapid-fire restarts on error
-          setTimeout(function () { if (quizActive) launchRecognition(); }, 300);
+      rec.onend = function () {
+        if (wordToken !== token || answered) return;
+        // Session ended without a final result — restart immediately to keep listening
+        try {
+          rec.start();       // try restarting same object (stays in audio session on iOS)
+        } catch (ex) {
+          // Fallback: create a fresh instance
+          setTimeout(function () {
+            if (wordToken === token && !answered) startWordRecognition(token);
+          }, 150);
         }
       };
 
-      recognition.start();
+      rec.start();
+      recognition = rec;
       setMicStatus('on');
     } catch (e) {
       SpeechAPI = null;
@@ -379,23 +353,19 @@
   }
 
   function stopRecognition() {
-    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
-    setMicStatus('off');
+    if (recognition) {
+      var r = recognition;
+      recognition = null;          // clear first so onend restart is a no-op
+      try { r.stop(); } catch (e) {}
+    }
   }
 
   function setMicStatus(state) {
-    if (state === 'on') {
-      elMicStatus.style.color = '#34d399';
-      elMicStatus.textContent = '🎙️ Mikrofon aktiv';
-    } else if (state === 'text') {
-      elMicStatus.style.color = '#6b7280';
-      elMicStatus.textContent = '⌨️ Texteingabe';
-    } else if (state === 'error') {
-      elMicStatus.style.color = '#f87171';
-      elMicStatus.textContent = '⚠️ Mikrofon-Fehler';
-    } else {
-      elMicStatus.textContent = '';
-    }
+    var map = { on: ['#34d399', '🎙️ Mikrofon aktiv'], text: ['#6b7280', '⌨️ Texteingabe'],
+                error: ['#f87171', '⚠️ Mikrofon-Fehler'], off: ['', ''] };
+    var s = map[state] || map.off;
+    elMicStatus.style.color = s[0];
+    elMicStatus.textContent = s[1];
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────
