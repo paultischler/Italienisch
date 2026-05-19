@@ -11,7 +11,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #1a1a2e;
       color: #eee;
-      min-height: 100dvh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -19,13 +19,7 @@
       padding: 1rem;
     }
 
-    h1 {
-      font-size: 1.3rem;
-      letter-spacing: 0.05em;
-      color: #a78bfa;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
+    h1 { font-size: 1.3rem; color: #a78bfa; margin-bottom: 1.5rem; text-align: center; }
 
     #card {
       background: #16213e;
@@ -38,52 +32,34 @@
       box-shadow: 0 8px 40px rgba(167,139,250,0.15);
     }
 
-    /* ── Screens ── */
-    .screen { display: none; flex-direction: column; align-items: center; gap: 1.2rem; }
-    .screen.active { display: flex; }
+    .screen { display: none; }
+    .screen.active { display: block; }
 
     /* ── Start ── */
-    #screen-start p {
-      color: #9ca3af;
-      line-height: 1.7;
-      margin-bottom: 0.5rem;
-    }
+    #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1rem; }
 
     /* ── Quiz ── */
-    #progress {
-      font-size: 0.78rem;
-      color: #6b7280;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    #progress { font-size: 0.78rem; color: #6b7280; text-transform: uppercase; margin-bottom: 1rem; }
+    #word { font-size: 2rem; font-weight: 700; color: #f9fafb; margin-bottom: 1.2rem; min-height: 2.5rem; }
 
-    #word {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #f9fafb;
-      min-height: 2.5rem;
-    }
-
-    /* Timer ring */
-    #timer-ring { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
-    #timer-ring svg { transform: rotate(-90deg); display: block; }
-    #timer-ring circle { fill: none; stroke-width: 5; }
-    #timer-track { stroke: #374151; }
-    #timer-bar   { stroke: #a78bfa; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
-    #timer-label {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: 700; color: #a78bfa;
-    }
-
-    /* Input row */
-    #input-row {
+    #timer-wrap {
       display: flex;
-      gap: 0.6rem;
-      width: 100%;
       align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
     }
+    #timer-display {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      border: 5px solid #a78bfa;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700; color: #a78bfa;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    #timer-display.warn  { border-color: #fbbf24; color: #fbbf24; }
+    #timer-display.urgent { border-color: #f87171; color: #f87171; }
 
+    #input-row { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
     #answer-input {
       flex: 1;
       background: #0f172a;
@@ -91,357 +67,307 @@
       border-radius: 0.6rem;
       color: #f9fafb;
       font-size: 1rem;
-      padding: 0.6rem 0.8rem;
+      padding: 0.65rem 0.8rem;
       outline: none;
-      transition: border-color 0.2s;
     }
     #answer-input:focus { border-color: #a78bfa; }
     #answer-input::placeholder { color: #4b5563; }
 
-    #mic-btn {
-      background: #a78bfa;
-      border: none;
-      border-radius: 50%;
-      width: 48px; height: 48px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s, transform 0.1s;
-      flex-shrink: 0;
+    #send-btn {
+      background: #7c3aed; border: none; border-radius: 0.6rem;
+      color: white; font-size: 0.9rem; font-weight: 700;
+      padding: 0 1.1rem; cursor: pointer;
     }
-    #mic-btn:active { transform: scale(0.92); }
-    #mic-btn.listening { background: #ef4444; animation: pulse 1s infinite; }
-    #mic-btn.hidden { display: none; }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.45); }
-      50%       { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
-    }
-    #mic-icon { width: 22px; height: 22px; fill: white; }
-
-    #heard { font-size: 0.9rem; color: #9ca3af; min-height: 1.2em; font-style: italic; }
-
-    #feedback { font-size: 1.05rem; font-weight: 600; min-height: 1.3em; }
+    #heard { font-size: 0.85rem; color: #9ca3af; min-height: 1.1em; font-style: italic; margin-bottom: 0.4rem; }
+    #feedback { font-size: 1.05rem; font-weight: 700; min-height: 1.3em; }
     .correct { color: #34d399; }
     .wrong   { color: #f87171; }
 
+    #mic-btn {
+      display: none;
+      margin: 0.6rem auto 0;
+      background: #a78bfa; border: none; border-radius: 2rem;
+      color: white; font-size: 0.9rem; font-weight: 600;
+      padding: 0.55rem 1.4rem; cursor: pointer;
+    }
+    #mic-btn.listening { background: #ef4444; }
+
     /* ── Buttons ── */
     .btn {
-      background: #a78bfa;
-      color: white;
-      border: none;
-      border-radius: 0.75rem;
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      width: 100%;
-      max-width: 260px;
+      display: inline-block;
+      background: #a78bfa; color: white; border: none;
+      border-radius: 0.75rem; padding: 0.8rem 2rem;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      margin-top: 0.5rem;
+      -webkit-appearance: none;
     }
-    .btn:active { transform: scale(0.97); background: #7c3aed; }
-
-    #send-btn {
-      background: #7c3aed;
-      border: none;
-      border-radius: 0.6rem;
-      color: white;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.6rem 0.9rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-    #send-btn:active { background: #5b21b6; }
 
     /* ── Results ── */
-    #result-box { width: 100%; text-align: left; }
-    #result-box h2 { font-size: 1rem; color: #a78bfa; margin-bottom: 0.8rem; text-align: center; }
-
-    .result-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.45rem 0.7rem;
-      border-radius: 0.45rem;
-      margin-bottom: 0.35rem;
-      font-size: 0.9rem;
+    #result-box { text-align: left; margin-bottom: 1rem; }
+    #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
+    .ri {
+      display: flex; justify-content: space-between;
+      padding: 0.45rem 0.7rem; border-radius: 0.45rem; margin-bottom: 0.35rem; font-size: 0.9rem;
     }
-    .result-item.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
-    .result-item.fail { background: rgba(248,113,113,0.12); color: #f87171; }
+    .ri.ok   { background: rgba(52,211,153,0.15); color: #34d399; }
+    .ri.fail { background: rgba(248,113,113,0.15); color: #f87171; }
 
-    #mode-hint { font-size: 0.75rem; color: #4b5563; }
+    #mode-hint { font-size: 0.75rem; color: #6b7280; margin-bottom: 0.8rem; }
   </style>
 </head>
 <body>
-  <h1>🇮🇹 Impara Italiano</h1>
+  <h1>&#127470;&#127481; Impara Italiano</h1>
 
   <div id="card">
 
-    <!-- Start -->
     <div id="screen-start" class="screen active">
-      <p>
-        5 Vokabeln werden auf Deutsch angezeigt.<br>
-        Du hast <strong style="color:#a78bfa">5 Sekunden</strong>, die<br>
-        italienische Übersetzung einzugeben.
-      </p>
-      <p id="mode-hint"></p>
+      <p>5 Vokabeln auf Deutsch &mdash; du hast <strong style="color:#a78bfa">5 Sekunden</strong> die italienische &Uuml;bersetzung einzugeben.</p>
+      <div id="mode-hint"></div>
       <button class="btn" id="start-btn">Starten</button>
     </div>
 
-    <!-- Quiz -->
     <div id="screen-quiz" class="screen">
       <div id="progress"></div>
       <div id="word"></div>
-
-      <div id="timer-ring">
-        <svg width="68" height="68" viewBox="0 0 68 68">
-          <circle id="timer-track" cx="34" cy="34" r="29"/>
-          <circle id="timer-bar"   cx="34" cy="34" r="29"/>
-        </svg>
-        <div id="timer-label">5</div>
-      </div>
-
+      <div id="timer-wrap"><div id="timer-display">5</div></div>
       <div id="input-row">
-        <input id="answer-input" type="text" placeholder="Italiano…" autocomplete="off"
-               autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <input id="answer-input" type="text" placeholder="Italiano&hellip;"
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
         <button id="send-btn">OK</button>
-        <button id="mic-btn" class="hidden" aria-label="Mikrofon">
-          <svg id="mic-icon" viewBox="0 0 24 24">
-            <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm6.94 7A7 7 0 0 1 5.06 10H3.05A9.004 9.004 0 0 0 11 18.94V21H9v2h6v-2h-2v-2.06A9.004 9.004 0 0 0 20.95 10h-2.01z"/>
-          </svg>
-        </button>
       </div>
-
       <div id="heard"></div>
       <div id="feedback"></div>
+      <button id="mic-btn">&#127908; Sprechen</button>
     </div>
 
-    <!-- Result -->
     <div id="screen-result" class="screen">
       <div id="result-box"></div>
-      <button class="btn" id="next-btn"></button>
+      <button class="btn" id="next-btn">-</button>
     </div>
 
   </div>
 
 <script>
-// ── Vokabeln A2 ───────────────────────────────────────────────────────────
-const VOCAB = [
-  { de: "die Reise",      it: "il viaggio",    alt: ["viaggio"] },
-  { de: "der Urlaub",     it: "la vacanza",    alt: ["vacanza"] },
-  { de: "das Wetter",     it: "il tempo",      alt: ["tempo"] },
-  { de: "die Gesundheit", it: "la salute",     alt: ["salute"] },
-  { de: "der Beruf",      it: "la professione",alt: ["professione"] },
-];
+(function () {
+  'use strict';
 
-// ── State ─────────────────────────────────────────────────────────────────
-let queue = [], missed = [], results = [], current = null;
-let timerInterval = null, timeLeft = 5;
-let recognition = null, listening = false, answered = false, repeatRound = false;
+  var VOCAB = [
+    { de: 'die Reise',      it: 'il viaggio',     alt: ['viaggio'] },
+    { de: 'der Urlaub',     it: 'la vacanza',      alt: ['vacanza'] },
+    { de: 'das Wetter',     it: 'il tempo',        alt: ['tempo'] },
+    { de: 'die Gesundheit', it: 'la salute',       alt: ['salute'] },
+    { de: 'der Beruf',      it: 'la professione',  alt: ['professione'] }
+  ];
 
-// ── SVG ring setup ────────────────────────────────────────────────────────
-const R = 29, CIRC = +(2 * Math.PI * R).toFixed(2);
-const barEl = document.getElementById("timer-bar");
-barEl.style.strokeDasharray  = CIRC;
-barEl.style.strokeDashoffset = 0;
+  var queue = [], missed = [], results = [], current = null;
+  var timerInterval = null, timeLeft = 5;
+  var recognition = null, listening = false, answered = false, repeatRound = false;
 
-// ── Speech recognition ────────────────────────────────────────────────────
-let speechOk = false;
-try {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (SR) { new SR(); speechOk = true; } // probe — throws on blocked environments
-} catch(e) {}
+  // ── DOM refs ──────────────────────────────────────────────────────────
+  var elProgress = document.getElementById('progress');
+  var elWord     = document.getElementById('word');
+  var elTimer    = document.getElementById('timer-display');
+  var elInput    = document.getElementById('answer-input');
+  var elHeard    = document.getElementById('heard');
+  var elFeedback = document.getElementById('feedback');
+  var elMic      = document.getElementById('mic-btn');
+  var elResult   = document.getElementById('result-box');
+  var elNext     = document.getElementById('next-btn');
+  var elHint     = document.getElementById('mode-hint');
 
-document.getElementById("mode-hint").textContent =
-  speechOk ? "🎤 Spracheingabe aktiv" : "⌨️ Texteingabe (Mikrofon nicht verfügbar)";
+  // ── Speech ────────────────────────────────────────────────────────────
+  var SpeechAPI = null;
+  try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch(e) {}
 
-if (speechOk) {
-  document.getElementById("mic-btn").classList.remove("hidden");
-}
-
-// ── Event listeners ───────────────────────────────────────────────────────
-document.getElementById("start-btn").addEventListener("click", startQuiz);
-document.getElementById("send-btn").addEventListener("click", submitText);
-document.getElementById("mic-btn").addEventListener("click", toggleMic);
-document.getElementById("answer-input").addEventListener("keydown", e => {
-  if (e.key === "Enter") submitText();
-});
-
-// ── Quiz flow ─────────────────────────────────────────────────────────────
-function startQuiz() {
-  queue = shuffle([...VOCAB]);
-  missed = []; results = []; repeatRound = false;
-  showScreen("quiz");
-  nextWord();
-}
-
-function nextWord() {
-  answered = false;
-  stopMic();
-  document.getElementById("answer-input").value = "";
-  document.getElementById("heard").textContent    = "";
-  document.getElementById("feedback").textContent = "";
-  document.getElementById("feedback").className   = "";
-
-  if (queue.length === 0) { showRoundResult(); return; }
-
-  current = queue.shift();
-  document.getElementById("word").textContent = current.de;
-  setProgress();
-  startTimer();
-  document.getElementById("answer-input").focus();
-}
-
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 5;
-  setRing(5);
-
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    setRing(timeLeft);
-    if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
-  }, 1000);
-}
-
-function setRing(t) {
-  barEl.style.strokeDashoffset = CIRC - (t / 5) * CIRC;
-  const col = t <= 2 ? "#f87171" : t <= 3 ? "#fbbf24" : "#a78bfa";
-  barEl.style.stroke = col;
-  document.getElementById("timer-label").style.color = col;
-  document.getElementById("timer-label").textContent = t;
-}
-
-function timeOut() {
-  if (answered) return;
-  answered = true; stopMic();
-  markWrong("⏱ Zeit! → " + current.it);
-  setTimeout(nextWord, 1900);
-}
-
-function submitText() {
-  if (answered) return;
-  const val = document.getElementById("answer-input").value.trim().toLowerCase();
-  if (!val) return;
-  answered = true;
-  clearInterval(timerInterval);
-  stopMic();
-  checkAnswer(val);
-}
-
-function checkAnswer(transcript) {
-  const acceptable = [current.it.toLowerCase(), ...current.alt.map(a => a.toLowerCase())];
-  const ok = acceptable.some(a => transcript.includes(a));
-  if (ok) {
-    document.getElementById("feedback").textContent = "✓ Richtig!";
-    document.getElementById("feedback").className   = "correct";
-    results.push({ word: current, ok: true });
+  if (SpeechAPI) {
+    elMic.style.display = 'block';
+    elHint.textContent  = 'Tipp: Mikrofon-Taste drücken zum Sprechen';
   } else {
-    markWrong("✗ Falsch → " + current.it);
+    elHint.textContent  = '⌨️ Texteingabe';
   }
-  setTimeout(nextWord, 1700);
-}
 
-function markWrong(msg) {
-  document.getElementById("feedback").textContent = msg;
-  document.getElementById("feedback").className   = "wrong";
-  missed.push(current);
-  results.push({ word: current, ok: false });
-}
+  // ── Wire up buttons ────────────────────────────────────────────────────
+  document.getElementById('start-btn').onclick = startQuiz;
+  document.getElementById('send-btn').onclick  = submitText;
+  elMic.onclick  = toggleMic;
+  elNext.onclick = startQuiz; // overwritten in showRoundResult
 
-// ── Results ───────────────────────────────────────────────────────────────
-function showRoundResult() {
-  const box = document.getElementById("result-box");
-  const btn = document.getElementById("next-btn");
-
-  let html = `<h2>${repeatRound ? "Wiederholung" : "Runde"} abgeschlossen</h2>`;
-  results.forEach(r => {
-    html += `<div class="result-item ${r.ok ? "ok" : "fail"}">
-      <span>${r.word.de}</span><span>${r.word.it}</span>
-    </div>`;
+  elInput.addEventListener('keydown', function(e) {
+    if (e.keyCode === 13 || e.key === 'Enter') submitText();
   });
-  box.innerHTML = html;
 
-  if (missed.length > 0 && !repeatRound) {
-    btn.textContent = `${missed.length} Wort${missed.length > 1 ? "e" : ""} wiederholen →`;
-    btn.onclick = startRepeat;
-  } else {
-    btn.textContent = "Neu starten";
-    btn.onclick = startQuiz;
+  // ── Screens ───────────────────────────────────────────────────────────
+  function showScreen(name) {
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].className = 'screen' + (screens[i].id === 'screen-' + name ? ' active' : '');
+    }
   }
-  showScreen("result");
-}
 
-function startRepeat() {
-  queue = shuffle([...missed]);
-  missed = []; results = []; repeatRound = true;
-  showScreen("quiz");
-  nextWord();
-}
-
-// ── Mic ───────────────────────────────────────────────────────────────────
-function toggleMic() { listening ? stopMic() : startMic(); }
-
-function startMic() {
-  if (!speechOk || listening || answered) return;
-  try {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = "it-IT";
-    recognition.continuous = false;
-    recognition.interimResults = true;
-
-    recognition.onresult = e => {
-      const t = Array.from(e.results).map(r => r[0].transcript).join(" ").trim().toLowerCase();
-      document.getElementById("answer-input").value = t;
-      document.getElementById("heard").textContent  = "„" + t + """;
-      if (e.results[e.results.length - 1].isFinal) { stopMic(); submitText(); }
-    };
-    recognition.onerror = e => {
-      stopMic();
-      if (e.error === "no-speech" && !answered) timeOut();
-    };
-    recognition.onend = () => { listening = false; setMicUI(false); };
-
-    recognition.start();
-    listening = true;
-    setMicUI(true);
-  } catch(e) {
-    speechOk = false;
-    document.getElementById("mic-btn").classList.add("hidden");
+  // ── Quiz ──────────────────────────────────────────────────────────────
+  function startQuiz() {
+    queue = shuffle(VOCAB.slice());
+    missed = []; results = []; repeatRound = false;
+    showScreen('quiz');
+    nextWord();
   }
-}
 
-function stopMic() {
-  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
-  listening = false;
-  setMicUI(false);
-}
+  function nextWord() {
+    answered = false;
+    stopMic();
+    elInput.value      = '';
+    elHeard.textContent    = '';
+    elFeedback.textContent = '';
+    elFeedback.className   = '';
 
-function setMicUI(on) {
-  document.getElementById("mic-btn").className = on ? "listening" : "";
-}
+    if (queue.length === 0) { showRoundResult(); return; }
 
-// ── Helpers ───────────────────────────────────────────────────────────────
-function showScreen(name) {
-  document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-  document.getElementById("screen-" + name).classList.add("active");
-}
-
-function setProgress() {
-  const done = VOCAB.length - queue.length;
-  document.getElementById("progress").textContent =
-    `Wort ${done} / ${VOCAB.length}${repeatRound ? " · Wiederholung" : ""}`;
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    current = queue.shift();
+    elWord.textContent = current.de;
+    setProgress();
+    startTimer();
   }
-  return arr;
-}
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 5;
+    setTimerDisplay(5);
+
+    timerInterval = setInterval(function() {
+      timeLeft -= 1;
+      setTimerDisplay(timeLeft);
+      if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
+    }, 1000);
+  }
+
+  function setTimerDisplay(t) {
+    elTimer.textContent = t;
+    elTimer.className =
+      t <= 2 ? 'urgent' :
+      t <= 3 ? 'warn'   : '';
+  }
+
+  function timeOut() {
+    if (answered) return;
+    answered = true; stopMic();
+    markWrong('⏱ Zeit! → ' + current.it);
+    setTimeout(nextWord, 1900);
+  }
+
+  function submitText() {
+    if (answered) return;
+    var val = elInput.value.replace(/^\s+|\s+$/g, '').toLowerCase();
+    if (!val) return;
+    answered = true;
+    clearInterval(timerInterval);
+    stopMic();
+    evaluate(val);
+  }
+
+  function evaluate(text) {
+    var ok = [current.it.toLowerCase()].concat(current.alt.map(function(a) { return a.toLowerCase(); }))
+              .some(function(a) { return text.indexOf(a) !== -1; });
+    if (ok) {
+      elFeedback.textContent = '✓ Richtig!';
+      elFeedback.className   = 'correct';
+      results.push({ word: current, ok: true });
+    } else {
+      markWrong('✗ Falsch → ' + current.it);
+    }
+    setTimeout(nextWord, 1700);
+  }
+
+  function markWrong(msg) {
+    elFeedback.textContent = msg;
+    elFeedback.className   = 'wrong';
+    missed.push(current);
+    results.push({ word: current, ok: false });
+  }
+
+  // ── Results ───────────────────────────────────────────────────────────
+  function showRoundResult() {
+    var html = '<h2>' + (repeatRound ? 'Wiederholung' : 'Runde') + ' abgeschlossen</h2>';
+    results.forEach(function(r) {
+      html += '<div class="ri ' + (r.ok ? 'ok' : 'fail') + '"><span>' +
+              r.word.de + '</span><span>' + r.word.it + '</span></div>';
+    });
+    elResult.innerHTML = html;
+
+    if (missed.length > 0 && !repeatRound) {
+      elNext.textContent = missed.length + ' Wort' + (missed.length > 1 ? 'e' : '') + ' wiederholen';
+      elNext.onclick = startRepeat;
+    } else {
+      elNext.textContent = 'Neu starten';
+      elNext.onclick = startQuiz;
+    }
+    showScreen('result');
+  }
+
+  function startRepeat() {
+    queue = shuffle(missed.slice());
+    missed = []; results = []; repeatRound = true;
+    showScreen('quiz');
+    nextWord();
+  }
+
+  // ── Mic ───────────────────────────────────────────────────────────────
+  function toggleMic() { listening ? stopMic() : startMic(); }
+
+  function startMic() {
+    if (!SpeechAPI || listening || answered) return;
+    try {
+      recognition = new SpeechAPI();
+      recognition.lang = 'it-IT';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+
+      recognition.onresult = function(e) {
+        var t = '';
+        for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+        t = t.toLowerCase().replace(/^\s+|\s+$/g, '');
+        elInput.value = t;
+        elHeard.textContent = '„' + t + '“';
+        if (e.results[e.results.length - 1].isFinal) { stopMic(); submitText(); }
+      };
+      recognition.onerror = function(e) {
+        stopMic();
+        if (e.error === 'no-speech' && !answered) timeOut();
+      };
+      recognition.onend = function() { listening = false; elMic.className = ''; elMic.textContent = '🎙️ Sprechen'; };
+
+      recognition.start();
+      listening = true;
+      elMic.className = 'listening';
+      elMic.textContent = '⏹ Stopp';
+    } catch(e) {
+      SpeechAPI = null;
+      elMic.style.display = 'none';
+    }
+  }
+
+  function stopMic() {
+    if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+    listening = false;
+    elMic.className = '';
+    elMic.textContent = '🎙️ Sprechen';
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────
+  function setProgress() {
+    elProgress.textContent = 'Wort ' + (VOCAB.length - queue.length) + ' / ' + VOCAB.length +
+      (repeatRound ? ' · Wiederholung' : '');
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+}());
 </script>
 </body>
 </html>
