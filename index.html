@@ -12,92 +12,90 @@
       background: #1a1a2e; color: #eee;
       min-height: 100vh;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 1rem;
+      align-items: center; justify-content: flex-start;
+      padding: 1rem; padding-top: 1.5rem;
     }
 
-    h1 { font-size: 1.1rem; color: #a78bfa; margin-bottom: 1.2rem; text-align: center; letter-spacing: 0.08em; }
+    h1 { font-size: 1.1rem; color: #a78bfa; margin-bottom: 1rem; text-align: center; letter-spacing: 0.08em; }
 
     #card {
       background: #16213e; border: 2px solid #a78bfa;
       border-radius: 1.5rem; width: 100%; max-width: 420px;
-      padding: 1.5rem 1.5rem 2rem;
+      padding: 1.2rem 1.2rem 1.5rem;
       box-shadow: 0 8px 40px rgba(167,139,250,0.15);
     }
 
     .screen { display: none; }
     .screen.active { display: block; }
 
-    #screen-start { text-align: center; }
-    #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1.2rem; }
-
-    #quiz-topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.6rem;
+    /* ── Category selection ── */
+    #screen-start p { color: #9ca3af; font-size: 0.82rem; margin-bottom: 0.8rem; text-align: center; }
+    #category-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 0.45rem;
     }
-
-    #progress {
-      font-size: 0.72rem; color: #6b7280;
-      text-transform: uppercase; letter-spacing: 0.07em;
+    .cat-btn {
+      background: #1e2a4a; border: 1.5px solid #374151; border-radius: 0.7rem;
+      color: #e5e7eb; font-size: 0.8rem; font-weight: 600;
+      padding: 0.7rem 0.4rem; cursor: pointer; text-align: center;
+      line-height: 1.3; -webkit-appearance: none;
     }
+    .cat-btn:active { background: #263354; border-color: #a78bfa; }
+    .cat-btn-mix {
+      width: 100%; background: rgba(167,139,250,0.13); border: 1.5px solid #a78bfa;
+      border-radius: 0.7rem; color: #a78bfa; font-size: 0.88rem; font-weight: 700;
+      padding: 0.75rem; cursor: pointer; text-align: center;
+      margin-top: 0.2rem; -webkit-appearance: none;
+    }
+    .cat-btn-mix:active { background: rgba(167,139,250,0.28); }
 
+    /* ── Quiz topbar ── */
+    #quiz-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+    #progress { font-size: 0.72rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.07em; }
     #timer-display {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 3px solid #a78bfa;
+      width: 34px; height: 34px; border-radius: 50%; border: 3px solid #a78bfa;
       display: flex; align-items: center; justify-content: center;
       font-size: 0.95rem; font-weight: 700; color: #a78bfa;
-      transition: border-color 0.3s, color 0.3s;
-      flex-shrink: 0;
+      transition: border-color 0.3s, color 0.3s; flex-shrink: 0;
     }
     #timer-display.warn   { border-color: #fbbf24; color: #fbbf24; }
     #timer-display.urgent { border-color: #f87171; color: #f87171; }
     #timer-display.grace  { border-color: #374151; color: #6b7280; font-size: 0.7rem; }
 
+    /* ── Dots ── */
     #dots { display: flex; gap: 0.4rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
     .dot { width: 10px; height: 10px; border-radius: 50%; background: #374151; transition: background 0.3s; }
     .dot.done    { background: #34d399; }
     .dot.current { background: #a78bfa; }
 
+    /* ── The big word ── */
     #word {
-      font-size: 2.6rem; font-weight: 800;
-      color: #f9fafb; text-align: center;
-      margin: 1.8rem 0 1.6rem;
-      line-height: 1.15;
-      min-height: 4rem;
+      font-size: 2.6rem; font-weight: 800; color: #f9fafb; text-align: center;
+      margin: 1.8rem 0 1.6rem; line-height: 1.15; min-height: 4rem;
       display: flex; align-items: center; justify-content: center;
+      word-break: break-word;
     }
 
-    #mic-status {
-      font-size: 0.72rem; color: #6b7280;
-      text-align: center; margin-bottom: 0.7rem; min-height: 1em;
-    }
-
+    /* ── Mic & input ── */
+    #mic-status { font-size: 0.72rem; color: #6b7280; text-align: center; margin-bottom: 0.7rem; min-height: 1em; }
     #answer-input {
-      width: 100%; background: #0f172a;
-      border: 1.5px solid #374151; border-radius: 0.6rem;
-      color: #f9fafb; font-size: 1.05rem;
-      padding: 0.7rem 1rem; outline: none;
-      margin-bottom: 0.6rem;
+      width: 100%; background: #0f172a; border: 1.5px solid #374151; border-radius: 0.6rem;
+      color: #f9fafb; font-size: 1.05rem; padding: 0.7rem 1rem; outline: none; margin-bottom: 0.6rem;
     }
     #answer-input:focus { border-color: #a78bfa; }
     #answer-input::placeholder { color: #4b5563; }
-
     #heard    { font-size: 0.82rem; color: #9ca3af; min-height: 1.1em; font-style: italic; text-align: center; margin-bottom: 0.4rem; }
     #feedback { font-size: 1.1rem; font-weight: 700; min-height: 1.3em; text-align: center; }
     .correct  { color: #34d399; }
     .wrong    { color: #f87171; }
 
+    /* ── Shared button ── */
     .btn {
-      display: block; width: 100%;
-      background: #a78bfa; color: white; border: none;
-      border-radius: 0.75rem; padding: 0.85rem;
-      font-size: 1rem; font-weight: 700; cursor: pointer;
-      margin-top: 0.5rem; -webkit-appearance: none;
-      text-align: center;
+      display: block; width: 100%; background: #a78bfa; color: white; border: none;
+      border-radius: 0.75rem; padding: 0.85rem; font-size: 1rem; font-weight: 700;
+      cursor: pointer; margin-top: 0.5rem; -webkit-appearance: none; text-align: center;
     }
 
+    /* ── Results ── */
     #result-box { margin-bottom: 1rem; }
     #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
     .ri {
@@ -108,38 +106,19 @@
     .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
     .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; white-space: nowrap; }
 
+    /* ── Joker FAB ── */
     #joker-fab {
-      position: fixed;
-      bottom: 1.8rem;
-      right: 1.8rem;
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: #fbbf24;
-      border: none;
-      cursor: pointer;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      box-shadow: 0 6px 24px rgba(251,191,36,0.35);
+      position: fixed; bottom: 1.8rem; right: 1.8rem;
+      width: 72px; height: 72px; border-radius: 50%; background: #fbbf24; border: none;
+      cursor: pointer; display: none; flex-direction: column; align-items: center;
+      justify-content: center; gap: 4px; box-shadow: 0 6px 24px rgba(251,191,36,0.35);
       transition: opacity 0.2s, transform 0.15s, background 0.2s;
-      -webkit-appearance: none;
-      z-index: 100;
+      -webkit-appearance: none; z-index: 100;
     }
     #joker-fab.visible  { display: flex; }
     #joker-fab:active   { transform: scale(0.93); }
-    #joker-fab:disabled {
-      background: #374151;
-      box-shadow: none;
-      cursor: default;
-      opacity: 0.5;
-    }
-
-    #joker-label {
-      font-size: 1rem; font-weight: 800;
-      color: #1a1a2e; line-height: 1;
-    }
+    #joker-fab:disabled { background: #374151; box-shadow: none; cursor: default; opacity: 0.5; }
+    #joker-label { font-size: 1rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
     #joker-pips { display: flex; gap: 3px; }
     .pip { width: 7px; height: 7px; border-radius: 50%; background: rgba(26,26,46,0.5); }
     .pip.active { background: rgba(26,26,46,0.85); }
@@ -150,11 +129,9 @@
   <div id="card">
 
     <div id="screen-start" class="screen active">
-      <p>5 Vokabeln auf Deutsch — sprich oder tippe<br>
-         die italienische Übersetzung.<br>
-         Du hast jeweils <strong style="color:#a78bfa">5 Sekunden</strong>.<br>
-         Falsche Antworten werden wiederholt.</p>
-      <button class="btn" id="start-btn">Starten</button>
+      <p>Kategorie wählen – 5 zufällige Vokabeln:</p>
+      <div id="category-grid"></div>
+      <button class="cat-btn-mix" id="mix-btn">Mix – alle Kategorien</button>
     </div>
 
     <div id="screen-quiz" class="screen">
@@ -173,7 +150,7 @@
 
     <div id="screen-result" class="screen">
       <div id="result-box"></div>
-      <button class="btn" id="next-btn">Neu starten</button>
+      <button class="btn" id="next-btn">Kategorien</button>
     </div>
 
   </div>
@@ -187,20 +164,358 @@
 (function () {
   'use strict';
 
-  var VOCAB = [
-    { de: 'die Reise',      it: 'il viaggio',    alt: ['viaggio'] },
-    { de: 'der Urlaub',     it: 'la vacanza',     alt: ['vacanza'] },
-    { de: 'das Wetter',     it: 'il tempo',       alt: ['tempo'] },
-    { de: 'die Gesundheit', it: 'la salute',      alt: ['salute'] },
-    { de: 'der Beruf',      it: 'la professione', alt: ['professione'] }
+  var CATEGORIES = [
+    {
+      name: 'Personen & Familie',
+      words: [
+        { de: 'die Familie',        it: 'la famiglia',       alt: ['famiglia'] },
+        { de: 'der Vater',          it: 'il padre',          alt: ['padre'] },
+        { de: 'die Mutter',         it: 'la madre',          alt: ['madre'] },
+        { de: 'der Sohn',           it: 'il figlio',         alt: ['figlio'] },
+        { de: 'die Tochter',        it: 'la figlia',         alt: ['figlia'] },
+        { de: 'der Bruder',         it: 'il fratello',       alt: ['fratello'] },
+        { de: 'die Schwester',      it: 'la sorella',        alt: ['sorella'] },
+        { de: 'der Ehemann',        it: 'il marito',         alt: ['marito'] },
+        { de: 'die Ehefrau',        it: 'la moglie',         alt: ['moglie'] },
+        { de: 'der Großvater',      it: 'il nonno',          alt: ['nonno'] },
+        { de: 'die Großmutter',     it: 'la nonna',          alt: ['nonna'] },
+        { de: 'der Onkel',          it: 'lo zio',            alt: ['zio'] },
+        { de: 'die Tante',          it: 'la zia',            alt: ['zia'] },
+        { de: 'der Cousin',         it: 'il cugino',         alt: ['cugino'] },
+        { de: 'die Cousine',        it: 'la cugina',         alt: ['cugina'] },
+        { de: 'das Kind (Junge)',   it: 'il bambino',        alt: ['bambino'] },
+        { de: 'das Kind (Mädchen)', it: 'la bambina',        alt: ['bambina'] },
+        { de: 'der Freund',         it: "l'amico",           alt: ['amico'] },
+        { de: 'die Freundin',       it: "l'amica",           alt: ['amica'] },
+        { de: 'der Nachbar',        it: 'il vicino',         alt: ['vicino'] },
+        { de: 'die Nachbarin',      it: 'la vicina',         alt: ['vicina'] },
+        { de: 'die Person',         it: 'la persona',        alt: ['persona'] },
+        { de: 'der Mann',           it: "l'uomo",            alt: ['uomo'] },
+        { de: 'die Frau',           it: 'la donna',          alt: ['donna'] },
+        { de: 'der Herr',           it: 'il signore',        alt: ['signore'] },
+        { de: 'die Dame',           it: 'la signora',        alt: ['signora'] },
+        { de: 'der Junge',          it: 'il ragazzo',        alt: ['ragazzo'] },
+        { de: 'das Mädchen',        it: 'la ragazza',        alt: ['ragazza'] },
+        { de: 'der Kollege',        it: 'il collega',        alt: ['collega'] },
+        { de: 'die Kollegin',       it: 'la collega',        alt: ['collega'] },
+        { de: 'der Chef',           it: 'il capo',           alt: ['capo'] },
+        { de: 'der Kunde',          it: 'il cliente',        alt: ['cliente'] },
+        { de: 'die Kundin',         it: 'la cliente',        alt: ['cliente'] },
+        { de: 'der Lehrer',         it: 'il professore',     alt: ['professore'] },
+        { de: 'die Lehrerin',       it: 'la professoressa',  alt: ['professoressa'] },
+        { de: 'der Student',        it: 'lo studente',       alt: ['studente'] },
+        { de: 'die Studentin',      it: 'la studentessa',    alt: ['studentessa'] },
+        { de: 'der Arzt',           it: 'il dottore',        alt: ['dottore'] },
+        { de: 'die Ärztin',         it: 'la dottoressa',     alt: ['dottoressa'] },
+        { de: 'der Hausnachbar',    it: 'il vicino di casa', alt: ['vicino di casa', 'vicino'] }
+      ]
+    },
+    {
+      name: 'Alltag & Wohnen',
+      words: [
+        { de: 'das Haus',           it: 'la casa',           alt: ['casa'] },
+        { de: 'die Wohnung',        it: "l'appartamento",    alt: ['appartamento'] },
+        { de: 'das Zimmer',         it: 'la stanza',         alt: ['stanza'] },
+        { de: 'das Wohnzimmer',     it: 'il soggiorno',      alt: ['soggiorno'] },
+        { de: 'die Küche',          it: 'la cucina',         alt: ['cucina'] },
+        { de: 'das Bad',            it: 'il bagno',          alt: ['bagno'] },
+        { de: 'das Schlafzimmer',   it: 'la camera da letto', alt: ['camera da letto', 'camera'] },
+        { de: 'der Balkon',         it: 'il balcone',        alt: ['balcone'] },
+        { de: 'der Garten',         it: 'il giardino',       alt: ['giardino'] },
+        { de: 'die Tür',            it: 'la porta',          alt: ['porta'] },
+        { de: 'das Fenster',        it: 'la finestra',       alt: ['finestra'] },
+        { de: 'das Bett',           it: 'il letto',          alt: ['letto'] },
+        { de: 'der Stuhl',          it: 'la sedia',          alt: ['sedia'] },
+        { de: 'der Tisch',          it: 'il tavolo',         alt: ['tavolo'] },
+        { de: 'der Schrank',        it: "l'armadio",         alt: ['armadio'] },
+        { de: 'das Licht',          it: 'la luce',           alt: ['luce'] },
+        { de: 'der Kühlschrank',    it: 'il frigorifero',    alt: ['frigorifero'] },
+        { de: 'der Ofen',           it: 'il forno',          alt: ['forno'] },
+        { de: 'die Waschmaschine',  it: 'la lavatrice',      alt: ['lavatrice'] },
+        { de: 'die Stadt',          it: 'la città',          alt: ['città', 'citta'] },
+        { de: 'das Dorf',           it: 'il paese',          alt: ['paese'] },
+        { de: 'die Straße',         it: 'la strada',         alt: ['strada'] },
+        { de: 'der Platz',          it: 'la piazza',         alt: ['piazza'] },
+        { de: 'das Viertel',        it: 'il quartiere',      alt: ['quartiere'] },
+        { de: 'das Gebäude',        it: 'il palazzo',        alt: ['palazzo'] },
+        { de: 'das Geschäft',       it: 'il negozio',        alt: ['negozio'] },
+        { de: 'der Supermarkt',     it: 'il supermercato',   alt: ['supermercato'] },
+        { de: 'der Markt',          it: 'il mercato',        alt: ['mercato'] },
+        { de: 'die Apotheke',       it: 'la farmacia',       alt: ['farmacia'] },
+        { de: 'die Bank',           it: 'la banca',          alt: ['banca'] },
+        { de: 'die Post',           it: 'la posta',          alt: ['posta'] },
+        { de: 'die Kirche',         it: 'la chiesa',         alt: ['chiesa'] },
+        { de: 'der Park',           it: 'il parco',          alt: ['parco'] },
+        { de: 'die Haltestelle',    it: 'la fermata',        alt: ['fermata'] },
+        { de: 'der Bahnhof',        it: 'la stazione',       alt: ['stazione'] },
+        { de: 'das Büro',           it: "l'ufficio",         alt: ['ufficio'] },
+        { de: 'die Schule',         it: 'la scuola',         alt: ['scuola'] },
+        { de: 'die Universität',    it: "l'università",      alt: ['università', 'universita'] },
+        { de: 'das Café',           it: 'il bar',            alt: ['bar'] },
+        { de: 'das Restaurant',     it: 'il ristorante',     alt: ['ristorante'] },
+        { de: 'das Hotel',          it: "l'albergo",         alt: ['albergo'] },
+        { de: 'das Museum',         it: 'il museo',          alt: ['museo'] },
+        { de: 'das Theater',        it: 'il teatro',         alt: ['teatro'] },
+        { de: 'das Kino',           it: 'il cinema',         alt: ['cinema'] },
+        { de: 'die Bibliothek',     it: 'la biblioteca',     alt: ['biblioteca'] }
+      ]
+    },
+    {
+      name: 'Essen & Trinken',
+      words: [
+        { de: 'das Essen',          it: 'il cibo',           alt: ['cibo'] },
+        { de: 'das Getränk',        it: 'la bevanda',        alt: ['bevanda'] },
+        { de: 'das Brot',           it: 'il pane',           alt: ['pane'] },
+        { de: 'das Wasser',         it: "l'acqua",           alt: ['acqua'] },
+        { de: 'der Wein',           it: 'il vino',           alt: ['vino'] },
+        { de: 'das Bier',           it: 'la birra',          alt: ['birra'] },
+        { de: 'der Kaffee',         it: 'il caffè',          alt: ['caffè', 'caffe'] },
+        { de: 'der Tee',            it: 'il tè',             alt: ['tè', 'te'] },
+        { de: 'die Milch',          it: 'il latte',          alt: ['latte'] },
+        { de: 'der Zucker',         it: 'lo zucchero',       alt: ['zucchero'] },
+        { de: 'das Salz',           it: 'il sale',           alt: ['sale'] },
+        { de: 'das Öl',             it: "l'olio",            alt: ['olio'] },
+        { de: 'die Butter',         it: 'il burro',          alt: ['burro'] },
+        { de: 'der Käse',           it: 'il formaggio',      alt: ['formaggio'] },
+        { de: 'der Schinken',       it: 'il prosciutto',     alt: ['prosciutto'] },
+        { de: 'das Fleisch',        it: 'la carne',          alt: ['carne'] },
+        { de: 'der Fisch',          it: 'il pesce',          alt: ['pesce'] },
+        { de: 'das Obst',           it: 'la frutta',         alt: ['frutta'] },
+        { de: 'das Gemüse',         it: 'la verdura',        alt: ['verdura'] },
+        { de: 'der Apfel',          it: 'la mela',           alt: ['mela'] },
+        { de: 'die Banane',         it: 'la banana',         alt: ['banana'] },
+        { de: 'die Orange',         it: "l'arancia",         alt: ['arancia'] },
+        { de: 'die Tomate',         it: 'il pomodoro',       alt: ['pomodoro'] },
+        { de: 'die Kartoffel',      it: 'la patata',         alt: ['patata'] },
+        { de: 'der Salat',          it: "l'insalata",        alt: ['insalata'] },
+        { de: 'die Pasta',          it: 'la pasta',          alt: ['pasta'] },
+        { de: 'die Pizza',          it: 'la pizza',          alt: ['pizza'] },
+        { de: 'der Reis',           it: 'il riso',           alt: ['riso'] },
+        { de: 'die Suppe',          it: 'la zuppa',          alt: ['zuppa'] },
+        { de: 'der Nachtisch',      it: 'il dolce',          alt: ['dolce'] },
+        { de: 'das Eis',            it: 'il gelato',         alt: ['gelato'] },
+        { de: 'das Frühstück',      it: 'la colazione',      alt: ['colazione'] },
+        { de: 'das Mittagessen',    it: 'il pranzo',         alt: ['pranzo'] },
+        { de: 'das Abendessen',     it: 'la cena',           alt: ['cena'] },
+        { de: 'der Snack',          it: 'lo spuntino',       alt: ['spuntino'] },
+        { de: 'der Teller',         it: 'il piatto',         alt: ['piatto'] },
+        { de: 'das Messer',         it: 'il coltello',       alt: ['coltello'] },
+        { de: 'die Gabel',          it: 'la forchetta',      alt: ['forchetta'] },
+        { de: 'der Löffel',         it: 'il cucchiaio',      alt: ['cucchiaio'] },
+        { de: 'das Glas',           it: 'il bicchiere',      alt: ['bicchiere'] },
+        { de: 'die Rechnung',       it: 'il conto',          alt: ['conto'] },
+        { de: 'die Speisekarte',    it: 'il menu',           alt: ['menu', 'menù'] },
+        { de: 'der Kassenbon',      it: 'lo scontrino',      alt: ['scontrino'] },
+        { de: 'der Supermarkt',     it: 'il supermercato',   alt: ['supermercato'] },
+        { de: 'die Kasse',          it: 'la cassa',          alt: ['cassa'] }
+      ]
+    },
+    {
+      name: 'Zeit & Kalender',
+      words: [
+        { de: 'heute',              it: 'oggi',              alt: [] },
+        { de: 'gestern',            it: 'ieri',              alt: [] },
+        { de: 'morgen',             it: 'domani',            alt: [] },
+        { de: 'der Morgen',         it: 'la mattina',        alt: ['mattina'] },
+        { de: 'der Nachmittag',     it: 'il pomeriggio',     alt: ['pomeriggio'] },
+        { de: 'der Abend',          it: 'la sera',           alt: ['sera'] },
+        { de: 'die Nacht',          it: 'la notte',          alt: ['notte'] },
+        { de: 'der Tag',            it: 'il giorno',         alt: ['giorno'] },
+        { de: 'die Woche',          it: 'la settimana',      alt: ['settimana'] },
+        { de: 'der Monat',          it: 'il mese',           alt: ['mese'] },
+        { de: 'das Jahr',           it: "l'anno",            alt: ['anno'] },
+        { de: 'Montag',             it: 'lunedì',            alt: ['lunedi'] },
+        { de: 'Dienstag',           it: 'martedì',           alt: ['martedi'] },
+        { de: 'Mittwoch',           it: 'mercoledì',         alt: ['mercoledi'] },
+        { de: 'Donnerstag',         it: 'giovedì',           alt: ['giovedi'] },
+        { de: 'Freitag',            it: 'venerdì',           alt: ['venerdi'] },
+        { de: 'Samstag',            it: 'sabato',            alt: [] },
+        { de: 'Sonntag',            it: 'domenica',          alt: [] },
+        { de: 'die Stunde',         it: "l'ora",             alt: ['ora'] },
+        { de: 'die Minute',         it: 'il minuto',         alt: ['minuto'] },
+        { de: 'das Datum',          it: 'la data',           alt: ['data'] },
+        { de: 'der Geburtstag',     it: 'il compleanno',     alt: ['compleanno'] },
+        { de: 'früh / bald',        it: 'presto',            alt: [] },
+        { de: 'spät',               it: 'tardi',             alt: [] },
+        { de: 'jetzt',              it: 'adesso',            alt: [] }
+      ]
+    },
+    {
+      name: 'Körper & Gefühle',
+      words: [
+        { de: 'der Körper',         it: 'il corpo',          alt: ['corpo'] },
+        { de: 'der Kopf',           it: 'la testa',          alt: ['testa'] },
+        { de: 'das Gesicht',        it: 'il viso',           alt: ['viso'] },
+        { de: 'das Auge',           it: "l'occhio",          alt: ['occhio'] },
+        { de: 'das Ohr',            it: "l'orecchio",        alt: ['orecchio'] },
+        { de: 'der Mund',           it: 'la bocca',          alt: ['bocca'] },
+        { de: 'der Zahn',           it: 'il dente',          alt: ['dente'] },
+        { de: 'die Hand',           it: 'la mano',           alt: ['mano'] },
+        { de: 'der Arm',            it: 'il braccio',        alt: ['braccio'] },
+        { de: 'das Bein',           it: 'la gamba',          alt: ['gamba'] },
+        { de: 'der Fuß',            it: 'il piede',          alt: ['piede'] },
+        { de: 'das Herz',           it: 'il cuore',          alt: ['cuore'] },
+        { de: 'der Rücken',         it: 'la schiena',        alt: ['schiena'] },
+        { de: 'die Gesundheit',     it: 'la salute',         alt: ['salute'] },
+        { de: 'die Krankheit',      it: 'la malattia',       alt: ['malattia'] },
+        { de: 'der Arzt',           it: 'il medico',         alt: ['medico'] },
+        { de: 'die Apotheke',       it: 'la farmacia',       alt: ['farmacia'] },
+        { de: 'das Medikament',     it: 'il medicinale',     alt: ['medicinale'] },
+        { de: 'der Schmerz',        it: 'il dolore',         alt: ['dolore'] },
+        { de: 'das Fieber',         it: 'la febbre',         alt: ['febbre'] },
+        { de: 'müde',               it: 'stanco',            alt: [] },
+        { de: 'krank',              it: 'malato',            alt: [] },
+        { de: 'glücklich',          it: 'felice',            alt: [] },
+        { de: 'traurig',            it: 'triste',            alt: [] },
+        { de: 'wütend',             it: 'arrabbiato',        alt: [] }
+      ]
+    },
+    {
+      name: 'Arbeit & Freizeit',
+      words: [
+        { de: 'die Arbeit',         it: 'il lavoro',         alt: ['lavoro'] },
+        { de: 'arbeiten',           it: 'lavorare',          alt: [] },
+        { de: 'das Büro',           it: "l'ufficio",         alt: ['ufficio'] },
+        { de: 'der Kollege',        it: 'il collega',        alt: ['collega'] },
+        { de: 'die Besprechung',    it: 'la riunione',       alt: ['riunione'] },
+        { de: 'die Arbeitszeit',    it: "l'orario",          alt: ['orario'] },
+        { de: 'das Gehalt',         it: 'lo stipendio',      alt: ['stipendio'] },
+        { de: 'die Pause',          it: 'la pausa',          alt: ['pausa'] },
+        { de: 'die Aufgabe',        it: 'il compito',        alt: ['compito'] },
+        { de: 'die Prüfung',        it: "l'esame",           alt: ['esame'] },
+        { de: 'der Unterricht',     it: 'la lezione',        alt: ['lezione'] },
+        { de: 'der Student',        it: 'lo studente',       alt: ['studente'] },
+        { de: 'studieren',          it: 'studiare',          alt: [] },
+        { de: 'die Schule',         it: 'la scuola',         alt: ['scuola'] },
+        { de: 'die Universität',    it: "l'università",      alt: ['università', 'universita'] },
+        { de: 'der Kurs',           it: 'il corso',          alt: ['corso'] },
+        { de: 'der Lehrer',         it: 'il professore',     alt: ['professore'] },
+        { de: 'die Lehrerin',       it: 'la professoressa',  alt: ['professoressa'] },
+        { de: 'das Buch',           it: 'il libro',          alt: ['libro'] },
+        { de: 'das Heft',           it: 'il quaderno',       alt: ['quaderno'] },
+        { de: 'der Stift',          it: 'la penna',          alt: ['penna'] },
+        { de: 'der Bleistift',      it: 'la matita',         alt: ['matita'] },
+        { de: 'der Radiergummi',    it: 'la gomma',          alt: ['gomma'] },
+        { de: 'der Computer',       it: 'il computer',       alt: ['computer'] },
+        { de: 'die E-Mail',         it: "l'e-mail",          alt: ['e-mail', 'email'] },
+        { de: 'das Telefon',        it: 'il telefono',       alt: ['telefono'] },
+        { de: 'anrufen',            it: 'chiamare',          alt: [] },
+        { de: 'spielen',            it: 'giocare',           alt: [] },
+        { de: 'lesen',              it: 'leggere',           alt: [] },
+        { de: 'schreiben',          it: 'scrivere',          alt: [] },
+        { de: 'zuhören',            it: 'ascoltare',         alt: [] },
+        { de: 'schauen',            it: 'guardare',          alt: [] },
+        { de: 'zu Fuß gehen',       it: 'camminare',         alt: [] },
+        { de: 'laufen / rennen',    it: 'correre',           alt: [] },
+        { de: 'schwimmen',          it: 'nuotare',           alt: [] },
+        { de: 'reisen',             it: 'viaggiare',         alt: [] },
+        { de: 'ausgehen',           it: 'uscire',            alt: [] },
+        { de: 'besuchen',           it: 'visitare',          alt: [] },
+        { de: 'treffen',            it: 'incontrare',        alt: [] },
+        { de: 'tanzen',             it: 'ballare',           alt: [] },
+        { de: 'singen',             it: 'cantare',           alt: [] },
+        { de: 'das Hobby',          it: 'il hobby',          alt: ['hobby'] },
+        { de: 'die Freizeit',       it: 'il tempo libero',   alt: ['tempo libero'] },
+        { de: 'der Sport',          it: 'lo sport',          alt: ['sport'] },
+        { de: 'die Musik',          it: 'la musica',         alt: ['musica'] }
+      ]
+    },
+    {
+      name: 'Reise & Verkehr',
+      words: [
+        { de: 'die Reise',          it: 'il viaggio',        alt: ['viaggio'] },
+        { de: 'reisen',             it: 'viaggiare',         alt: [] },
+        { de: 'der Urlaub',         it: 'la vacanza',        alt: ['vacanza'] },
+        { de: 'der Tourist',        it: 'il turista',        alt: ['turista'] },
+        { de: 'die Stadt',          it: 'la città',          alt: ['città', 'citta'] },
+        { de: 'die Karte / Plan',   it: 'la mappa',          alt: ['mappa'] },
+        { de: 'die Haltestelle',    it: 'la fermata',        alt: ['fermata'] },
+        { de: 'der Bahnhof',        it: 'la stazione',       alt: ['stazione'] },
+        { de: 'der Flughafen',      it: "l'aeroporto",       alt: ['aeroporto'] },
+        { de: 'der Zug',            it: 'il treno',          alt: ['treno'] },
+        { de: 'der Bus',            it: "l'autobus",         alt: ['autobus'] },
+        { de: 'die Straßenbahn',    it: 'il tram',           alt: ['tram'] },
+        { de: 'die U-Bahn',         it: 'la metropolitana',  alt: ['metropolitana', 'metro'] },
+        { de: 'das Auto',           it: 'la macchina',       alt: ['macchina'] },
+        { de: 'das Taxi',           it: 'il taxi',           alt: ['taxi'] },
+        { de: 'das Ticket',         it: 'il biglietto',      alt: ['biglietto'] },
+        { de: 'der Koffer',         it: 'la valigia',        alt: ['valigia'] },
+        { de: 'die Reservierung',   it: 'la prenotazione',   alt: ['prenotazione'] },
+        { de: 'das Hotelzimmer',    it: 'la camera',         alt: ['camera'] },
+        { de: 'das Stockwerk',      it: 'il piano',          alt: ['piano'] },
+        { de: 'der Aufzug',         it: "l'ascensore",       alt: ['ascensore'] },
+        { de: 'links',              it: 'sinistra',          alt: [] },
+        { de: 'rechts',             it: 'destra',            alt: [] },
+        { de: 'geradeaus',          it: 'diritto',           alt: [] },
+        { de: 'in der Nähe',        it: 'vicino',            alt: [] },
+        { de: 'weit entfernt',      it: 'lontano',           alt: [] },
+        { de: 'hier',               it: 'qui',               alt: [] },
+        { de: 'dort',               it: 'lì',                alt: ['li'] },
+        { de: 'hineingehen',        it: 'entrare',           alt: [] },
+        { de: 'hinausgehen',        it: 'uscire',            alt: [] },
+        { de: 'einsteigen',         it: 'salire',            alt: [] },
+        { de: 'aussteigen',         it: 'scendere',          alt: [] },
+        { de: 'ankommen',           it: 'arrivare',          alt: [] },
+        { de: 'abfahren',           it: 'partire',           alt: [] },
+        { de: 'verpassen',          it: 'perdere',           alt: [] }
+      ]
+    },
+    {
+      name: 'Grundverben',
+      words: [
+        { de: 'sein',               it: 'essere',            alt: [] },
+        { de: 'haben',              it: 'avere',             alt: [] },
+        { de: 'machen / tun',       it: 'fare',              alt: [] },
+        { de: 'gehen / fahren',     it: 'andare',            alt: [] },
+        { de: 'kommen',             it: 'venire',            alt: [] },
+        { de: 'bleiben / befinden', it: 'stare',             alt: [] },
+        { de: 'geben',              it: 'dare',              alt: [] },
+        { de: 'nehmen',             it: 'prendere',          alt: [] },
+        { de: 'sehen',              it: 'vedere',            alt: [] },
+        { de: 'hören / fühlen',     it: 'sentire',           alt: [] },
+        { de: 'sagen',              it: 'dire',              alt: [] },
+        { de: 'sprechen',           it: 'parlare',           alt: [] },
+        { de: 'verstehen',          it: 'capire',            alt: [] },
+        { de: 'wissen',             it: 'sapere',            alt: [] },
+        { de: 'kennen',             it: 'conoscere',         alt: [] },
+        { de: 'wollen',             it: 'volere',            alt: [] },
+        { de: 'können / dürfen',    it: 'potere',            alt: [] },
+        { de: 'müssen / sollen',    it: 'dovere',            alt: [] },
+        { de: 'gefallen',           it: 'piacere',           alt: [] },
+        { de: 'kaufen',             it: 'comprare',          alt: [] },
+        { de: 'verkaufen',          it: 'vendere',           alt: [] },
+        { de: 'öffnen',             it: 'aprire',            alt: [] },
+        { de: 'schließen',          it: 'chiudere',          alt: [] },
+        { de: 'stellen / legen',    it: 'mettere',           alt: [] },
+        { de: 'benutzen',           it: 'usare',             alt: [] },
+        { de: 'leben',              it: 'vivere',            alt: [] },
+        { de: 'wohnen',             it: 'abitare',           alt: [] },
+        { de: 'essen',              it: 'mangiare',          alt: [] },
+        { de: 'trinken',            it: 'bere',              alt: [] },
+        { de: 'helfen',             it: 'aiutare',           alt: [] },
+        { de: 'lieben',             it: 'amare',             alt: [] },
+        { de: 'finden',             it: 'trovare',           alt: [] },
+        { de: 'suchen',             it: 'cercare',           alt: [] },
+        { de: 'arbeiten',           it: 'lavorare',          alt: [] },
+        { de: 'eintreten',          it: 'entrare',           alt: [] },
+        { de: 'bleiben',            it: 'restare',           alt: [] },
+        { de: 'zurückkehren',       it: 'tornare',           alt: [] },
+        { de: 'denken',             it: 'pensare',           alt: [] },
+        { de: 'glauben',            it: 'credere',           alt: [] },
+        { de: 'passieren',          it: 'succedere',         alt: [] }
+      ]
+    }
   ];
 
+  // ── State ─────────────────────────────────────────────────────────────
+  var currentRound = [];
   var queue = [], correctSet = {}, wrongCounts = {}, current = null;
   var timerInterval = null, timeLeft = 5;
   var recognition = null, quizActive = false, answered = false;
   var wordToken = 0;
   var jokersLeft = 3;
 
+  // ── DOM ───────────────────────────────────────────────────────────────
   var elProgress  = document.getElementById('progress');
   var elDots      = document.getElementById('dots');
   var elWord      = document.getElementById('word');
@@ -214,20 +529,61 @@
   var elJoker     = document.getElementById('joker-fab');
   var elJokerPips = document.getElementById('joker-pips');
 
+  // ── Speech API ────────────────────────────────────────────────────────
   var SpeechAPI = null;
   try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch (e) {}
 
-  document.getElementById('start-btn').onclick = startQuiz;
-  elJoker.onclick  = useJoker;
-  elNext.onclick   = startQuiz;
+  // ── Build category buttons ────────────────────────────────────────────
+  var grid = document.getElementById('category-grid');
+  CATEGORIES.forEach(function (cat, i) {
+    var btn = document.createElement('button');
+    btn.className   = 'cat-btn';
+    btn.textContent = cat.name;
+    btn.onclick = (function (idx) {
+      return function () { pickCategory(idx); };
+    }(i));
+    grid.appendChild(btn);
+  });
+  document.getElementById('mix-btn').onclick = function () { pickCategory(-1); };
+
+  // ── Other buttons ─────────────────────────────────────────────────────
+  elJoker.onclick = useJoker;
+  elNext.onclick  = showCategoryScreen;
   elInput.addEventListener('keydown', function (e) {
     if (e.keyCode === 13 || e.key === 'Enter') onEnter();
   });
 
-  function startQuiz() {
-    queue = shuffle(VOCAB.slice());
+  // ── Category & quiz start ─────────────────────────────────────────────
+  function showCategoryScreen() {
+    quizActive = false;
+    stopRecognition();
+    clearInterval(timerInterval);
+    elJoker.classList.remove('visible');
+    showScreen('start');
+  }
+
+  function pickCategory(idx) {
+    var pool;
+    if (idx === -1) {
+      var seen = {};
+      pool = [];
+      CATEGORIES.forEach(function (c) {
+        c.words.forEach(function (w) {
+          if (!seen[w.it]) { seen[w.it] = true; pool.push(w); }
+        });
+      });
+    } else {
+      pool = CATEGORIES[idx].words;
+    }
+    var selected = shuffle(pool.slice()).slice(0, 5);
+    startQuiz(selected);
+  }
+
+  function startQuiz(words) {
+    currentRound = words;
+    queue = shuffle(words.slice());
     correctSet = {}; wrongCounts = {};
-    VOCAB.forEach(function (v) { wrongCounts[v.de] = 0; });
+    words.forEach(function (v) { wrongCounts[v.de] = 0; });
     jokersLeft = 3;
     quizActive = true;
     elJoker.classList.add('visible');
@@ -241,17 +597,24 @@
     wordToken++;
     var token = wordToken;
     answered = false;
+
     stopRecognition();
-    elInput.value = ''; elHeard.textContent = '';
-    elFeedback.textContent = ''; elFeedback.className = '';
+    elInput.value          = '';
+    elHeard.textContent    = '';
+    elFeedback.textContent = '';
+    elFeedback.className   = '';
+
     if (queue.length === 0) { finishQuiz(); return; }
+
     current = queue.shift();
     elWord.textContent = current.de;
-    updateDots(); updateProgress();
+    updateDots();
+    updateProgress();
     startTimer(token);
     startWordRecognition(token);
   }
 
+  // ── Joker ─────────────────────────────────────────────────────────────
   function useJoker() {
     if (jokersLeft <= 0 || answered) return;
     jokersLeft--;
@@ -271,10 +634,12 @@
     elJoker.disabled = jokersLeft <= 0;
   }
 
+  // ── Timer ─────────────────────────────────────────────────────────────
   function startTimer(token) {
     clearInterval(timerInterval);
     timeLeft = 5;
     renderTimer(5, '');
+
     timerInterval = setInterval(function () {
       if (wordToken !== token) { clearInterval(timerInterval); return; }
       timeLeft--;
@@ -295,6 +660,7 @@
     elTimer.className   = cls || '';
   }
 
+  // ── Answers ───────────────────────────────────────────────────────────
   function timeOut() {
     if (answered) return;
     answered = true;
@@ -319,6 +685,7 @@
     var ok = [current.it.toLowerCase()]
       .concat(current.alt.map(function (a) { return a.toLowerCase(); }))
       .some(function (a) { return text.indexOf(a) !== -1; });
+
     if (ok) {
       correctSet[current.de] = true;
       elFeedback.textContent = 'Richtig!';
@@ -333,30 +700,32 @@
     setTimeout(nextWord, 1700);
   }
 
+  // ── Finish ────────────────────────────────────────────────────────────
   function finishQuiz() {
     quizActive = false;
     stopRecognition();
     clearInterval(timerInterval);
     elJoker.classList.remove('visible');
+
     var html = '<h2>Geschafft!</h2>';
-    VOCAB.forEach(function (v) {
+    currentRound.forEach(function (v) {
       var c = wrongCounts[v.de], cls = c === 0 ? 'ok' : 'some';
       html += '<div class="ri ' + cls + '"><span>' + v.de + '</span><span>' + v.it;
       if (c > 0) html += '<span class="wrong-count">(' + c + 'x falsch)</span>';
       html += '</span></div>';
     });
     elResult.innerHTML = html;
-    elNext.onclick = startQuiz;
     showScreen('result');
   }
 
+  // ── Progress ──────────────────────────────────────────────────────────
   function updateProgress() {
-    elProgress.textContent = Object.keys(correctSet).length + ' / ' + VOCAB.length + ' richtig';
+    elProgress.textContent = Object.keys(correctSet).length + ' / ' + currentRound.length + ' richtig';
   }
 
   function updateDots() {
     var html = '';
-    VOCAB.forEach(function (v) {
+    currentRound.forEach(function (v) {
       var cls = correctSet[v.de] ? 'dot done'
               : (current && v.de === current.de ? 'dot current' : 'dot');
       html += '<div class="' + cls + '" title="' + v.de + '"></div>';
@@ -364,6 +733,7 @@
     elDots.innerHTML = html;
   }
 
+  // ── Recognition ───────────────────────────────────────────────────────
   function startWordRecognition(token) {
     if (!SpeechAPI) { setMicStatus('Texteingabe'); return; }
     try {
@@ -371,12 +741,13 @@
       rec.lang           = 'it-IT';
       rec.continuous     = false;
       rec.interimResults = true;
+
       rec.onresult = function (e) {
         if (wordToken !== token || answered) return;
         var last = e.results[e.results.length - 1];
         var t    = last[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
         elInput.value       = t;
-        elHeard.textContent = '„' + t + '“';
+        elHeard.textContent = '„' + t + '"';
         if (last.isFinal) {
           answered = true;
           clearInterval(timerInterval);
@@ -384,10 +755,12 @@
           evaluate(t);
         }
       };
+
       rec.onerror = function (e) {
         if (wordToken !== token || answered) return;
         if (e.error !== 'no-speech' && e.error !== 'aborted') setMicStatus('Mikrofon-Fehler');
       };
+
       rec.onend = function () {
         if (wordToken !== token || answered) return;
         try {
@@ -398,6 +771,7 @@
           }, 150);
         }
       };
+
       rec.start();
       recognition = rec;
       setMicStatus('Mikrofon aktiv');
@@ -415,8 +789,11 @@
     }
   }
 
-  function setMicStatus(msg) { elMicStatus.textContent = msg; }
+  function setMicStatus(msg) {
+    elMicStatus.textContent = msg;
+  }
 
+  // ── Helpers ───────────────────────────────────────────────────────────
   function showScreen(name) {
     var screens = document.querySelectorAll('.screen');
     for (var i = 0; i < screens.length; i++) {
