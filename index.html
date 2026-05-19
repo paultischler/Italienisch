@@ -167,6 +167,7 @@
   var timerInterval = null, timeLeft = 5;
   var recognition   = null, quizActive = false, answered = false;
   var processedIdx  = 0;
+  var acceptAfter   = 0;
 
   var elProgress  = document.getElementById('progress');
   var elDots      = document.getElementById('dots');
@@ -214,6 +215,7 @@
     elWord.textContent = current.de;
     updateDots();
     updateProgress();
+    acceptAfter = Date.now() + 600;
     startTimer();
   }
 
@@ -328,13 +330,16 @@
           var t = r[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
           if (r.isFinal) {
             processedIdx = i + 1;
+            if (Date.now() < acceptAfter) break;
             elInput.value       = t;
             elHeard.textContent = '„' + t + '“';
             if (!answered) { answered = true; clearInterval(timerInterval); evaluate(t); }
             break;
           } else {
-            elInput.value       = t;
-            elHeard.textContent = '„' + t + '“';
+            if (Date.now() >= acceptAfter) {
+              elInput.value       = t;
+              elHeard.textContent = '„' + t + '“';
+            }
           }
         }
       };
