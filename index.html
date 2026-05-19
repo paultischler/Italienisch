@@ -93,6 +93,19 @@
     .dot { width: 12px; height: 12px; border-radius: 50%; background: #374151; transition: background 0.3s; }
     .dot.done    { background: #34d399; }
     .dot.current { background: #a78bfa; }
+
+    #joker-row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.9rem; }
+    #joker-btn {
+      background: #0f172a; border: 1.5px solid #fbbf24; border-radius: 2rem;
+      color: #fbbf24; font-size: 0.85rem; font-weight: 700;
+      padding: 0.35rem 0.9rem; cursor: pointer; -webkit-appearance: none;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    #joker-btn:active { background: #1e293b; }
+    #joker-btn:disabled { opacity: 0.3; cursor: default; border-color: #374151; color: #6b7280; }
+    #joker-pips { display: flex; gap: 0.35rem; align-items: center; }
+    .pip { width: 10px; height: 10px; border-radius: 50%; background: #fbbf24; transition: background 0.3s; }
+    .pip.used { background: #374151; }
   </style>
 </head>
 <body>
@@ -112,6 +125,10 @@
       <div id="dots"></div>
       <div id="word"></div>
       <div id="timer-wrap"><div id="timer-display">5</div></div>
+      <div id="joker-row">
+        <button id="joker-btn">+3s</button>
+        <div id="joker-pips"></div>
+      </div>
       <div id="mic-status"></div>
       <div id="input-row">
         <input id="answer-input" type="text" placeholder="Italiano&hellip;"
@@ -145,6 +162,7 @@
   var timerInterval = null, timeLeft = 5;
   var recognition = null, quizActive = false, answered = false;
   var wordToken = 0;   // increments with every new word; stale results carry old token
+  var jokersLeft = 3;  // Zeit-Joker per round
 
   // ── DOM ───────────────────────────────────────────────────────────────
   var elProgress  = document.getElementById('progress');
@@ -157,6 +175,8 @@
   var elFeedback  = document.getElementById('feedback');
   var elResult    = document.getElementById('result-box');
   var elNext      = document.getElementById('next-btn');
+  var elJokerBtn  = document.getElementById('joker-btn');
+  var elJokerPips = document.getElementById('joker-pips');
 
   // ── Speech API ────────────────────────────────────────────────────────
   var SpeechAPI = null;
@@ -165,6 +185,7 @@
   // ── Buttons ───────────────────────────────────────────────────────────
   document.getElementById('start-btn').onclick = startQuiz;
   document.getElementById('send-btn').onclick  = onSend;
+  elJokerBtn.onclick = useJoker;
   elNext.onclick = startQuiz;
   elInput.addEventListener('keydown', function (e) {
     if (e.keyCode === 13 || e.key === 'Enter') onSend();
@@ -175,8 +196,10 @@
     queue = shuffle(VOCAB.slice());
     correctSet = {}; wrongCounts = {};
     VOCAB.forEach(function (v) { wrongCounts[v.de] = 0; });
+    jokersLeft = 3;
     quizActive = true;
     showScreen('quiz');
+    renderJokers();
     nextWord();
   }
 
@@ -197,6 +220,26 @@
     updateDots(); updateProgress();
     startTimer(token);
     startWordRecognition(token);   // fresh recognition tied to this token
+  }
+
+  // ── Joker ─────────────────────────────────────────────────────────────
+  function useJoker() {
+    if (jokersLeft <= 0 || answered) return;
+    jokersLeft--;
+    renderJokers();
+    if (timeLeft > 0) {
+      timeLeft += 3;
+      renderTimer(timeLeft, timeLeft <= 2 ? 'urgent' : timeLeft <= 3 ? 'warn' : '');
+    }
+  }
+
+  function renderJokers() {
+    var html = '';
+    for (var i = 0; i < 3; i++) {
+      html += '<div class="pip' + (i >= jokersLeft ? ' used' : '') + '"></div>';
+    }
+    elJokerPips.innerHTML = html;
+    elJokerBtn.disabled = jokersLeft <= 0;
   }
 
   // ── Timer ─────────────────────────────────────────────────────────────
