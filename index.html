@@ -37,18 +37,20 @@
 
     #screen-start p { color: #9ca3af; line-height: 1.7; margin-bottom: 1rem; }
 
-    #progress { font-size: 0.78rem; color: #6b7280; text-transform: uppercase; margin-bottom: 1rem; }
-    #word { font-size: 2rem; font-weight: 700; color: #f9fafb; margin-bottom: 1.2rem; min-height: 2.5rem; }
-
-    #timer-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
+    #progress {
+      font-size: 0.78rem; color: #6b7280;
+      text-transform: uppercase; margin-bottom: 1rem;
+      letter-spacing: 0.06em;
     }
+
+    #word {
+      font-size: 2rem; font-weight: 700;
+      color: #f9fafb; margin-bottom: 1.2rem; min-height: 2.5rem;
+    }
+
+    #timer-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; }
     #timer-display {
-      width: 60px; height: 60px;
-      border-radius: 50%;
+      width: 60px; height: 60px; border-radius: 50%;
       border: 5px solid #a78bfa;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.4rem; font-weight: 700; color: #a78bfa;
@@ -57,16 +59,16 @@
     #timer-display.warn   { border-color: #fbbf24; color: #fbbf24; }
     #timer-display.urgent { border-color: #f87171; color: #f87171; }
 
+    #mic-status {
+      font-size: 0.8rem; margin-bottom: 0.8rem; min-height: 1.1em;
+      transition: color 0.3s;
+    }
+
     #input-row { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
     #answer-input {
-      flex: 1;
-      background: #0f172a;
-      border: 1.5px solid #374151;
-      border-radius: 0.6rem;
-      color: #f9fafb;
-      font-size: 1rem;
-      padding: 0.65rem 0.8rem;
-      outline: none;
+      flex: 1; background: #0f172a;
+      border: 1.5px solid #374151; border-radius: 0.6rem;
+      color: #f9fafb; font-size: 1rem; padding: 0.65rem 0.8rem; outline: none;
     }
     #answer-input:focus { border-color: #a78bfa; }
     #answer-input::placeholder { color: #4b5563; }
@@ -75,41 +77,40 @@
       background: #7c3aed; border: none; border-radius: 0.6rem;
       color: white; font-size: 0.9rem; font-weight: 700;
       padding: 0 1.1rem; cursor: pointer;
+      -webkit-appearance: none;
     }
 
-    #heard { font-size: 0.85rem; color: #9ca3af; min-height: 1.1em; font-style: italic; margin-bottom: 0.4rem; }
+    #heard    { font-size: 0.85rem; color: #9ca3af; min-height: 1.1em; font-style: italic; margin-bottom: 0.4rem; }
     #feedback { font-size: 1.05rem; font-weight: 700; min-height: 1.3em; }
-    .correct { color: #34d399; }
-    .wrong   { color: #f87171; }
-
-    #mic-btn {
-      display: none;
-      margin: 0.6rem auto 0;
-      background: #a78bfa; border: none; border-radius: 2rem;
-      color: white; font-size: 0.9rem; font-weight: 600;
-      padding: 0.55rem 1.4rem; cursor: pointer;
-    }
-    #mic-btn.listening { background: #ef4444; }
+    .correct  { color: #34d399; }
+    .wrong    { color: #f87171; }
 
     .btn {
       display: inline-block;
       background: #a78bfa; color: white; border: none;
       border-radius: 0.75rem; padding: 0.8rem 2rem;
       font-size: 1rem; font-weight: 700; cursor: pointer;
-      margin-top: 0.5rem;
-      -webkit-appearance: none;
+      margin-top: 0.5rem; -webkit-appearance: none;
     }
 
     #result-box { text-align: left; margin-bottom: 1rem; }
     #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
     .ri {
-      display: flex; justify-content: space-between;
-      padding: 0.45rem 0.7rem; border-radius: 0.45rem; margin-bottom: 0.35rem; font-size: 0.9rem;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0.7rem; border-radius: 0.45rem;
+      margin-bottom: 0.35rem; font-size: 0.9rem;
     }
-    .ri.ok   { background: rgba(52,211,153,0.15); color: #34d399; }
-    .ri.fail { background: rgba(248,113,113,0.15); color: #f87171; }
+    .ri.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
+    .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+    .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; }
 
-    #mode-hint { font-size: 0.75rem; color: #6b7280; margin-bottom: 0.8rem; }
+    #dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 1.1rem; flex-wrap: wrap; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #374151; transition: background 0.3s;
+    }
+    .dot.done { background: #34d399; }
+    .dot.current { background: #a78bfa; }
   </style>
 </head>
 <body>
@@ -118,15 +119,19 @@
   <div id="card">
 
     <div id="screen-start" class="screen active">
-      <p>5 Vokabeln auf Deutsch &mdash; du hast <strong style="color:#a78bfa">5 Sekunden</strong> die italienische &Uuml;bersetzung einzugeben.</p>
-      <div id="mode-hint"></div>
+      <p>5 Vokabeln auf Deutsch &mdash; sprich oder tippe die italienische &Uuml;bersetzung.<br>
+         Du hast jeweils <strong style="color:#a78bfa">5 Sekunden</strong>.<br>
+         Falsche Antworten werden wiederholt, bis alle richtig sind.</p>
+      <br>
       <button class="btn" id="start-btn">Starten</button>
     </div>
 
     <div id="screen-quiz" class="screen">
       <div id="progress"></div>
+      <div id="dots"></div>
       <div id="word"></div>
       <div id="timer-wrap"><div id="timer-display">5</div></div>
+      <div id="mic-status"></div>
       <div id="input-row">
         <input id="answer-input" type="text" placeholder="Italiano&hellip;"
                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
@@ -134,12 +139,11 @@
       </div>
       <div id="heard"></div>
       <div id="feedback"></div>
-      <button id="mic-btn">&#127908; Sprechen</button>
     </div>
 
     <div id="screen-result" class="screen">
       <div id="result-box"></div>
-      <button class="btn" id="next-btn">-</button>
+      <button class="btn" id="next-btn">Neu starten</button>
     </div>
 
   </div>
@@ -149,200 +153,237 @@
   'use strict';
 
   var VOCAB = [
-    { de: 'die Reise',      it: 'il viaggio',     alt: ['viaggio'] },
-    { de: 'der Urlaub',     it: 'la vacanza',      alt: ['vacanza'] },
-    { de: 'das Wetter',     it: 'il tempo',        alt: ['tempo'] },
-    { de: 'die Gesundheit', it: 'la salute',       alt: ['salute'] },
-    { de: 'der Beruf',      it: 'la professione',  alt: ['professione'] }
+    { de: 'die Reise',      it: 'il viaggio',    alt: ['viaggio'] },
+    { de: 'der Urlaub',     it: 'la vacanza',     alt: ['vacanza'] },
+    { de: 'das Wetter',     it: 'il tempo',       alt: ['tempo'] },
+    { de: 'die Gesundheit', it: 'la salute',      alt: ['salute'] },
+    { de: 'der Beruf',      it: 'la professione', alt: ['professione'] }
   ];
 
-  var queue = [], missed = [], results = [], current = null;
+  var queue       = [];
+  var correctSet  = {};
+  var wrongCounts = {};
+  var current     = null;
   var timerInterval = null, timeLeft = 5;
-  var recognition = null, listening = false, answered = false, repeatRound = false;
+  var recognition   = null, quizActive = false, answered = false;
+  var processedIdx  = 0;
 
-  var elProgress = document.getElementById('progress');
-  var elWord     = document.getElementById('word');
-  var elTimer    = document.getElementById('timer-display');
-  var elInput    = document.getElementById('answer-input');
-  var elHeard    = document.getElementById('heard');
-  var elFeedback = document.getElementById('feedback');
-  var elMic      = document.getElementById('mic-btn');
-  var elResult   = document.getElementById('result-box');
-  var elNext     = document.getElementById('next-btn');
-  var elHint     = document.getElementById('mode-hint');
+  var elProgress  = document.getElementById('progress');
+  var elDots      = document.getElementById('dots');
+  var elWord      = document.getElementById('word');
+  var elTimer     = document.getElementById('timer-display');
+  var elMicStatus = document.getElementById('mic-status');
+  var elInput     = document.getElementById('answer-input');
+  var elHeard     = document.getElementById('heard');
+  var elFeedback  = document.getElementById('feedback');
+  var elResult    = document.getElementById('result-box');
+  var elNext      = document.getElementById('next-btn');
 
   var SpeechAPI = null;
-  try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch(e) {}
-
-  if (SpeechAPI) {
-    elMic.style.display = 'block';
-    elHint.textContent  = 'Tipp: Mikrofon-Taste drücken zum Sprechen';
-  } else {
-    elHint.textContent  = '⌨️ Texteingabe';
-  }
+  try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch (e) {}
 
   document.getElementById('start-btn').onclick = startQuiz;
-  document.getElementById('send-btn').onclick  = submitText;
-  elMic.onclick  = toggleMic;
+  document.getElementById('send-btn').onclick  = onSend;
   elNext.onclick = startQuiz;
-
-  elInput.addEventListener('keydown', function(e) {
-    if (e.keyCode === 13 || e.key === 'Enter') submitText();
+  elInput.addEventListener('keydown', function (e) {
+    if (e.keyCode === 13 || e.key === 'Enter') onSend();
   });
 
-  function showScreen(name) {
-    var screens = document.querySelectorAll('.screen');
-    for (var i = 0; i < screens.length; i++) {
-      screens[i].className = 'screen' + (screens[i].id === 'screen-' + name ? ' active' : '');
-    }
-  }
-
   function startQuiz() {
-    queue = shuffle(VOCAB.slice());
-    missed = []; results = []; repeatRound = false;
+    queue      = shuffle(VOCAB.slice());
+    correctSet = {};
+    wrongCounts = {};
+    VOCAB.forEach(function (v) { wrongCounts[v.de] = 0; });
+    quizActive = true;
     showScreen('quiz');
+    startRecognition();
     nextWord();
   }
 
   function nextWord() {
+    if (!quizActive) return;
     answered = false;
-    stopMic();
     elInput.value          = '';
     elHeard.textContent    = '';
     elFeedback.textContent = '';
     elFeedback.className   = '';
 
-    if (queue.length === 0) { showRoundResult(); return; }
+    if (queue.length === 0) { finishQuiz(); return; }
 
     current = queue.shift();
     elWord.textContent = current.de;
-    setProgress();
+    updateDots();
+    updateProgress();
     startTimer();
   }
 
   function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 5;
-    setTimerDisplay(5);
-
-    timerInterval = setInterval(function() {
-      timeLeft -= 1;
-      setTimerDisplay(timeLeft);
+    renderTimer(5);
+    timerInterval = setInterval(function () {
+      timeLeft--;
+      renderTimer(timeLeft);
       if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
     }, 1000);
   }
 
-  function setTimerDisplay(t) {
+  function renderTimer(t) {
     elTimer.textContent = t;
-    elTimer.className = t <= 2 ? 'urgent' : t <= 3 ? 'warn' : '';
+    elTimer.className   = t <= 2 ? 'urgent' : t <= 3 ? 'warn' : '';
   }
 
   function timeOut() {
     if (answered) return;
-    answered = true; stopMic();
-    markWrong('⏱ Zeit! → ' + current.it);
+    answered = true;
+    wrongCounts[current.de]++;
+    queue.push(current);
+    elFeedback.textContent = '⏱ Zeit! → ' + current.it;
+    elFeedback.className   = 'wrong';
     setTimeout(nextWord, 1900);
   }
 
-  function submitText() {
+  function onSend() {
     if (answered) return;
     var val = elInput.value.replace(/^\s+|\s+$/g, '').toLowerCase();
     if (!val) return;
     answered = true;
     clearInterval(timerInterval);
-    stopMic();
     evaluate(val);
   }
 
   function evaluate(text) {
-    var ok = [current.it.toLowerCase()].concat(current.alt.map(function(a) { return a.toLowerCase(); }))
-              .some(function(a) { return text.indexOf(a) !== -1; });
+    var ok = [current.it.toLowerCase()]
+      .concat(current.alt.map(function (a) { return a.toLowerCase(); }))
+      .some(function (a) { return text.indexOf(a) !== -1; });
+
     if (ok) {
+      correctSet[current.de] = true;
       elFeedback.textContent = '✓ Richtig!';
       elFeedback.className   = 'correct';
-      results.push({ word: current, ok: true });
     } else {
-      markWrong('✗ Falsch → ' + current.it);
+      wrongCounts[current.de]++;
+      queue.push(current);
+      elFeedback.textContent = '✗ Falsch → ' + current.it;
+      elFeedback.className   = 'wrong';
     }
+    updateDots();
     setTimeout(nextWord, 1700);
   }
 
-  function markWrong(msg) {
-    elFeedback.textContent = msg;
-    elFeedback.className   = 'wrong';
-    missed.push(current);
-    results.push({ word: current, ok: false });
-  }
+  function finishQuiz() {
+    quizActive = false;
+    stopRecognition();
+    clearInterval(timerInterval);
 
-  function showRoundResult() {
-    var html = '<h2>' + (repeatRound ? 'Wiederholung' : 'Runde') + ' abgeschlossen</h2>';
-    results.forEach(function(r) {
-      html += '<div class="ri ' + (r.ok ? 'ok' : 'fail') + '"><span>' +
-              r.word.de + '</span><span>' + r.word.it + '</span></div>';
+    var html = '<h2>Geschafft! &#127881;</h2>';
+    VOCAB.forEach(function (v) {
+      var c = wrongCounts[v.de];
+      var cls = c === 0 ? 'ok' : 'some';
+      html += '<div class="ri ' + cls + '"><span>' + v.de + '</span><span>' + v.it;
+      if (c > 0) {
+        html += '<span class="wrong-count">' + c + '&times; falsch</span>';
+      }
+      html += '</span></div>';
     });
     elResult.innerHTML = html;
-
-    if (missed.length > 0 && !repeatRound) {
-      elNext.textContent = missed.length + ' Wort' + (missed.length > 1 ? 'e' : '') + ' wiederholen';
-      elNext.onclick = startRepeat;
-    } else {
-      elNext.textContent = 'Neu starten';
-      elNext.onclick = startQuiz;
-    }
+    elNext.onclick = startQuiz;
     showScreen('result');
   }
 
-  function startRepeat() {
-    queue = shuffle(missed.slice());
-    missed = []; results = []; repeatRound = true;
-    showScreen('quiz');
-    nextWord();
+  function updateProgress() {
+    var done = Object.keys(correctSet).length;
+    elProgress.textContent = done + ' / ' + VOCAB.length + ' richtig';
   }
 
-  function toggleMic() { listening ? stopMic() : startMic(); }
+  function updateDots() {
+    var html = '';
+    VOCAB.forEach(function (v) {
+      var cls = correctSet[v.de]
+        ? 'dot done'
+        : (current && v.de === current.de ? 'dot current' : 'dot');
+      html += '<div class="' + cls + '" title="' + v.de + '"></div>';
+    });
+    elDots.innerHTML = html;
+  }
 
-  function startMic() {
-    if (!SpeechAPI || listening || answered) return;
+  function startRecognition() {
+    if (!SpeechAPI) { setMicStatus('text'); return; }
+    processedIdx = 0;
+    launchRecognition();
+  }
+
+  function launchRecognition() {
+    if (!quizActive || !SpeechAPI) return;
     try {
       recognition = new SpeechAPI();
       recognition.lang = 'it-IT';
-      recognition.continuous = false;
+      recognition.continuous     = true;
       recognition.interimResults = true;
 
-      recognition.onresult = function(e) {
-        var t = '';
-        for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
-        t = t.toLowerCase().replace(/^\s+|\s+$/g, '');
-        elInput.value = t;
-        elHeard.textContent = '„' + t + '“';
-        if (e.results[e.results.length - 1].isFinal) { stopMic(); submitText(); }
+      recognition.onresult = function (e) {
+        if (answered || !quizActive) return;
+        for (var i = processedIdx; i < e.results.length; i++) {
+          var r = e.results[i];
+          var t = r[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
+          if (r.isFinal) {
+            processedIdx = i + 1;
+            elInput.value       = t;
+            elHeard.textContent = '„' + t + '“';
+            if (!answered) { answered = true; clearInterval(timerInterval); evaluate(t); }
+            break;
+          } else {
+            elInput.value       = t;
+            elHeard.textContent = '„' + t + '“';
+          }
+        }
       };
-      recognition.onerror = function(e) {
-        stopMic();
-        if (e.error === 'no-speech' && !answered) timeOut();
+
+      recognition.onerror = function (e) {
+        if (e.error === 'no-speech' || e.error === 'aborted') return;
+        setMicStatus('error');
       };
-      recognition.onend = function() { listening = false; elMic.className = ''; elMic.textContent = '🎙️ Sprechen'; };
+
+      recognition.onend = function () {
+        if (quizActive) {
+          processedIdx = 0;
+          setTimeout(function () { if (quizActive) launchRecognition(); }, 300);
+        }
+      };
 
       recognition.start();
-      listening = true;
-      elMic.className = 'listening';
-      elMic.textContent = '⏹ Stopp';
-    } catch(e) {
+      setMicStatus('on');
+    } catch (e) {
       SpeechAPI = null;
-      elMic.style.display = 'none';
+      setMicStatus('text');
     }
   }
 
-  function stopMic() {
-    if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
-    listening = false;
-    elMic.className = '';
-    elMic.textContent = '🎙️ Sprechen';
+  function stopRecognition() {
+    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+    setMicStatus('off');
   }
 
-  function setProgress() {
-    elProgress.textContent = 'Wort ' + (VOCAB.length - queue.length) + ' / ' + VOCAB.length +
-      (repeatRound ? ' · Wiederholung' : '');
+  function setMicStatus(state) {
+    if (state === 'on') {
+      elMicStatus.style.color = '#34d399';
+      elMicStatus.textContent = '🎙️ Mikrofon aktiv';
+    } else if (state === 'text') {
+      elMicStatus.style.color = '#6b7280';
+      elMicStatus.textContent = '⌨️ Texteingabe';
+    } else if (state === 'error') {
+      elMicStatus.style.color = '#f87171';
+      elMicStatus.textContent = '⚠️ Mikrofon-Fehler';
+    } else {
+      elMicStatus.textContent = '';
+    }
+  }
+
+  function showScreen(name) {
+    var screens = document.querySelectorAll('.screen');
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].className = 'screen' + (screens[i].id === 'screen-' + name ? ' active' : '');
+    }
   }
 
   function shuffle(arr) {
