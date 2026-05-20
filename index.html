@@ -394,6 +394,39 @@
           <p>Statistiken werden geladen…</p>
         </div>
       </div>
+
+      <!-- Data Import Section -->
+      <div class="stats-section" style="margin-top:1.5rem">
+        <h3 class="stats-section-title">Daten importieren</h3>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.8rem">
+          Lernfortschritt aus einer anderen Instanz übernehmen. Exportiere die Daten dort per Browser-Konsole und füge sie hier ein.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <button class="btn btn-ghost btn-sm" id="importQuizBtn" style="text-align:left">
+            📥 Quiz-Fortschritt importieren (impara_mastery)
+          </button>
+          <button class="btn btn-ghost btn-sm" id="importAppBtn" style="text-align:left">
+            📥 Lektionen &amp; Karten importieren (iit_*)
+          </button>
+        </div>
+      </div>
+
+      <!-- Import Modal -->
+      <div class="confirm-overlay" id="importOverlay" style="display:none">
+        <div class="confirm-dialog" style="max-width:480px;width:92vw">
+          <h4 class="confirm-title" id="importTitle">Daten importieren</h4>
+          <p class="confirm-message" id="importDesc" style="font-size:0.8rem;margin-bottom:0.6rem"></p>
+          <textarea id="importInput" rows="6"
+            style="width:100%;box-sizing:border-box;font-size:0.78rem;font-family:monospace;
+                   background:var(--paper);border:2px solid rgba(0,0,0,0.2);border-radius:var(--radius-md);
+                   padding:0.6rem;resize:vertical;outline:none"
+            placeholder='Hier JSON einfügen…'></textarea>
+          <div class="confirm-actions" style="margin-top:0.8rem">
+            <button class="btn btn-ghost" id="importCancel">Abbrechen</button>
+            <button class="btn btn-primary" id="importOk">Importieren</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== TAB: NEU ==================== -->
