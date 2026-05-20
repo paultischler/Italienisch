@@ -2453,6 +2453,94 @@ function initPhase6() {
 }
 
 /* ============================================================
+   DATA IMPORT
+   ============================================================ */
+function initImport() {
+  const overlay  = $('importOverlay');
+  const titleEl  = $('importTitle');
+  const descEl   = $('importDesc');
+  const input    = $('importInput');
+  const okBtn    = $('importOk');
+  const cancelBtn= $('importCancel');
+  if (!overlay) return;
+
+  let importMode = null; // 'quiz' | 'app'
+
+  function openImport(mode) {
+    importMode = mode;
+    input.value = '';
+    if (mode === 'quiz') {
+      titleEl.textContent = 'Quiz-Fortschritt importieren';
+      descEl.innerHTML = 'Führe in der alten App folgendes in der Browser-Konsole aus und füge das Ergebnis hier ein:<br>' +
+        '<code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:0.75rem">' +
+        'localStorage.getItem(\'impara_mastery\')</code>';
+    } else {
+      titleEl.textContent = 'Lektionen & Karten importieren';
+      descEl.innerHTML = 'Führe in der alten App folgendes in der Browser-Konsole aus und füge das Ergebnis hier ein:<br>' +
+        '<code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:0.75rem">' +
+        'JSON.stringify({l:localStorage.getItem(\'iit_lessons\'),c:localStorage.getItem(\'iit_cards\'),' +
+        's:localStorage.getItem(\'iit_sessions\'),r:localStorage.getItem(\'iit_card_results\'),' +
+        'p:localStorage.getItem(\'iit_phase6\')})</code>';
+    }
+    overlay.style.display = 'flex';
+    setTimeout(() => input.focus(), 100);
+  }
+
+  function closeImport() { overlay.style.display = 'none'; }
+
+  $('importQuizBtn').addEventListener('click', () => openImport('quiz'));
+  $('importAppBtn').addEventListener('click',  () => openImport('app'));
+  cancelBtn.addEventListener('click', closeImport);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeImport(); });
+
+  okBtn.addEventListener('click', () => {
+    const raw = input.value.trim();
+    if (!raw) { showToast('Kein Inhalt eingefügt', 'error'); return; }
+    try {
+      if (importMode === 'quiz') {
+        const data = JSON.parse(raw);
+        if (typeof data !== 'object' || Array.isArray(data)) throw new Error('Ungültiges Format');
+        // Merge: keep higher value for each word
+        let existing = {};
+        try { existing = JSON.parse(localStorage.getItem('impara_mastery') || '{}'); } catch(e) {}
+        for (const [k,v] of Object.entries(data)) {
+          existing[k] = Math.max(existing[k] || 0, parseInt(v) || 0);
+        }
+        localStorage.setItem('impara_mastery', JSON.stringify(existing));
+        showToast(`${Object.keys(data).length} Vokabeln importiert`, 'success');
+        closeImport();
+      } else {
+        const pkg = JSON.parse(raw);
+        const keys = {l:'iit_lessons', c:'iit_cards', s:'iit_sessions', r:'iit_card_results', p:'iit_phase6'};
+        let count = 0;
+        for (const [short, key] of Object.entries(keys)) {
+          if (pkg[short]) {
+            // Merge arrays (lessons, cards, sessions, results) by id; phase6 is an object
+            if (short === 'p') {
+              const existing = DB.phase6();
+              const incoming = JSON.parse(pkg[short]);
+              DB.savePhase6({...existing, ...incoming});
+            } else {
+              const existing = DB._g(key, []);
+              const incoming = JSON.parse(pkg[short]);
+              const existingIds = new Set(existing.map(x=>x.id));
+              const merged = [...existing, ...incoming.filter(x=>!existingIds.has(x.id))];
+              DB._s(key, merged);
+            }
+            count++;
+          }
+        }
+        showToast(`Daten aus ${count} Kategorien importiert`, 'success');
+        closeImport();
+        loadStats();
+      }
+    } catch(e) {
+      showToast('Fehler beim Parsen: ' + e.message, 'error');
+    }
+  });
+}
+
+/* ============================================================
    HTML ESCAPE
    ============================================================ */
 function escHtml(str) {
@@ -2475,6 +2563,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewLessonTab();
   initNewTabSubnav();
   initPhase6();
+  initImport();
   initQuizTab();
   // Load learn tab data on startup since it's the default tab
   loadLearnTab();
