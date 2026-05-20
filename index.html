@@ -749,6 +749,10 @@
     if (answered) return;
     answered = true;
     stopRecognition();
+    if (wrongCounts[current.de] === 0 && (mastery[current.it] || 0) > 0) {
+      mastery[current.it] = 0;
+      saveMastery();
+    }
     wrongCounts[current.de]++;
     queue.push(current);
     elFeedback.textContent = 'Zeit! – ' + current.it;
@@ -779,6 +783,10 @@
         saveMastery();
       }
     } else {
+      if (wrongCounts[current.de] === 0 && (mastery[current.it] || 0) > 0) {
+        mastery[current.it] = 0;
+        saveMastery();
+      }
       wrongCounts[current.de]++;
       queue.push(current);
       elFeedback.textContent = 'Falsch – ' + current.it;
