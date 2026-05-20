@@ -2,929 +2,642 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Gioco di Vocabolario</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #1a1a2e; color: #eee;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
-      padding: 1rem; padding-top: 1.5rem;
-    }
-
-    h1 { font-size: 1.1rem; color: #a78bfa; margin-bottom: 1rem; text-align: center; letter-spacing: 0.08em; }
-
-    #card {
-      background: #16213e; border: 2px solid #a78bfa;
-      border-radius: 1.5rem; width: 100%; max-width: 420px;
-      padding: 1.2rem 1.2rem 1.5rem;
-      box-shadow: 0 8px 40px rgba(167,139,250,0.15);
-    }
-
-    .screen { display: none; }
-    .screen.active { display: block; }
-
-    /* ── Category selection ── */
-    #screen-start p { color: #9ca3af; font-size: 0.82rem; margin-bottom: 0.8rem; text-align: center; }
-    #category-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; margin-bottom: 0.45rem;
-    }
-    .cat-btn {
-      background: #1e2a4a; border: 1.5px solid #374151; border-radius: 0.7rem;
-      color: #e5e7eb; font-size: 0.8rem; font-weight: 600;
-      padding: 0.7rem 0.4rem; cursor: pointer; text-align: center;
-      line-height: 1.3; -webkit-appearance: none;
-    }
-    .cat-btn:active { background: #263354; border-color: #a78bfa; }
-    .cat-btn-mix {
-      width: 100%; background: rgba(167,139,250,0.13); border: 1.5px solid #a78bfa;
-      border-radius: 0.7rem; color: #a78bfa; font-size: 0.88rem; font-weight: 700;
-      padding: 0.75rem; cursor: pointer; text-align: center;
-      margin-top: 0.2rem; -webkit-appearance: none;
-    }
-    .cat-btn-mix:active { background: rgba(167,139,250,0.28); }
-
-    /* ── Quiz topbar ── */
-    #quiz-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
-    #progress { font-size: 0.72rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.07em; }
-    #timer-display {
-      width: 34px; height: 34px; border-radius: 50%; border: 3px solid #a78bfa;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.95rem; font-weight: 700; color: #a78bfa;
-      transition: border-color 0.3s, color 0.3s; flex-shrink: 0;
-    }
-    #timer-display.warn   { border-color: #fbbf24; color: #fbbf24; }
-    #timer-display.urgent { border-color: #f87171; color: #f87171; }
-    #timer-display.grace  { border-color: #374151; color: #6b7280; font-size: 0.7rem; }
-
-    /* ── Dots ── */
-    #dots { display: flex; gap: 0.4rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: #374151; transition: background 0.3s; }
-    .dot.done    { background: #34d399; }
-    .dot.current { background: #a78bfa; }
-
-    /* ── The big word ── */
-    #word {
-      font-size: 2.6rem; font-weight: 800; color: #f9fafb; text-align: center;
-      margin: 1.8rem 0 1.6rem; line-height: 1.15; min-height: 4rem;
-      display: flex; align-items: center; justify-content: center;
-      word-break: break-word;
-    }
-
-    /* ── Mic & input ── */
-    #mic-status { font-size: 0.72rem; color: #6b7280; text-align: center; margin-bottom: 0.7rem; min-height: 1em; }
-    #answer-input {
-      width: 100%; background: #0f172a; border: 1.5px solid #374151; border-radius: 0.6rem;
-      color: #f9fafb; font-size: 1.05rem; padding: 0.7rem 1rem; outline: none; margin-bottom: 0.6rem;
-    }
-    #answer-input:focus { border-color: #a78bfa; }
-    #answer-input::placeholder { color: #4b5563; }
-    #heard    { font-size: 0.82rem; color: #9ca3af; min-height: 1.1em; font-style: italic; text-align: center; margin-bottom: 0.4rem; }
-    #feedback { font-size: 1.1rem; font-weight: 700; min-height: 1.3em; text-align: center; }
-    .correct  { color: #34d399; }
-    .wrong    { color: #f87171; }
-
-    /* ── Shared button ── */
-    .btn {
-      display: block; width: 100%; background: #a78bfa; color: white; border: none;
-      border-radius: 0.75rem; padding: 0.85rem; font-size: 1rem; font-weight: 700;
-      cursor: pointer; margin-top: 0.5rem; -webkit-appearance: none; text-align: center;
-    }
-
-    /* ── Results ── */
-    #result-box { margin-bottom: 1rem; }
-    #result-box h2 { font-size: 1rem; color: #a78bfa; text-align: center; margin-bottom: 0.8rem; }
-    .ri {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.5rem 0.7rem; border-radius: 0.45rem; margin-bottom: 0.35rem; font-size: 0.9rem;
-    }
-    .ri.ok   { background: rgba(52,211,153,0.12); color: #34d399; }
-    .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
-    .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; white-space: nowrap; }
-
-    /* ── Mastery pips (result) ── */
-    .mpips { display: flex; gap: 3px; flex-shrink: 0; margin-left: 0.5rem; }
-    .mpip  { width: 7px; height: 7px; border-radius: 50%; background: #374151; }
-    .mpip.done { background: #a78bfa; }
-    .mpip.max  { background: #34d399; }
-
-    /* ── Inline pips for stats bar ── */
-    .stp { display: inline-flex; gap: 2px; vertical-align: middle; margin: 0 1px; }
-    .stp span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #374151; }
-    .stp span.on { background: #a78bfa; }
-
-    /* ── Stats bar (category screen) ── */
-    #stats-bar {
-      margin-top: 0.85rem; padding-top: 0.7rem;
-      border-top: 1px solid #1e2a4a;
-      font-size: 0.73rem; color: #6b7280; text-align: center; line-height: 1.6;
-    }
-    #stats-bar b { color: #a78bfa; }
-
-    /* ── Joker FAB ── */
-    #joker-fab {
-      position: fixed; bottom: 1.8rem; right: 1.8rem;
-      width: 72px; height: 72px; border-radius: 50%; background: #fbbf24; border: none;
-      cursor: pointer; display: none; flex-direction: column; align-items: center;
-      justify-content: center; gap: 4px; box-shadow: 0 6px 24px rgba(251,191,36,0.35);
-      transition: opacity 0.2s, transform 0.15s, background 0.2s;
-      -webkit-appearance: none; z-index: 100;
-    }
-    #joker-fab.visible  { display: flex; }
-    #joker-fab:active   { transform: scale(0.93); }
-    #joker-fab:disabled { background: #374151; box-shadow: none; cursor: default; opacity: 0.5; }
-    #joker-label { font-size: 1rem; font-weight: 800; color: #1a1a2e; line-height: 1; }
-    #joker-pips { display: flex; gap: 3px; }
-    .pip { width: 7px; height: 7px; border-radius: 50%; background: rgba(26,26,46,0.5); }
-    .pip.active { background: rgba(26,26,46,0.85); }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Impara Italiano</title>
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADjUlEQVR4nO3du21bSxiF0a0Lp+7EBdxqnDhW7BpUhBIF7uFWcWP34MwFyJEBgSAlPs5jZnOtVMmcfz6M5hAE+PD718/XQIl/9l4ALEnQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FT5tPcCtvL967eTf3t6ed5wJeu6l+c8pTbo9zb2Xh3OpDHwqqBFfJm382qJ+6HhV7DODbll065xLzOaOuh7vy/eqnF+0wZ9ajNG3IjR764zzfIjU35sd2wDnl6ep9yAEZya3YzvJNMFfey0E/Iyjs1ytqinCnr0f90tZo56mqAPP2IS87oOZzxL1MO/FM4yyHsy8mEyzQkN5xA0VQRNlem+yzHy/e2vS+79bc+zNyc0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVPu29gEt9//pt7yUsqu159uaEpoqgqSJoqjz8/vXzde9FtDu8Jz+9PO+0km6ffzw6oenw+cdjElcOCvyNORE0k3sbcyJoJnYYc+KlkEkdizlxQjOhUzEngmYy78WcCJqJfBRzImgmcU7MiaCZwLkxJ4JmcJfEnAiagV0acyJoBnVNzImgGdC1MSeCZjC3xJwImoHcGnMiaAaxRMyJoBnAUjEngmZnS8acCJodLR3z6+N/gmYfa8ScOKHZwVoxJ4JmY2vGnAiaDa0dcyJoNrJFzImg2cBWMSeCZmVbxpwImhVtHXMiaFayR8yJoFnBXjEngmZhe8acCJoF7R1zImgWMkLMiaBZwCgxJ4LmRiPFnAiaG4wWcyJorjRizImgucKoMSeC5kIjx5wImguMHvP/X/4VNOeZIebECc0ZZok5ETQfmCnmRNC8Y7aYE0FzwowxJ4LmiFljTgTNgZljTgTNG7PHnCR/AM3y8BlBQvJZAAAAAElFTkSuQmCC" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADjUlEQVR4nO3du21bSxiF0a0Lp+7EBdxqnDhW7BpUhBIF7uFWcWP34MwFyJEBgSAlPs5jZnOtVMmcfz6M5hAE+PD718/XQIl/9l4ALEnQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FT5tPcCtvL967eTf3t6ed5wJeu6l+c8pTbo9zb2Xh3OpDHwqqBFfJm382qJ+6HhV7DODbll065xLzOaOuh7vy/eqnF+0wZ9ajNG3IjR764zzfIjU35sd2wDnl6ep9yAEZya3YzvJNMFfey0E/Iyjs1ytqinCnr0f90tZo56mqAPP2IS87oOZzxL1MO/FM4yyHsy8mEyzQkN5xA0VQRNlem+yzHy/e2vS+79bc+zNyc0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVPu29gEt9//pt7yUsqu159uaEpoqgqSJoqjz8/vXzde9FtDu8Jz+9PO+0km6ffzw6oenw+cdjElcOCvyNORE0k3sbcyJoJnYYc+KlkEkdizlxQjOhUzEngmYy78WcCJqJfBRzImgmcU7MiaCZwLkxJ4JmcJfEnAiagV0acyJoBnVNzImgGdC1MSeCZjC3xJwImoHcGnMiaAaxRMyJoBnAUjEngmZnS8acCJodLR3z6+N/gmYfa8ScOKHZwVoxJ4JmY2vGnAiaDa0dcyJoNrJFzImg2cBWMSeCZmVbxpwImhVtHXMiaFayR8yJoFnBXjEngmZhe8acCJoF7R1zImgWMkLMiaBZwCgxJ4LmRiPFnAiaG4wWcyJorjRizImgucKoMSeC5kIjx5wImguMHvP/X/4VNOeZIebECc0ZZok5ETQfmCnmRNC8Y7aYE0FzwowxJ4LmiFljTgTNgZljTgTNG7PHnCR/AM3y8BlBQvJZAAAAAElFTkSuQmCC" />
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAADjUlEQVR4nO3du21bSxiF0a0Lp+7EBdxqnDhW7BpUhBIF7uFWcWP34MwFyJEBgSAlPs5jZnOtVMmcfz6M5hAE+PD718/XQIl/9l4ALEnQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FT5tPcCtvL967eTf3t6ed5wJeu6l+c8pTbo9zb2Xh3OpDHwqqBFfJm382qJ+6HhV7DODbll065xLzOaOuh7vy/eqnF+0wZ9ajNG3IjR764zzfIjU35sd2wDnl6ep9yAEZya3YzvJNMFfey0E/Iyjs1ytqinCnr0f90tZo56mqAPP2IS87oOZzxL1MO/FM4yyHsy8mEyzQkN5xA0VQRNlem+yzHy/e2vS+79bc+zNyc0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVBE0VQVNF0FQRNFUETRVBU0XQVBE0VQRNFUFTRdBUETRVPu29gEt9//pt7yUsqu159uaEpoqgqSJoqjz8/vXzde9FtDu8Jz+9PO+0km6ffzw6oenw+cdjElcOCvyNORE0k3sbcyJoJnYYc+KlkEkdizlxQjOhUzEngmYy78WcCJqJfBRzImgmcU7MiaCZwLkxJ4JmcJfEnAiagV0acyJoBnVNzImgGdC1MSeCZjC3xJwImoHcGnMiaAaxRMyJoBnAUjEngmZnS8acCJodLR3z6+N/gmYfa8ScOKHZwVoxJ4JmY2vGnAiaDa0dcyJoNrJFzImg2cBWMSeCZmVbxpwImhVtHXMiaFayR8yJoFnBXjEngmZhe8acCJoF7R1zImgWMkLMiaBZwCgxJ4LmRiPFnAiaG4wWcyJorjRizImgucKoMSeC5kIjx5wImguMHvP/X/4VNOeZIebECc0ZZok5ETQfmCnmRNC8Y7aYE0FzwowxJ4LmiFljTgTNgZljTgTNG7PHnCR/AM3y8BlBQvJZAAAAAElFTkSuQmCC" />
+  <meta name="apple-mobile-web-app-title" content="Italiano" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-  <h1>Gioco di Vocabolario</h1>
-  <div id="card">
-
-    <div id="screen-start" class="screen active">
-      <p>Kategorie wählen – 5 zufällige Vokabeln:</p>
-      <div id="category-grid"></div>
-      <button class="cat-btn-mix" id="mix-btn">Mix – alle Kategorien</button>
-      <div id="stats-bar"></div>
-    </div>
-
-    <div id="screen-quiz" class="screen">
-      <div id="quiz-topbar">
-        <div id="progress"></div>
-        <div id="timer-display">5</div>
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <span class="logo-flag">🇮🇹</span>
+        <span class="logo-text">Impara Italiano</span>
       </div>
-      <div id="dots"></div>
-      <div id="word"></div>
-      <div id="mic-status"></div>
-      <input id="answer-input" type="text" placeholder="Italiano …"
-             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-      <div id="heard"></div>
-      <div id="feedback"></div>
+      <div class="header-actions" id="headerActions"></div>
     </div>
+  </header>
 
-    <div id="screen-result" class="screen">
-      <div id="result-box"></div>
-      <button class="btn" id="next-btn">Kategorien</button>
-    </div>
+  <!-- Main Content Area -->
+  <main class="app-main" id="appMain">
+    <div class="watercolor-bg" aria-hidden="true"></div>
 
-  </div>
+    <!-- ==================== TAB: BIBLIOTHEK ==================== -->
+    <section class="tab-panel" id="tab-library" style="display:none">
+      <div class="section-header section-header--row">
+        <div>
+          <h2 class="section-title">Bibliothek</h2>
+          <p class="section-subtitle" id="librarySubtitle">Deine Lektionen</p>
+        </div>
+      </div>
 
-  <button id="joker-fab" disabled>
-    <span id="joker-label">+3s</span>
-    <div id="joker-pips"></div>
+      <!-- Search & Filter -->
+      <div class="library-controls">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="librarySearch" placeholder="Lektion suchen…" />
+        </div>
+        <div class="filter-chips" id="libraryCategoryFilter">
+          <button class="chip chip--active" data-cat="all">Alle</button>
+          <button class="chip" data-cat="vokabeln">Vokabeln</button>
+          <button class="chip" data-cat="konjugation">Konjugation</button>
+          <button class="chip" data-cat="grammatik">Grammatik</button>
+          <button class="chip" data-cat="redewendungen">Redewendungen</button>
+        </div>
+      </div>
+
+      <!-- Lessons Grid -->
+      <div class="lessons-grid" id="lessonsGrid">
+        <div class="loading-state" id="libraryLoading">
+          <div class="spinner"></div>
+          <p>Lektionen werden geladen…</p>
+        </div>
+      </div>
+
+      <!-- Lesson Detail View (overlay) -->
+      <div class="lesson-detail" id="lessonDetail" style="display:none">
+        <div class="detail-header">
+          <button class="btn btn-ghost btn-icon" id="backToLibraryBtn">← Zurück</button>
+          <div class="detail-title-wrap">
+            <h3 class="detail-title" id="detailLessonTitle">Lektion</h3>
+            <span class="category-badge" id="detailCategoryBadge"></span>
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-ghost btn-sm" id="editLessonMetaBtn">✏️ Bearbeiten</button>
+            <button class="btn btn-danger btn-sm" id="deleteLessonBtn">🗑 Löschen</button>
+          </div>
+        </div>
+
+        <!-- Edit lesson meta form -->
+        <div class="lesson-meta-edit" id="lessonMetaEdit" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-input" id="editLessonTitle" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategorie</label>
+            <select class="form-select" id="editLessonCategory">
+              <option value="vokabeln">Vokabeln</option>
+              <option value="konjugation">Konjugation</option>
+              <option value="grammatik">Grammatik</option>
+              <option value="redewendungen">Redewendungen</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="editLessonDescription" rows="2"></textarea>
+          </div>
+          <div class="form-row-btns">
+            <button class="btn btn-primary btn-sm" id="saveLessonMetaBtn">Speichern</button>
+            <button class="btn btn-ghost btn-sm" id="cancelLessonMetaBtn">Abbrechen</button>
+          </div>
+        </div>
+
+        <p class="detail-description" id="detailDescription"></p>
+
+        <div class="detail-stats-row">
+          <span class="detail-stat" id="detailCardCount"></span>
+          <span class="detail-stat" id="detailLastStudied"></span>
+        </div>
+
+        <div class="detail-start">
+          <button class="btn btn-primary btn-large" id="startLearningFromDetailBtn">
+            🎓 Lernen beginnen
+          </button>
+        </div>
+
+        <!-- Cards List -->
+        <div class="cards-list-header">
+          <h4 class="cards-list-title">Alle Karten</h4>
+          <button class="btn btn-ghost btn-sm" id="addCardToLessonBtn">+ Karte hinzufügen</button>
+        </div>
+
+        <!-- Add card form -->
+        <div class="add-card-form" id="addCardInlineForm" style="display:none">
+          <div class="card-editor-row">
+            <div class="form-group">
+              <label class="form-label">Vorderseite (DE)</label>
+              <input type="text" class="form-input" id="newCardFront" placeholder="Deutsch…" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rückseite (IT)</label>
+              <input type="text" class="form-input" id="newCardBack" placeholder="Italiano…" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beispielsatz</label>
+            <input type="text" class="form-input" id="newCardExample" placeholder="z.B. Io sono felice." />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notizen</label>
+            <input type="text" class="form-input" id="newCardNotes" placeholder="Zusätzliche Hinweise…" />
+          </div>
+          <div class="form-row-btns">
+            <button class="btn btn-primary btn-sm" id="saveNewCardBtn">Karte speichern</button>
+            <button class="btn btn-ghost btn-sm" id="cancelNewCardBtn">Abbrechen</button>
+          </div>
+        </div>
+
+        <div id="detailCardsList" class="detail-cards-list"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB: LERNEN ==================== -->
+    <section class="tab-panel" id="tab-learn">
+
+      <!-- Learn Sub-Navigation -->
+      <div class="learn-subnav">
+        <button class="learn-subnav-btn learn-subnav-btn--active" id="learnSubnavUnits" data-view="units">
+          <span class="subnav-icon">📖</span>
+          <span class="subnav-label">Lerneinheiten</span>
+        </button>
+        <button class="learn-subnav-btn" id="learnSubnavCards" data-view="cards">
+          <span class="subnav-icon">🃏</span>
+          <span class="subnav-label">Lernkarten</span>
+        </button>
+        <button class="learn-subnav-btn" id="learnSubnavPhase6" data-view="phase6">
+          <span class="subnav-icon">🧠</span>
+          <span class="subnav-label">Phase 6</span>
+        </button>
+      </div>
+
+      <!-- Lesson Picker -->
+      <div id="learnLessonPicker" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Lernen</h2>
+          <p class="section-subtitle">Wähle eine oder mehrere Lektionen zum Lernen</p>
+        </div>
+
+        <!-- Weak cards option -->
+        <div class="weak-cards-banner" id="weakCardsBanner" style="display:none">
+          <div class="weak-banner-content">
+            <span class="weak-banner-icon">🎯</span>
+            <div>
+              <strong>Schwierige Karten üben</strong>
+              <p>Übe die 10 Karten, bei denen du am häufigsten Fehler machst</p>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="startWeakCardsBtn">Starten</button>
+        </div>
+        <div class="learn-direction-toggle">
+          <span class="direction-label">Lernrichtung:</span>
+          <div class="toggle-wrap">
+            <button class="toggle-btn toggle-btn--active" id="dirDE2IT">DE → IT</button>
+            <button class="toggle-btn" id="dirIT2DE">IT → DE</button>
+          </div>
+        </div>
+        <div class="lessons-grid learn-select-grid" id="learnLessonsGrid">
+          <div class="loading-state" id="learnLoading">
+            <div class="spinner"></div>
+            <p>Lektionen werden geladen…</p>
+          </div>
+        </div>
+
+        <!-- Session config bar (appears when lessons selected) -->
+        <div class="learn-start-bar" id="learnStartBar" style="display:none">
+          <div class="learn-start-bar-top">
+            <span class="learn-selected-count" id="learnSelectedCount">0 Lektionen gewählt</span>
+            <span class="learn-total-cards" id="learnTotalCards">0 Karten</span>
+          </div>
+          <div class="learn-count-selector">
+            <span class="count-label">Anzahl Fragen:</span>
+            <div class="count-options" id="countOptions">
+              <button class="count-btn" data-count="10">10</button>
+              <button class="count-btn" data-count="15">15</button>
+              <button class="count-btn" data-count="20">20</button>
+              <button class="count-btn count-btn--active" data-count="all">Alle</button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-large learn-start-btn" id="startMultiLessonBtn">🎓 Lernen starten</button>
+        </div>
+
+      </div>
+
+      <!-- Learning Session -->
+      <div id="learnSession" style="display:none">
+        <div class="session-header">
+          <button class="btn btn-ghost btn-icon" id="exitSessionBtn">✕</button>
+          <div class="session-progress-wrap">
+            <div class="session-progress-bar">
+              <div class="session-progress-fill" id="sessionProgressFill" style="width:0%"></div>
+            </div>
+            <span class="session-progress-label" id="sessionProgressLabel">0 / 0</span>
+          </div>
+          <span class="session-round" id="sessionRoundLabel">Runde 1</span>
+        </div>
+
+        <div class="session-card-wrap">
+          <div class="flip-card" id="flipCard">
+            <div class="flip-card-inner" id="flipCardInner">
+              <div class="flip-card-front">
+                <div class="card-side-label">Frage</div>
+                <span class="card-phase-badge" id="cardPhaseFront"></span>
+                <div class="card-question" id="cardQuestion"></div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-side-label">Antwort</div>
+                <span class="card-phase-badge" id="cardPhaseBack"></span>
+                <div class="card-answer" id="cardAnswer"></div>
+                <div class="card-example" id="cardExample"></div>
+                <div class="card-notes" id="cardNotes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="session-scratch-wrap">
+          <textarea class="session-scratch" id="sessionScratch" rows="3" placeholder="Notizen (werden nicht gespeichert)"></textarea>
+        </div>
+
+        <div class="session-actions">
+          <button class="btn btn-reveal" id="showAnswerBtn">Antwort zeigen</button>
+          <div class="grade-btns" id="gradeBtns" style="display:none">
+            <button class="btn btn-wrong" id="wrongBtn">✗ Falsch</button>
+            <button class="btn btn-correct" id="correctBtn">✓ Richtig</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Summary -->
+      <div id="learnSummary" style="display:none">
+        <div class="summary-container">
+          <div class="summary-icon" id="summaryIcon">🎉</div>
+          <h2 class="summary-title">Lektion abgeschlossen!</h2>
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryCorrect">0</span>
+              <span class="summary-stat-label">Beim ersten Versuch richtig</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryTotal">0</span>
+              <span class="summary-stat-label">Karten gesamt</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryRounds">0</span>
+              <span class="summary-stat-label">Runden</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryTime">0:00</span>
+              <span class="summary-stat-label">Zeit</span>
+            </div>
+          </div>
+          <div class="summary-score-wrap">
+            <div class="summary-score-circle">
+              <svg viewBox="0 0 100 100" class="score-svg">
+                <circle cx="50" cy="50" r="42" class="score-bg" />
+                <circle cx="50" cy="50" r="42" class="score-arc" id="scoreArc" />
+              </svg>
+              <span class="score-pct" id="summaryScorePct">0%</span>
+            </div>
+          </div>
+          <div id="summaryAttemptBreakdown" class="summary-attempt-breakdown" style="display:none"></div>
+          <div class="summary-actions">
+            <button class="btn btn-primary btn-large" id="repeatLessonBtn">🔄 Wiederholen</button>
+            <button class="btn btn-ghost btn-large" id="backToPickerBtn">← Lektion wählen</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PHASE 6 SPACED REPETITION ==================== -->
+      <div id="learnPhase6View" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Phase-6-Training</h2>
+          <p class="section-subtitle" id="phase6Subtitle">Spaced Repetition für langfristiges Lernen</p>
+        </div>
+
+        <!-- Phase-6 Dashboard -->
+        <div class="phase6-dashboard" id="phase6Dashboard">
+          <div class="phase6-due-banner" id="phase6DueBanner">
+            <div class="phase6-due-icon">🧠</div>
+            <div class="phase6-due-info">
+              <span class="phase6-due-count" id="phase6DueCount">0</span>
+              <span class="phase6-due-label">Karten fällig</span>
+            </div>
+            <button class="btn btn-primary" id="startPhase6Btn">Jetzt lernen</button>
+          </div>
+
+          <!-- Phase distribution bars -->
+          <div class="phase6-distribution" id="phase6Distribution">
+            <h4 class="phase6-dist-title">Phasenverteilung</h4>
+            <div class="phase6-bars" id="phase6Bars"></div>
+            <div class="phase6-legend">
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--1"></span>Phase 1</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--2"></span>Phase 2</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--3"></span>Phase 3</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--4"></span>Phase 4</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--5"></span>Phase 5</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--6"></span>Phase 6</span>
+            </div>
+          </div>
+
+          <!-- Interval info -->
+          <div class="phase6-info-card">
+            <h4 class="phase6-info-title">So funktioniert Phase 6</h4>
+            <div class="phase6-info-steps">
+              <div class="phase6-step"><span class="phase6-step-num">1</span><span>Richtig → nächste Phase. Falsch → zurück auf Phase 1.</span></div>
+              <div class="phase6-step"><span class="phase6-step-num">2</span><span>Jede Phase hat längere Wiederholungsabstände.</span></div>
+              <div class="phase6-step"><span class="phase6-step-num">3</span><span>Phase 6 = Langzeitgedächtnis (90 Tage Abstand).</span></div>
+            </div>
+            <div class="phase6-intervals">
+              <span class="phase6-interval">P1: sofort</span>
+              <span class="phase6-interval">P2: 1 Tag</span>
+              <span class="phase6-interval">P3: 3 Tage</span>
+              <span class="phase6-interval">P4: 10 Tage</span>
+              <span class="phase6-interval">P5: 30 Tage</span>
+              <span class="phase6-interval">P6: 90 Tage</span>
+            </div>
+          </div>
+
+          <!-- Empty state when no cards due -->
+          <div class="phase6-empty" id="phase6Empty" style="display:none">
+            <div class="empty-state">
+              <div class="empty-icon">✨</div>
+              <p class="empty-title">Alles gelernt!</p>
+              <p class="empty-subtitle" id="phase6NextReview">Keine Karten fällig. Nächste Wiederholung bald.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== LERNEINHEITEN (Grammar Reference) ==================== -->
+      <div id="learnUnitsView">
+        <div class="section-header">
+          <h2 class="section-title">Lerneinheiten</h2>
+          <p class="section-subtitle">Übersicht und Erklärungen zu den wichtigsten Grammatik-Themen</p>
+        </div>
+        <div id="grammarUnitsContainer" class="grammar-units-container"></div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB: STATISTIK ==================== -->
+    <section class="tab-panel" id="tab-stats" style="display:none">
+      <div class="section-header">
+        <h2 class="section-title">Statistiken</h2>
+        <p class="section-subtitle">Dein Lernfortschritt auf einen Blick</p>
+      </div>
+
+      <div id="statsContent">
+        <div class="loading-state" id="statsLoading">
+          <div class="spinner"></div>
+          <p>Statistiken werden geladen…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB: NEU ==================== -->
+    <section class="tab-panel" id="tab-new" style="display:none">
+
+      <!-- Neu Sub-Navigation -->
+      <div class="learn-subnav">
+        <button class="learn-subnav-btn learn-subnav-btn--active" id="newSubnavManual" data-newview="manual">
+          <span class="subnav-icon">✏️</span>
+          <span class="subnav-label">Manuell</span>
+        </button>
+        <button class="learn-subnav-btn" id="newSubnavUpload" data-newview="upload">
+          <span class="subnav-icon">📷</span>
+          <span class="subnav-label">Screenshot</span>
+        </button>
+      </div>
+
+      <!-- Manual Lesson Creation -->
+      <div id="newManualView">
+        <div class="section-header">
+          <h2 class="section-title">Neue Lektion</h2>
+          <p class="section-subtitle">Erstelle manuell eine neue Lektion mit Karteikarten</p>
+        </div>
+
+        <div class="new-lesson-form">
+          <div class="form-group">
+            <label class="form-label">Titel <span class="required">*</span></label>
+            <input type="text" class="form-input" id="newLessonTitle" placeholder="z.B. Haushaltsgeräte" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kategorie</label>
+            <select class="form-select" id="newLessonCategory">
+              <option value="vokabeln">Vokabeln</option>
+              <option value="konjugation">Konjugation</option>
+              <option value="grammatik">Grammatik</option>
+              <option value="redewendungen">Redewendungen</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="newLessonDescription" rows="2" placeholder="Kurze Beschreibung…"></textarea>
+          </div>
+
+          <!-- New lesson cards -->
+          <div class="cards-editor">
+            <div class="cards-editor-header">
+              <h4 class="cards-editor-title">Karteikarten</h4>
+              <span class="card-count-badge" id="newLessonCardCount">0 Karten</span>
+            </div>
+            <div id="newLessonCards" class="builder-cards-list"></div>
+            <button class="btn btn-ghost btn-sm add-card-btn" id="newLessonAddCardBtn">
+              + Karte hinzufügen
+            </button>
+          </div>
+
+          <div class="builder-actions">
+            <button class="btn btn-primary btn-large" id="saveNewLessonBtn">
+              <span>💾 Lektion speichern</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot Upload -->
+      <div id="newUploadView" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Screenshot hochladen</h2>
+          <p class="section-subtitle">Lade ein Bild deines Lernmaterials hoch — der Text wird automatisch erkannt</p>
+        </div>
+
+        <!-- Drop Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept="image/*" hidden />
+          <div class="upload-zone-inner" id="uploadZoneInner">
+            <div class="upload-icon">📷</div>
+            <p class="upload-text">Bild hier ablegen oder tippen zum Auswählen</p>
+            <p class="upload-hint">JPG, PNG, WEBP bis 10 MB</p>
+            <button class="btn btn-primary upload-btn" id="uploadBtn">Bild auswählen</button>
+          </div>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="upload-preview" id="uploadPreview" style="display:none">
+          <img id="previewImg" class="preview-image" src="" alt="Vorschau" />
+          <button class="btn btn-ghost btn-sm" id="removeImageBtn">✕ Bild entfernen</button>
+        </div>
+
+        <!-- OCR Progress -->
+        <div class="ocr-progress" id="ocrProgress" style="display:none">
+          <div class="progress-label" id="ocrProgressLabel">OCR wird durchgeführt…</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="ocrProgressBar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- OCR Result -->
+        <div class="ocr-result" id="ocrResult" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Erkannter Text <span class="label-hint">(bearbeitbar)</span></label>
+            <textarea class="form-textarea" id="ocrText" rows="8" placeholder="Der erkannte Text erscheint hier…"></textarea>
+          </div>
+          <button class="btn btn-secondary" id="parseTextBtn">
+            <span>🔍 Text analysieren & Karten erstellen</span>
+          </button>
+        </div>
+
+        <!-- Lesson Builder from OCR -->
+        <div class="lesson-builder" id="lessonBuilder" style="display:none">
+          <div class="builder-header">
+            <h3 class="builder-title">Neue Lektion erstellen</h3>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Titel <span class="required">*</span></label>
+            <input type="text" class="form-input" id="builderTitle" placeholder="z.B. Verben: essere & avere" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Kategorie</label>
+              <select class="form-select" id="builderCategory">
+                <option value="vokabeln">Vokabeln</option>
+                <option value="konjugation">Konjugation</option>
+                <option value="grammatik">Grammatik</option>
+                <option value="redewendungen">Redewendungen</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="builderDescription" rows="2" placeholder="Kurze Beschreibung der Lektion…"></textarea>
+          </div>
+
+          <!-- Cards Preview -->
+          <div class="cards-editor">
+            <div class="cards-editor-header">
+              <h4 class="cards-editor-title">Erkannte Karten</h4>
+              <span class="card-count-badge" id="builderCardCount">0 Karten</span>
+            </div>
+            <div id="builderCards" class="builder-cards-list"></div>
+            <button class="btn btn-ghost btn-sm add-card-btn" id="builderAddCardBtn">
+              + Karte hinzufügen
+            </button>
+          </div>
+
+          <div class="builder-actions">
+            <button class="btn btn-primary btn-large" id="saveUploadLessonBtn">
+              <span>💾 Lektion speichern</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB: QUIZ ==================== -->
+    <section class="tab-panel" id="tab-quiz" style="display:none">
+      <div class="tab-header">
+        <h2 class="tab-title">Gioco di Vocabolario</h2>
+        <p class="tab-subtitle">Kategorie wählen – 5 zufällige Vokabeln</p>
+      </div>
+      <div class="tab-content">
+
+        <!-- Start screen -->
+        <div id="q-screen-start">
+          <div id="q-category-grid"></div>
+          <button class="q-mix-btn" id="q-mix-btn">Mix – alle Kategorien</button>
+          <div id="q-stats-bar"></div>
+        </div>
+
+        <!-- Quiz screen -->
+        <div id="q-screen-quiz" style="display:none">
+          <div class="q-topbar">
+            <div id="q-progress"></div>
+            <div id="q-timer">5</div>
+          </div>
+          <div id="q-dots"></div>
+          <div id="q-word"></div>
+          <div id="q-mic-status"></div>
+          <input id="q-answer" type="text" placeholder="Italiano …"
+                 autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <div id="q-heard"></div>
+          <div id="q-feedback"></div>
+        </div>
+
+        <!-- Result screen -->
+        <div id="q-screen-result" style="display:none">
+          <div id="q-result-box"></div>
+          <button class="btn btn-primary" id="q-next-btn" style="width:100%;margin-top:1rem">Categorie</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Joker FAB (above bottom nav) -->
+  <button id="q-joker-fab" style="display:none">
+    <span id="q-joker-label">+3s</span>
+    <div id="q-joker-pips"></div>
   </button>
 
-<script>
-(function () {
-  'use strict';
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
 
-  var CATEGORIES = [
-    {
-      name: 'Personen & Familie',
-      words: [
-        { de: 'die Familie',        it: 'la famiglia',       alt: ['famiglia'] },
-        { de: 'der Vater',          it: 'il padre',          alt: ['padre'] },
-        { de: 'die Mutter',         it: 'la madre',          alt: ['madre'] },
-        { de: 'der Sohn',           it: 'il figlio',         alt: ['figlio'] },
-        { de: 'die Tochter',        it: 'la figlia',         alt: ['figlia'] },
-        { de: 'der Bruder',         it: 'il fratello',       alt: ['fratello'] },
-        { de: 'die Schwester',      it: 'la sorella',        alt: ['sorella'] },
-        { de: 'der Ehemann',        it: 'il marito',         alt: ['marito'] },
-        { de: 'die Ehefrau',        it: 'la moglie',         alt: ['moglie'] },
-        { de: 'der Großvater',      it: 'il nonno',          alt: ['nonno'] },
-        { de: 'die Großmutter',     it: 'la nonna',          alt: ['nonna'] },
-        { de: 'der Onkel',          it: 'lo zio',            alt: ['zio'] },
-        { de: 'die Tante',          it: 'la zia',            alt: ['zia'] },
-        { de: 'der Cousin',         it: 'il cugino',         alt: ['cugino'] },
-        { de: 'die Cousine',        it: 'la cugina',         alt: ['cugina'] },
-        { de: 'das Kind (Junge)',   it: 'il bambino',        alt: ['bambino'] },
-        { de: 'das Kind (Mädchen)', it: 'la bambina',        alt: ['bambina'] },
-        { de: 'der Freund',         it: "l'amico",           alt: ['amico'] },
-        { de: 'die Freundin',       it: "l'amica",           alt: ['amica'] },
-        { de: 'der Nachbar',        it: 'il vicino',         alt: ['vicino'] },
-        { de: 'die Nachbarin',      it: 'la vicina',         alt: ['vicina'] },
-        { de: 'die Person',         it: 'la persona',        alt: ['persona'] },
-        { de: 'der Mann',           it: "l'uomo",            alt: ['uomo'] },
-        { de: 'die Frau',           it: 'la donna',          alt: ['donna'] },
-        { de: 'der Herr',           it: 'il signore',        alt: ['signore'] },
-        { de: 'die Dame',           it: 'la signora',        alt: ['signora'] },
-        { de: 'der Junge',          it: 'il ragazzo',        alt: ['ragazzo'] },
-        { de: 'das Mädchen',        it: 'la ragazza',        alt: ['ragazza'] },
-        { de: 'der Kollege',        it: 'il collega',        alt: ['collega'] },
-        { de: 'die Kollegin',       it: 'la collega',        alt: ['collega'] },
-        { de: 'der Chef',           it: 'il capo',           alt: ['capo'] },
-        { de: 'der Kunde',          it: 'il cliente',        alt: ['cliente'] },
-        { de: 'die Kundin',         it: 'la cliente',        alt: ['cliente'] },
-        { de: 'der Lehrer',         it: 'il professore',     alt: ['professore'] },
-        { de: 'die Lehrerin',       it: 'la professoressa',  alt: ['professoressa'] },
-        { de: 'der Student',        it: 'lo studente',       alt: ['studente'] },
-        { de: 'die Studentin',      it: 'la studentessa',    alt: ['studentessa'] },
-        { de: 'der Arzt',           it: 'il dottore',        alt: ['dottore'] },
-        { de: 'die Ärztin',         it: 'la dottoressa',     alt: ['dottoressa'] },
-        { de: 'der Hausnachbar',    it: 'il vicino di casa', alt: ['vicino di casa', 'vicino'] },
-        { de: 'der Schwiegervater', it: 'il suocero',        alt: ['suocero'] },
-        { de: 'die Schwiegermutter',it: 'la suocera',        alt: ['suocera'] }
-      ]
-    },
-    {
-      name: 'Alltag & Wohnen',
-      words: [
-        { de: 'das Haus',           it: 'la casa',           alt: ['casa'] },
-        { de: 'die Wohnung',        it: "l'appartamento",    alt: ['appartamento'] },
-        { de: 'das Zimmer',         it: 'la stanza',         alt: ['stanza'] },
-        { de: 'das Wohnzimmer',     it: 'il soggiorno',      alt: ['soggiorno'] },
-        { de: 'die Küche',          it: 'la cucina',         alt: ['cucina'] },
-        { de: 'das Bad',            it: 'il bagno',          alt: ['bagno'] },
-        { de: 'das Schlafzimmer',   it: 'la camera da letto', alt: ['camera da letto', 'camera'] },
-        { de: 'der Balkon',         it: 'il balcone',        alt: ['balcone'] },
-        { de: 'der Garten',         it: 'il giardino',       alt: ['giardino'] },
-        { de: 'die Tür',            it: 'la porta',          alt: ['porta'] },
-        { de: 'das Fenster',        it: 'la finestra',       alt: ['finestra'] },
-        { de: 'das Bett',           it: 'il letto',          alt: ['letto'] },
-        { de: 'der Stuhl',          it: 'la sedia',          alt: ['sedia'] },
-        { de: 'der Tisch',          it: 'il tavolo',         alt: ['tavolo'] },
-        { de: 'der Schrank',        it: "l'armadio",         alt: ['armadio'] },
-        { de: 'das Licht',          it: 'la luce',           alt: ['luce'] },
-        { de: 'der Kühlschrank',    it: 'il frigorifero',    alt: ['frigorifero'] },
-        { de: 'der Ofen',           it: 'il forno',          alt: ['forno'] },
-        { de: 'die Waschmaschine',  it: 'la lavatrice',      alt: ['lavatrice'] },
-        { de: 'die Stadt',          it: 'la città',          alt: ['città', 'citta'] },
-        { de: 'das Dorf',           it: 'il paese',          alt: ['paese'] },
-        { de: 'die Straße',         it: 'la strada',         alt: ['strada'] },
-        { de: 'der Platz',          it: 'la piazza',         alt: ['piazza'] },
-        { de: 'das Viertel',        it: 'il quartiere',      alt: ['quartiere'] },
-        { de: 'das Gebäude',        it: 'il palazzo',        alt: ['palazzo'] },
-        { de: 'das Geschäft',       it: 'il negozio',        alt: ['negozio'] },
-        { de: 'der Supermarkt',     it: 'il supermercato',   alt: ['supermercato'] },
-        { de: 'der Markt',          it: 'il mercato',        alt: ['mercato'] },
-        { de: 'die Apotheke',       it: 'la farmacia',       alt: ['farmacia'] },
-        { de: 'die Bank',           it: 'la banca',          alt: ['banca'] },
-        { de: 'die Post',           it: 'la posta',          alt: ['posta'] },
-        { de: 'die Kirche',         it: 'la chiesa',         alt: ['chiesa'] },
-        { de: 'der Park',           it: 'il parco',          alt: ['parco'] },
-        { de: 'die Haltestelle',    it: 'la fermata',        alt: ['fermata'] },
-        { de: 'der Bahnhof',        it: 'la stazione',       alt: ['stazione'] },
-        { de: 'das Büro',           it: "l'ufficio",         alt: ['ufficio'] },
-        { de: 'die Schule',         it: 'la scuola',         alt: ['scuola'] },
-        { de: 'die Universität',    it: "l'università",      alt: ['università', 'universita'] },
-        { de: 'das Café',           it: 'il bar',            alt: ['bar'] },
-        { de: 'das Restaurant',     it: 'il ristorante',     alt: ['ristorante'] },
-        { de: 'das Hotel',          it: "l'albergo",         alt: ['albergo'] },
-        { de: 'das Museum',         it: 'il museo',          alt: ['museo'] },
-        { de: 'das Theater',        it: 'il teatro',         alt: ['teatro'] },
-        { de: 'das Kino',           it: 'il cinema',         alt: ['cinema'] },
-        { de: 'die Bibliothek',     it: 'la biblioteca',     alt: ['biblioteca'] },
-        { de: 'das Krankenhaus',    it: "l'ospedale",        alt: ['ospedale'] },
-        { de: 'die Polizei',        it: 'la polizia',        alt: ['polizia'] }
-      ]
-    },
-    {
-      name: 'Essen & Trinken',
-      words: [
-        { de: 'das Essen',          it: 'il cibo',           alt: ['cibo'] },
-        { de: 'das Getränk',        it: 'la bevanda',        alt: ['bevanda'] },
-        { de: 'das Brot',           it: 'il pane',           alt: ['pane'] },
-        { de: 'das Wasser',         it: "l'acqua",           alt: ['acqua'] },
-        { de: 'der Wein',           it: 'il vino',           alt: ['vino'] },
-        { de: 'das Bier',           it: 'la birra',          alt: ['birra'] },
-        { de: 'der Kaffee',         it: 'il caffè',          alt: ['caffè', 'caffe'] },
-        { de: 'der Tee',            it: 'il tè',             alt: ['tè', 'te'] },
-        { de: 'die Milch',          it: 'il latte',          alt: ['latte'] },
-        { de: 'der Zucker',         it: 'lo zucchero',       alt: ['zucchero'] },
-        { de: 'das Salz',           it: 'il sale',           alt: ['sale'] },
-        { de: 'das Öl',             it: "l'olio",            alt: ['olio'] },
-        { de: 'die Butter',         it: 'il burro',          alt: ['burro'] },
-        { de: 'der Käse',           it: 'il formaggio',      alt: ['formaggio'] },
-        { de: 'der Schinken',       it: 'il prosciutto',     alt: ['prosciutto'] },
-        { de: 'das Fleisch',        it: 'la carne',          alt: ['carne'] },
-        { de: 'der Fisch',          it: 'il pesce',          alt: ['pesce'] },
-        { de: 'das Obst',           it: 'la frutta',         alt: ['frutta'] },
-        { de: 'das Gemüse',         it: 'la verdura',        alt: ['verdura'] },
-        { de: 'der Apfel',          it: 'la mela',           alt: ['mela'] },
-        { de: 'die Banane',         it: 'la banana',         alt: ['banana'] },
-        { de: 'die Orange',         it: "l'arancia",         alt: ['arancia'] },
-        { de: 'die Tomate',         it: 'il pomodoro',       alt: ['pomodoro'] },
-        { de: 'die Kartoffel',      it: 'la patata',         alt: ['patata'] },
-        { de: 'der Salat',          it: "l'insalata",        alt: ['insalata'] },
-        { de: 'die Pasta',          it: 'la pasta',          alt: ['pasta'] },
-        { de: 'die Pizza',          it: 'la pizza',          alt: ['pizza'] },
-        { de: 'der Reis',           it: 'il riso',           alt: ['riso'] },
-        { de: 'die Suppe',          it: 'la zuppa',          alt: ['zuppa'] },
-        { de: 'der Nachtisch',      it: 'il dolce',          alt: ['dolce'] },
-        { de: 'das Eis',            it: 'il gelato',         alt: ['gelato'] },
-        { de: 'das Frühstück',      it: 'la colazione',      alt: ['colazione'] },
-        { de: 'das Mittagessen',    it: 'il pranzo',         alt: ['pranzo'] },
-        { de: 'das Abendessen',     it: 'la cena',           alt: ['cena'] },
-        { de: 'der Snack',          it: 'lo spuntino',       alt: ['spuntino'] },
-        { de: 'der Teller',         it: 'il piatto',         alt: ['piatto'] },
-        { de: 'das Messer',         it: 'il coltello',       alt: ['coltello'] },
-        { de: 'die Gabel',          it: 'la forchetta',      alt: ['forchetta'] },
-        { de: 'der Löffel',         it: 'il cucchiaio',      alt: ['cucchiaio'] },
-        { de: 'das Glas',           it: 'il bicchiere',      alt: ['bicchiere'] },
-        { de: 'die Rechnung',       it: 'il conto',          alt: ['conto'] },
-        { de: 'die Speisekarte',    it: 'il menu',           alt: ['menu', 'menù'] },
-        { de: 'der Kassenbon',      it: 'lo scontrino',      alt: ['scontrino'] },
-        { de: 'der Supermarkt',     it: 'il supermercato',   alt: ['supermercato'] },
-        { de: 'die Kasse',          it: 'la cassa',          alt: ['cassa'] },
-        { de: 'das Ei',             it: "l'uovo",            alt: ['uovo'] },
-        { de: 'der Kuchen',         it: 'la torta',          alt: ['torta'] }
-      ]
-    },
-    {
-      name: 'Zeit & Kalender',
-      words: [
-        { de: 'heute',              it: 'oggi',              alt: [] },
-        { de: 'gestern',            it: 'ieri',              alt: [] },
-        { de: 'morgen',             it: 'domani',            alt: [] },
-        { de: 'der Morgen',         it: 'la mattina',        alt: ['mattina'] },
-        { de: 'der Nachmittag',     it: 'il pomeriggio',     alt: ['pomeriggio'] },
-        { de: 'der Abend',          it: 'la sera',           alt: ['sera'] },
-        { de: 'die Nacht',          it: 'la notte',          alt: ['notte'] },
-        { de: 'der Tag',            it: 'il giorno',         alt: ['giorno'] },
-        { de: 'die Woche',          it: 'la settimana',      alt: ['settimana'] },
-        { de: 'der Monat',          it: 'il mese',           alt: ['mese'] },
-        { de: 'das Jahr',           it: "l'anno",            alt: ['anno'] },
-        { de: 'Montag',             it: 'lunedì',            alt: ['lunedi'] },
-        { de: 'Dienstag',           it: 'martedì',           alt: ['martedi'] },
-        { de: 'Mittwoch',           it: 'mercoledì',         alt: ['mercoledi'] },
-        { de: 'Donnerstag',         it: 'giovedì',           alt: ['giovedi'] },
-        { de: 'Freitag',            it: 'venerdì',           alt: ['venerdi'] },
-        { de: 'Samstag',            it: 'sabato',            alt: [] },
-        { de: 'Sonntag',            it: 'domenica',          alt: [] },
-        { de: 'die Stunde',         it: "l'ora",             alt: ['ora'] },
-        { de: 'die Minute',         it: 'il minuto',         alt: ['minuto'] },
-        { de: 'das Datum',          it: 'la data',           alt: ['data'] },
-        { de: 'der Geburtstag',     it: 'il compleanno',     alt: ['compleanno'] },
-        { de: 'früh / bald',        it: 'presto',            alt: [] },
-        { de: 'spät',               it: 'tardi',             alt: [] },
-        { de: 'jetzt',              it: 'adesso',            alt: [] },
-        { de: 'der Winter',         it: "l'inverno",         alt: ['inverno'] },
-        { de: 'der Sommer',         it: "l'estate",          alt: ['estate'] }
-      ]
-    },
-    {
-      name: 'Körper & Gefühle',
-      words: [
-        { de: 'der Körper',         it: 'il corpo',          alt: ['corpo'] },
-        { de: 'der Kopf',           it: 'la testa',          alt: ['testa'] },
-        { de: 'das Gesicht',        it: 'il viso',           alt: ['viso'] },
-        { de: 'das Auge',           it: "l'occhio",          alt: ['occhio'] },
-        { de: 'das Ohr',            it: "l'orecchio",        alt: ['orecchio'] },
-        { de: 'der Mund',           it: 'la bocca',          alt: ['bocca'] },
-        { de: 'der Zahn',           it: 'il dente',          alt: ['dente'] },
-        { de: 'die Hand',           it: 'la mano',           alt: ['mano'] },
-        { de: 'der Arm',            it: 'il braccio',        alt: ['braccio'] },
-        { de: 'das Bein',           it: 'la gamba',          alt: ['gamba'] },
-        { de: 'der Fuß',            it: 'il piede',          alt: ['piede'] },
-        { de: 'das Herz',           it: 'il cuore',          alt: ['cuore'] },
-        { de: 'der Rücken',         it: 'la schiena',        alt: ['schiena'] },
-        { de: 'die Gesundheit',     it: 'la salute',         alt: ['salute'] },
-        { de: 'die Krankheit',      it: 'la malattia',       alt: ['malattia'] },
-        { de: 'der Arzt',           it: 'il medico',         alt: ['medico'] },
-        { de: 'die Apotheke',       it: 'la farmacia',       alt: ['farmacia'] },
-        { de: 'das Medikament',     it: 'il medicinale',     alt: ['medicinale'] },
-        { de: 'der Schmerz',        it: 'il dolore',         alt: ['dolore'] },
-        { de: 'das Fieber',         it: 'la febbre',         alt: ['febbre'] },
-        { de: 'müde',               it: 'stanco',            alt: [] },
-        { de: 'krank',              it: 'malato',            alt: [] },
-        { de: 'glücklich',          it: 'felice',            alt: [] },
-        { de: 'traurig',            it: 'triste',            alt: [] },
-        { de: 'wütend',             it: 'arrabbiato',        alt: [] },
-        { de: 'die Nase',           it: 'il naso',           alt: ['naso'] },
-        { de: 'der Hals',           it: 'il collo',          alt: ['collo'] }
-      ]
-    },
-    {
-      name: 'Arbeit & Freizeit',
-      words: [
-        { de: 'die Arbeit',         it: 'il lavoro',         alt: ['lavoro'] },
-        { de: 'arbeiten',           it: 'lavorare',          alt: [] },
-        { de: 'das Büro',           it: "l'ufficio",         alt: ['ufficio'] },
-        { de: 'der Kollege',        it: 'il collega',        alt: ['collega'] },
-        { de: 'die Besprechung',    it: 'la riunione',       alt: ['riunione'] },
-        { de: 'die Arbeitszeit',    it: "l'orario",          alt: ['orario'] },
-        { de: 'das Gehalt',         it: 'lo stipendio',      alt: ['stipendio'] },
-        { de: 'die Pause',          it: 'la pausa',          alt: ['pausa'] },
-        { de: 'die Aufgabe',        it: 'il compito',        alt: ['compito'] },
-        { de: 'die Prüfung',        it: "l'esame",           alt: ['esame'] },
-        { de: 'der Unterricht',     it: 'la lezione',        alt: ['lezione'] },
-        { de: 'der Student',        it: 'lo studente',       alt: ['studente'] },
-        { de: 'studieren',          it: 'studiare',          alt: [] },
-        { de: 'die Schule',         it: 'la scuola',         alt: ['scuola'] },
-        { de: 'die Universität',    it: "l'università",      alt: ['università', 'universita'] },
-        { de: 'der Kurs',           it: 'il corso',          alt: ['corso'] },
-        { de: 'der Lehrer',         it: 'il professore',     alt: ['professore'] },
-        { de: 'die Lehrerin',       it: 'la professoressa',  alt: ['professoressa'] },
-        { de: 'das Buch',           it: 'il libro',          alt: ['libro'] },
-        { de: 'das Heft',           it: 'il quaderno',       alt: ['quaderno'] },
-        { de: 'der Stift',          it: 'la penna',          alt: ['penna'] },
-        { de: 'der Bleistift',      it: 'la matita',         alt: ['matita'] },
-        { de: 'der Radiergummi',    it: 'la gomma',          alt: ['gomma'] },
-        { de: 'der Computer',       it: 'il computer',       alt: ['computer'] },
-        { de: 'die E-Mail',         it: "l'e-mail",          alt: ['e-mail', 'email'] },
-        { de: 'das Telefon',        it: 'il telefono',       alt: ['telefono'] },
-        { de: 'anrufen',            it: 'chiamare',          alt: [] },
-        { de: 'spielen',            it: 'giocare',           alt: [] },
-        { de: 'lesen',              it: 'leggere',           alt: [] },
-        { de: 'schreiben',          it: 'scrivere',          alt: [] },
-        { de: 'zuhören',            it: 'ascoltare',         alt: [] },
-        { de: 'schauen',            it: 'guardare',          alt: [] },
-        { de: 'zu Fuß gehen',       it: 'camminare',         alt: [] },
-        { de: 'laufen / rennen',    it: 'correre',           alt: [] },
-        { de: 'schwimmen',          it: 'nuotare',           alt: [] },
-        { de: 'reisen',             it: 'viaggiare',         alt: [] },
-        { de: 'ausgehen',           it: 'uscire',            alt: [] },
-        { de: 'besuchen',           it: 'visitare',          alt: [] },
-        { de: 'treffen',            it: 'incontrare',        alt: [] },
-        { de: 'tanzen',             it: 'ballare',           alt: [] },
-        { de: 'singen',             it: 'cantare',           alt: [] },
-        { de: 'das Hobby',          it: 'il hobby',          alt: ['hobby'] },
-        { de: 'die Freizeit',       it: 'il tempo libero',   alt: ['tempo libero'] },
-        { de: 'der Sport',          it: 'lo sport',          alt: ['sport'] },
-        { de: 'die Musik',          it: 'la musica',         alt: ['musica'] },
-        { de: 'die Zeitung',        it: 'il giornale',       alt: ['giornale'] },
-        { de: 'das Konzert',        it: 'il concerto',       alt: ['concerto'] }
-      ]
-    },
-    {
-      name: 'Reise & Verkehr',
-      words: [
-        { de: 'die Reise',          it: 'il viaggio',        alt: ['viaggio'] },
-        { de: 'reisen',             it: 'viaggiare',         alt: [] },
-        { de: 'der Urlaub',         it: 'la vacanza',        alt: ['vacanza'] },
-        { de: 'der Tourist',        it: 'il turista',        alt: ['turista'] },
-        { de: 'die Stadt',          it: 'la città',          alt: ['città', 'citta'] },
-        { de: 'die Karte / Plan',   it: 'la mappa',          alt: ['mappa'] },
-        { de: 'die Haltestelle',    it: 'la fermata',        alt: ['fermata'] },
-        { de: 'der Bahnhof',        it: 'la stazione',       alt: ['stazione'] },
-        { de: 'der Flughafen',      it: "l'aeroporto",       alt: ['aeroporto'] },
-        { de: 'der Zug',            it: 'il treno',          alt: ['treno'] },
-        { de: 'der Bus',            it: "l'autobus",         alt: ['autobus'] },
-        { de: 'die Straßenbahn',    it: 'il tram',           alt: ['tram'] },
-        { de: 'die U-Bahn',         it: 'la metropolitana',  alt: ['metropolitana', 'metro'] },
-        { de: 'das Auto',           it: 'la macchina',       alt: ['macchina'] },
-        { de: 'das Taxi',           it: 'il taxi',           alt: ['taxi'] },
-        { de: 'das Ticket',         it: 'il biglietto',      alt: ['biglietto'] },
-        { de: 'der Koffer',         it: 'la valigia',        alt: ['valigia'] },
-        { de: 'die Reservierung',   it: 'la prenotazione',   alt: ['prenotazione'] },
-        { de: 'das Hotelzimmer',    it: 'la camera',         alt: ['camera'] },
-        { de: 'das Stockwerk',      it: 'il piano',          alt: ['piano'] },
-        { de: 'der Aufzug',         it: "l'ascensore",       alt: ['ascensore'] },
-        { de: 'links',              it: 'sinistra',          alt: [] },
-        { de: 'rechts',             it: 'destra',            alt: [] },
-        { de: 'geradeaus',          it: 'diritto',           alt: [] },
-        { de: 'in der Nähe',        it: 'vicino',            alt: [] },
-        { de: 'weit entfernt',      it: 'lontano',           alt: [] },
-        { de: 'hier',               it: 'qui',               alt: [] },
-        { de: 'dort',               it: 'lì',                alt: ['li'] },
-        { de: 'hineingehen',        it: 'entrare',           alt: [] },
-        { de: 'hinausgehen',        it: 'uscire',            alt: [] },
-        { de: 'einsteigen',         it: 'salire',            alt: [] },
-        { de: 'aussteigen',         it: 'scendere',          alt: [] },
-        { de: 'ankommen',           it: 'arrivare',          alt: [] },
-        { de: 'abfahren',           it: 'partire',           alt: [] },
-        { de: 'verpassen',          it: 'perdere',           alt: [] },
-        { de: 'das Fahrrad',        it: 'la bicicletta',     alt: ['bicicletta'] },
-        { de: 'das Motorrad',       it: 'la moto',           alt: ['moto'] }
-      ]
-    },
-    {
-      name: 'Grundverben',
-      words: [
-        { de: 'sein',               it: 'essere',            alt: [] },
-        { de: 'haben',              it: 'avere',             alt: [] },
-        { de: 'machen / tun',       it: 'fare',              alt: [] },
-        { de: 'gehen / fahren',     it: 'andare',            alt: [] },
-        { de: 'kommen',             it: 'venire',            alt: [] },
-        { de: 'bleiben / befinden', it: 'stare',             alt: [] },
-        { de: 'geben',              it: 'dare',              alt: [] },
-        { de: 'nehmen',             it: 'prendere',          alt: [] },
-        { de: 'sehen',              it: 'vedere',            alt: [] },
-        { de: 'hören / fühlen',     it: 'sentire',           alt: [] },
-        { de: 'sagen',              it: 'dire',              alt: [] },
-        { de: 'sprechen',           it: 'parlare',           alt: [] },
-        { de: 'verstehen',          it: 'capire',            alt: [] },
-        { de: 'wissen',             it: 'sapere',            alt: [] },
-        { de: 'kennen',             it: 'conoscere',         alt: [] },
-        { de: 'wollen',             it: 'volere',            alt: [] },
-        { de: 'können / dürfen',    it: 'potere',            alt: [] },
-        { de: 'müssen / sollen',    it: 'dovere',            alt: [] },
-        { de: 'gefallen',           it: 'piacere',           alt: [] },
-        { de: 'kaufen',             it: 'comprare',          alt: [] },
-        { de: 'verkaufen',          it: 'vendere',           alt: [] },
-        { de: 'öffnen',             it: 'aprire',            alt: [] },
-        { de: 'schließen',          it: 'chiudere',          alt: [] },
-        { de: 'stellen / legen',    it: 'mettere',           alt: [] },
-        { de: 'benutzen',           it: 'usare',             alt: [] },
-        { de: 'leben',              it: 'vivere',            alt: [] },
-        { de: 'wohnen',             it: 'abitare',           alt: [] },
-        { de: 'essen',              it: 'mangiare',          alt: [] },
-        { de: 'trinken',            it: 'bere',              alt: [] },
-        { de: 'helfen',             it: 'aiutare',           alt: [] },
-        { de: 'lieben',             it: 'amare',             alt: [] },
-        { de: 'finden',             it: 'trovare',           alt: [] },
-        { de: 'suchen',             it: 'cercare',           alt: [] },
-        { de: 'arbeiten',           it: 'lavorare',          alt: [] },
-        { de: 'eintreten',          it: 'entrare',           alt: [] },
-        { de: 'bleiben',            it: 'restare',           alt: [] },
-        { de: 'zurückkehren',       it: 'tornare',           alt: [] },
-        { de: 'denken',             it: 'pensare',           alt: [] },
-        { de: 'glauben',            it: 'credere',           alt: [] },
-        { de: 'passieren',          it: 'succedere',         alt: [] },
-        { de: 'vergessen',          it: 'dimenticare',       alt: [] },
-        { de: 'anfangen',           it: 'cominciare',        alt: [] }
-      ]
-    }
-  ];
+  <!-- Confirm Dialog -->
+  <div class="confirm-overlay" id="confirmOverlay" style="display:none">
+    <div class="confirm-dialog">
+      <h4 class="confirm-title" id="confirmTitle">Bestätigung</h4>
+      <p class="confirm-message" id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirmCancel">Abbrechen</button>
+        <button class="btn btn-danger" id="confirmOk">Löschen</button>
+      </div>
+    </div>
+  </div>
 
-  // ── Mastery (persisted) ───────────────────────────────────────────────
-  var mastery = {};
-  try { mastery = JSON.parse(localStorage.getItem('impara_mastery') || '{}'); } catch (e) {}
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item nav-item--active" data-tab="learn" onclick="switchTab('learn')">
+      <span class="nav-icon">🎓</span>
+      <span class="nav-label">Lernen</span>
+    </button>
+    <button class="nav-item" data-tab="library" onclick="switchTab('library')">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">Bibliothek</span>
+    </button>
+    <button class="nav-item" data-tab="stats" onclick="switchTab('stats')">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Statistik</span>
+    </button>
+    <button class="nav-item" data-tab="new" onclick="switchTab('new')">
+      <span class="nav-icon">➕</span>
+      <span class="nav-label">Neu</span>
+    </button>
+    <button class="nav-item" data-tab="quiz" onclick="switchTab('quiz')">
+      <span class="nav-icon">🎤</span>
+      <span class="nav-label">Quiz</span>
+    </button>
+  </nav>
 
-  function isMastered(w)  { return (mastery[w.it] || 0) >= 3; }
-  function saveMastery()  { try { localStorage.setItem('impara_mastery', JSON.stringify(mastery)); } catch (e) {} }
-
-  function renderStats() {
-    var total = 0, seen = {};
-    var lvl = [0, 0, 0, 0]; // lvl[0]=untouched, [1]=1x, [2]=2x, [3]=mastered
-    CATEGORIES.forEach(function (c) {
-      c.words.forEach(function (w) {
-        if (!seen[w.it]) {
-          seen[w.it] = true; total++;
-          lvl[Math.min(mastery[w.it] || 0, 3)]++;
-        }
-      });
-    });
-    var open = lvl[0] + lvl[1] + lvl[2];
-    function pips(filled) {
-      var h = '<span class="stp">';
-      for (var i = 0; i < 3; i++) h += '<span' + (i < filled ? ' class="on"' : '') + '></span>';
-      return h + '</span>';
-    }
-    document.getElementById('stats-bar').innerHTML =
-      '<b>' + open + '</b> von ' + total + ' Wörtern offen &nbsp;·&nbsp; <b>' + lvl[3] + '</b> gemeistert<br>' +
-      pips(1) + ' Stufe&nbsp;1:&nbsp;<b>' + lvl[1] + '</b>' +
-      '&ensp;·&ensp;' +
-      pips(2) + ' Stufe&nbsp;2:&nbsp;<b>' + lvl[2] + '</b>';
-  }
-
-  // ── State ─────────────────────────────────────────────────────────────
-  var currentRound = [];
-  var queue = [], correctSet = {}, wrongCounts = {}, current = null;
-  var timerInterval = null, timeLeft = 5;
-  var recognition = null, quizActive = false, answered = false;
-  var wordToken = 0;
-  var jokersLeft = 3;
-  var timerLaunchedForCurrentWord = false;
-
-  function launchTimerOnce(token) {
-    if (timerLaunchedForCurrentWord || wordToken !== token) return;
-    timerLaunchedForCurrentWord = true;
-    startTimer(token);
-  }
-
-  // ── DOM ───────────────────────────────────────────────────────────────
-  var elProgress  = document.getElementById('progress');
-  var elDots      = document.getElementById('dots');
-  var elWord      = document.getElementById('word');
-  var elTimer     = document.getElementById('timer-display');
-  var elMicStatus = document.getElementById('mic-status');
-  var elInput     = document.getElementById('answer-input');
-  var elHeard     = document.getElementById('heard');
-  var elFeedback  = document.getElementById('feedback');
-  var elResult    = document.getElementById('result-box');
-  var elNext      = document.getElementById('next-btn');
-  var elJoker     = document.getElementById('joker-fab');
-  var elJokerPips = document.getElementById('joker-pips');
-
-  renderStats();
-
-  // ── Speech API ────────────────────────────────────────────────────────
-  var SpeechAPI = null;
-  try { SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition || null; } catch (e) {}
-
-  // ── Build category buttons ────────────────────────────────────────────
-  var grid = document.getElementById('category-grid');
-  CATEGORIES.forEach(function (cat, i) {
-    var btn = document.createElement('button');
-    btn.className   = 'cat-btn';
-    btn.textContent = cat.name;
-    btn.onclick = (function (idx) {
-      return function () { pickCategory(idx); };
-    }(i));
-    grid.appendChild(btn);
-  });
-  document.getElementById('mix-btn').onclick = function () { pickCategory(-1); };
-
-  // ── Other buttons ─────────────────────────────────────────────────────
-  elJoker.onclick = useJoker;
-  elNext.onclick  = showCategoryScreen;
-  elInput.addEventListener('keydown', function (e) {
-    if (e.keyCode === 13 || e.key === 'Enter') onEnter();
-  });
-
-  // ── Category & quiz start ─────────────────────────────────────────────
-  function showCategoryScreen() {
-    quizActive = false;
-    stopRecognition();
-    clearInterval(timerInterval);
-    elJoker.classList.remove('visible');
-    renderStats();
-    showScreen('start');
-  }
-
-  function pickCategory(idx) {
-    var pool;
-    if (idx === -1) {
-      var seen = {};
-      pool = [];
-      CATEGORIES.forEach(function (c) {
-        c.words.forEach(function (w) {
-          if (!seen[w.it]) { seen[w.it] = true; pool.push(w); }
-        });
-      });
-    } else {
-      pool = CATEGORIES[idx].words;
-    }
-    var active = pool.filter(function (w) { return !isMastered(w); });
-    if (active.length === 0) {
-      var bar = document.getElementById('stats-bar');
-      bar.innerHTML = '<b style="color:#34d399">Alle Wörter dieser Kategorie gemeistert!</b>';
-      return;
-    }
-    var selected = shuffle(active.slice()).slice(0, 5);
-    startQuiz(selected);
-  }
-
-  function startQuiz(words) {
-    currentRound = words;
-    queue = shuffle(words.slice());
-    correctSet = {}; wrongCounts = {};
-    words.forEach(function (v) { wrongCounts[v.de] = 0; });
-    jokersLeft = 3;
-    quizActive = true;
-    elJoker.classList.add('visible');
-    renderJokers();
-    showScreen('quiz');
-    nextWord();
-  }
-
-  function nextWord() {
-    if (!quizActive) return;
-    wordToken++;
-    var token = wordToken;
-    answered = false;
-    timerLaunchedForCurrentWord = false;
-
-    stopRecognition();
-    elInput.value          = '';
-    elHeard.textContent    = '';
-    elFeedback.textContent = '';
-    elFeedback.className   = '';
-    renderTimer('…', 'grace'); // waiting for mic – timer not yet running
-
-    if (queue.length === 0) { finishQuiz(); return; }
-
-    current = queue.shift();
-    elWord.textContent = current.de;
-    updateDots();
-    updateProgress();
-    startWordRecognition(token); // timer launches inside once mic is ready
-  }
-
-  // ── Joker ─────────────────────────────────────────────────────────────
-  function useJoker() {
-    if (jokersLeft <= 0 || answered) return;
-    jokersLeft--;
-    renderJokers();
-    if (timeLeft > 0) {
-      timeLeft += 3;
-      renderTimer(timeLeft, timeLeft <= 2 ? 'urgent' : timeLeft <= 3 ? 'warn' : '');
-    }
-  }
-
-  function renderJokers() {
-    var html = '';
-    for (var i = 0; i < 3; i++) {
-      html += '<div class="pip' + (i < jokersLeft ? ' active' : '') + '"></div>';
-    }
-    elJokerPips.innerHTML = html;
-    elJoker.disabled = jokersLeft <= 0;
-  }
-
-  // ── Timer ─────────────────────────────────────────────────────────────
-  function startTimer(token) {
-    clearInterval(timerInterval);
-    timeLeft = 5;
-    renderTimer(5, '');
-
-    timerInterval = setInterval(function () {
-      if (wordToken !== token) { clearInterval(timerInterval); return; }
-      timeLeft--;
-      if (timeLeft > 0) {
-        renderTimer(timeLeft, timeLeft <= 2 ? 'urgent' : timeLeft <= 3 ? 'warn' : '');
-      } else {
-        clearInterval(timerInterval);
-        renderTimer('...', 'grace');
-        setTimeout(function () {
-          if (wordToken === token && !answered) timeOut();
-        }, 1500);
-      }
-    }, 1000);
-  }
-
-  function renderTimer(val, cls) {
-    elTimer.textContent = val;
-    elTimer.className   = cls || '';
-  }
-
-  // ── Answers ───────────────────────────────────────────────────────────
-  function timeOut() {
-    if (answered) return;
-    answered = true;
-    stopRecognition();
-    if (wrongCounts[current.de] === 0 && (mastery[current.it] || 0) > 0) {
-      mastery[current.it] = 0;
-      saveMastery();
-    }
-    wrongCounts[current.de]++;
-    queue.push(current);
-    elFeedback.textContent = 'Zeit! – ' + current.it;
-    elFeedback.className   = 'wrong';
-    setTimeout(nextWord, 1900);
-  }
-
-  function onEnter() {
-    if (answered) return;
-    var val = elInput.value.replace(/^\s+|\s+$/g, '').toLowerCase();
-    if (!val) return;
-    answered = true;
-    clearInterval(timerInterval);
-    evaluate(val);
-  }
-
-  function evaluate(text) {
-    var ok = [current.it.toLowerCase()]
-      .concat(current.alt.map(function (a) { return a.toLowerCase(); }))
-      .some(function (a) { return text.indexOf(a) !== -1; });
-
-    if (ok) {
-      correctSet[current.de] = true;
-      elFeedback.textContent = 'Richtig!';
-      elFeedback.className   = 'correct';
-      if (wrongCounts[current.de] === 0) {
-        mastery[current.it] = Math.min((mastery[current.it] || 0) + 1, 3);
-        saveMastery();
-      }
-    } else {
-      if (wrongCounts[current.de] === 0 && (mastery[current.it] || 0) > 0) {
-        mastery[current.it] = 0;
-        saveMastery();
-      }
-      wrongCounts[current.de]++;
-      queue.push(current);
-      elFeedback.textContent = 'Falsch – ' + current.it;
-      elFeedback.className   = 'wrong';
-    }
-    updateDots();
-    setTimeout(nextWord, 1700);
-  }
-
-  // ── Finish ────────────────────────────────────────────────────────────
-  function finishQuiz() {
-    quizActive = false;
-    stopRecognition();
-    clearInterval(timerInterval);
-    elJoker.classList.remove('visible');
-
-    var html = '<h2>Geschafft!</h2>';
-    currentRound.forEach(function (v) {
-      var c = wrongCounts[v.de], cls = c === 0 ? 'ok' : 'some';
-      var m = mastery[v.it] || 0;
-      var pips = '';
-      for (var j = 0; j < 3; j++) {
-        pips += '<span class="mpip' + (j < m ? (m >= 3 ? ' max' : ' done') : '') + '"></span>';
-      }
-      html += '<div class="ri ' + cls + '"><span>' + v.de + '</span>';
-      html += '<span style="display:flex;align-items:center">' + v.it;
-      if (c > 0) html += '<span class="wrong-count">(' + c + 'x falsch)</span>';
-      html += '<span class="mpips">' + pips + '</span></span></div>';
-    });
-    elResult.innerHTML = html;
-    renderStats();
-    showScreen('result');
-  }
-
-  // ── Progress ──────────────────────────────────────────────────────────
-  function updateProgress() {
-    elProgress.textContent = Object.keys(correctSet).length + ' / ' + currentRound.length + ' richtig';
-  }
-
-  function updateDots() {
-    var html = '';
-    currentRound.forEach(function (v) {
-      var cls = correctSet[v.de] ? 'dot done'
-              : (current && v.de === current.de ? 'dot current' : 'dot');
-      html += '<div class="' + cls + '" title="' + v.de + '"></div>';
-    });
-    elDots.innerHTML = html;
-  }
-
-  // ── Recognition ───────────────────────────────────────────────────────
-  function startWordRecognition(token) {
-    if (!SpeechAPI) { setMicStatus('Texteingabe'); launchTimerOnce(token); return; }
-    try {
-      var rec = new SpeechAPI();
-      rec.lang           = 'it-IT';
-      rec.continuous     = false;
-      rec.interimResults = true;
-
-      rec.onstart = function () {
-        if (wordToken !== token) return;
-        setMicStatus('Mikrofon aktiv');
-        launchTimerOnce(token); // timer starts here, never before
-      };
-
-      rec.onresult = function (e) {
-        if (wordToken !== token || answered) return;
-        var last = e.results[e.results.length - 1];
-        var t    = last[0].transcript.toLowerCase().replace(/^\s+|\s+$/g, '');
-        elInput.value       = t;
-        elHeard.textContent = '„' + t + '"';
-        if (last.isFinal) {
-          answered = true;
-          clearInterval(timerInterval);
-          stopRecognition();
-          evaluate(t);
-        }
-      };
-
-      rec.onerror = function (e) {
-        if (wordToken !== token || answered) return;
-        if (e.error === 'not-allowed') {
-          SpeechAPI = null;
-          setMicStatus('Texteingabe');
-          launchTimerOnce(token); // mic denied – switch to text, start timer
-        } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
-          setMicStatus('Mikrofon-Fehler');
-        }
-      };
-
-      rec.onend = function () {
-        if (wordToken !== token || answered) return;
-        try {
-          rec.start();
-        } catch (ex) {
-          setTimeout(function () {
-            if (wordToken === token && !answered) startWordRecognition(token);
-          }, 150);
-        }
-      };
-
-      rec.start();
-      recognition = rec;
-    } catch (e) {
-      SpeechAPI = null;
-      setMicStatus('Texteingabe');
-      launchTimerOnce(token);
-    }
-  }
-
-  function stopRecognition() {
-    if (recognition) {
-      var r = recognition;
-      recognition = null;
-      try { r.stop(); } catch (e) {}
-    }
-  }
-
-  function setMicStatus(msg) {
-    elMicStatus.textContent = msg;
-  }
-
-  // ── Helpers ───────────────────────────────────────────────────────────
-  function showScreen(name) {
-    var screens = document.querySelectorAll('.screen');
-    for (var i = 0; i < screens.length; i++) {
-      screens[i].className = 'screen' + (screens[i].id === 'screen-' + name ? ' active' : '');
-    }
-  }
-
-  function shuffle(arr) {
-    for (var i = arr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-    }
-    return arr;
-  }
-
-}());
-</script>
+  <script src="./app.js"></script>
 </body>
 </html>
