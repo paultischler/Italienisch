@@ -2759,6 +2759,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.65rem;
+  margin-top: 1.4rem;
   margin-bottom: 0.65rem;
 }
 
@@ -2807,19 +2808,19 @@ body {
 
 /* Stats bar */
 #q-stats-bar {
-  margin-top: 0.85rem;
-  padding-top: 0.7rem;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
   border-top: 2px solid rgba(0,0,0,0.08);
-  font-size: 0.73rem;
+  font-size: 1.1rem;
   color: var(--text-muted);
   text-align: center;
-  line-height: 1.7;
+  line-height: 2;
 }
 #q-stats-bar b { color: var(--coffee); }
 
 /* Stat pips */
-.q-stp { display: inline-flex; gap: 2px; vertical-align: middle; margin: 0 1px; }
-.q-stp span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: rgba(0,0,0,0.15); }
+.q-stp { display: inline-flex; gap: 4px; vertical-align: middle; margin: 0 2px; }
+.q-stp span { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: rgba(0,0,0,0.15); }
 .q-stp span.on { background: var(--mint-dark); }
 
 /* Topbar */
