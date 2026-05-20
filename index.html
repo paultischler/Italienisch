@@ -106,6 +106,20 @@
     .ri.some { background: rgba(251,191,36,0.12);  color: #fbbf24; }
     .wrong-count { font-size: 0.75rem; opacity: 0.75; margin-left: 0.4rem; white-space: nowrap; }
 
+    /* ── Mastery pips (result) ── */
+    .mpips { display: flex; gap: 3px; flex-shrink: 0; margin-left: 0.5rem; }
+    .mpip  { width: 7px; height: 7px; border-radius: 50%; background: #374151; }
+    .mpip.done { background: #a78bfa; }
+    .mpip.max  { background: #34d399; }
+
+    /* ── Stats bar (category screen) ── */
+    #stats-bar {
+      margin-top: 0.85rem; padding-top: 0.7rem;
+      border-top: 1px solid #1e2a4a;
+      font-size: 0.73rem; color: #6b7280; text-align: center; line-height: 1.6;
+    }
+    #stats-bar b { color: #a78bfa; }
+
     /* ── Joker FAB ── */
     #joker-fab {
       position: fixed; bottom: 1.8rem; right: 1.8rem;
@@ -132,6 +146,7 @@
       <p>Kategorie wählen – 5 zufällige Vokabeln:</p>
       <div id="category-grid"></div>
       <button class="cat-btn-mix" id="mix-btn">Mix – alle Kategorien</button>
+      <div id="stats-bar"></div>
     </div>
 
     <div id="screen-quiz" class="screen">
@@ -507,6 +522,28 @@
     }
   ];
 
+  // ── Mastery (persisted) ───────────────────────────────────────────────
+  var mastery = {};
+  try { mastery = JSON.parse(localStorage.getItem('impara_mastery') || '{}'); } catch (e) {}
+
+  function isMastered(w)  { return (mastery[w.it] || 0) >= 3; }
+  function saveMastery()  { try { localStorage.setItem('impara_mastery', JSON.stringify(mastery)); } catch (e) {} }
+
+  function renderStats() {
+    var total = 0, masteredCount = 0, seen = {};
+    CATEGORIES.forEach(function (c) {
+      c.words.forEach(function (w) {
+        if (!seen[w.it]) {
+          seen[w.it] = true; total++;
+          if (isMastered(w)) masteredCount++;
+        }
+      });
+    });
+    document.getElementById('stats-bar').innerHTML =
+      '<b>' + (total - masteredCount) + '</b> von ' + total + ' Wörtern offen &nbsp;·&nbsp; ' +
+      '<b>' + masteredCount + '</b> gemeistert';
+  }
+
   // ── State ─────────────────────────────────────────────────────────────
   var currentRound = [];
   var queue = [], correctSet = {}, wrongCounts = {}, current = null;
@@ -528,6 +565,8 @@
   var elNext      = document.getElementById('next-btn');
   var elJoker     = document.getElementById('joker-fab');
   var elJokerPips = document.getElementById('joker-pips');
+
+  renderStats();
 
   // ── Speech API ────────────────────────────────────────────────────────
   var SpeechAPI = null;
@@ -559,6 +598,7 @@
     stopRecognition();
     clearInterval(timerInterval);
     elJoker.classList.remove('visible');
+    renderStats();
     showScreen('start');
   }
 
@@ -575,7 +615,13 @@
     } else {
       pool = CATEGORIES[idx].words;
     }
-    var selected = shuffle(pool.slice()).slice(0, 5);
+    var active = pool.filter(function (w) { return !isMastered(w); });
+    if (active.length === 0) {
+      var bar = document.getElementById('stats-bar');
+      bar.innerHTML = '<b style="color:#34d399">Alle Wörter dieser Kategorie gemeistert!</b>';
+      return;
+    }
+    var selected = shuffle(active.slice()).slice(0, 5);
     startQuiz(selected);
   }
 
@@ -690,6 +736,10 @@
       correctSet[current.de] = true;
       elFeedback.textContent = 'Richtig!';
       elFeedback.className   = 'correct';
+      if (wrongCounts[current.de] === 0) {
+        mastery[current.it] = Math.min((mastery[current.it] || 0) + 1, 3);
+        saveMastery();
+      }
     } else {
       wrongCounts[current.de]++;
       queue.push(current);
@@ -710,11 +760,18 @@
     var html = '<h2>Geschafft!</h2>';
     currentRound.forEach(function (v) {
       var c = wrongCounts[v.de], cls = c === 0 ? 'ok' : 'some';
-      html += '<div class="ri ' + cls + '"><span>' + v.de + '</span><span>' + v.it;
+      var m = mastery[v.it] || 0;
+      var pips = '';
+      for (var j = 0; j < 3; j++) {
+        pips += '<span class="mpip' + (j < m ? (m >= 3 ? ' max' : ' done') : '') + '"></span>';
+      }
+      html += '<div class="ri ' + cls + '"><span>' + v.de + '</span>';
+      html += '<span style="display:flex;align-items:center">' + v.it;
       if (c > 0) html += '<span class="wrong-count">(' + c + 'x falsch)</span>';
-      html += '</span></div>';
+      html += '<span class="mpips">' + pips + '</span></span></div>';
     });
     elResult.innerHTML = html;
+    renderStats();
     showScreen('result');
   }
 
