@@ -567,6 +567,13 @@
   var recognition = null, quizActive = false, answered = false;
   var wordToken = 0;
   var jokersLeft = 3;
+  var timerLaunchedForCurrentWord = false;
+
+  function launchTimerOnce(token) {
+    if (timerLaunchedForCurrentWord || wordToken !== token) return;
+    timerLaunchedForCurrentWord = true;
+    startTimer(token);
+  }
 
   // ── DOM ───────────────────────────────────────────────────────────────
   var elProgress  = document.getElementById('progress');
@@ -659,12 +666,14 @@
     wordToken++;
     var token = wordToken;
     answered = false;
+    timerLaunchedForCurrentWord = false;
 
     stopRecognition();
     elInput.value          = '';
     elHeard.textContent    = '';
     elFeedback.textContent = '';
     elFeedback.className   = '';
+    renderTimer('…', 'grace'); // waiting for mic – timer not yet running
 
     if (queue.length === 0) { finishQuiz(); return; }
 
@@ -672,8 +681,7 @@
     elWord.textContent = current.de;
     updateDots();
     updateProgress();
-    startTimer(token);
-    startWordRecognition(token);
+    startWordRecognition(token); // timer launches inside once mic is ready
   }
 
   // ── Joker ─────────────────────────────────────────────────────────────
@@ -808,12 +816,18 @@
 
   // ── Recognition ───────────────────────────────────────────────────────
   function startWordRecognition(token) {
-    if (!SpeechAPI) { setMicStatus('Texteingabe'); return; }
+    if (!SpeechAPI) { setMicStatus('Texteingabe'); launchTimerOnce(token); return; }
     try {
       var rec = new SpeechAPI();
       rec.lang           = 'it-IT';
       rec.continuous     = false;
       rec.interimResults = true;
+
+      rec.onstart = function () {
+        if (wordToken !== token) return;
+        setMicStatus('Mikrofon aktiv');
+        launchTimerOnce(token); // timer starts here, never before
+      };
 
       rec.onresult = function (e) {
         if (wordToken !== token || answered) return;
@@ -831,7 +845,13 @@
 
       rec.onerror = function (e) {
         if (wordToken !== token || answered) return;
-        if (e.error !== 'no-speech' && e.error !== 'aborted') setMicStatus('Mikrofon-Fehler');
+        if (e.error === 'not-allowed') {
+          SpeechAPI = null;
+          setMicStatus('Texteingabe');
+          launchTimerOnce(token); // mic denied – switch to text, start timer
+        } else if (e.error !== 'no-speech' && e.error !== 'aborted') {
+          setMicStatus('Mikrofon-Fehler');
+        }
       };
 
       rec.onend = function () {
@@ -847,10 +867,10 @@
 
       rec.start();
       recognition = rec;
-      setMicStatus('Mikrofon aktiv');
     } catch (e) {
       SpeechAPI = null;
       setMicStatus('Texteingabe');
+      launchTimerOnce(token);
     }
   }
 
