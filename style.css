@@ -2755,11 +2755,14 @@ body {
    ============================================================ */
 
 /* Category grid */
+#q-screen-start {
+  padding-top: 2rem;
+}
+
 #q-category-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.65rem;
-  margin-top: 2.2rem;
   margin-bottom: 0.65rem;
 }
 
