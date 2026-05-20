@@ -112,6 +112,11 @@
     .mpip.done { background: #a78bfa; }
     .mpip.max  { background: #34d399; }
 
+    /* ── Inline pips for stats bar ── */
+    .stp { display: inline-flex; gap: 2px; vertical-align: middle; margin: 0 1px; }
+    .stp span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #374151; }
+    .stp span.on { background: #a78bfa; }
+
     /* ── Stats bar (category screen) ── */
     #stats-bar {
       margin-top: 0.85rem; padding-top: 0.7rem;
@@ -546,18 +551,27 @@
   function saveMastery()  { try { localStorage.setItem('impara_mastery', JSON.stringify(mastery)); } catch (e) {} }
 
   function renderStats() {
-    var total = 0, masteredCount = 0, seen = {};
+    var total = 0, seen = {};
+    var lvl = [0, 0, 0, 0]; // lvl[0]=untouched, [1]=1x, [2]=2x, [3]=mastered
     CATEGORIES.forEach(function (c) {
       c.words.forEach(function (w) {
         if (!seen[w.it]) {
           seen[w.it] = true; total++;
-          if (isMastered(w)) masteredCount++;
+          lvl[Math.min(mastery[w.it] || 0, 3)]++;
         }
       });
     });
+    var open = lvl[0] + lvl[1] + lvl[2];
+    function pips(filled) {
+      var h = '<span class="stp">';
+      for (var i = 0; i < 3; i++) h += '<span' + (i < filled ? ' class="on"' : '') + '></span>';
+      return h + '</span>';
+    }
     document.getElementById('stats-bar').innerHTML =
-      '<b>' + (total - masteredCount) + '</b> von ' + total + ' Wörtern offen &nbsp;·&nbsp; ' +
-      '<b>' + masteredCount + '</b> gemeistert';
+      '<b>' + open + '</b> von ' + total + ' Wörtern offen &nbsp;·&nbsp; <b>' + lvl[3] + '</b> gemeistert<br>' +
+      pips(1) + ' Stufe&nbsp;1:&nbsp;<b>' + lvl[1] + '</b>' +
+      '&ensp;·&ensp;' +
+      pips(2) + ' Stufe&nbsp;2:&nbsp;<b>' + lvl[2] + '</b>';
   }
 
   // ── State ─────────────────────────────────────────────────────────────
