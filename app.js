@@ -2531,26 +2531,46 @@ function initImport() {
         closeImport();
       } else {
         const pkg = JSON.parse(raw);
-        const keys = {l:'iit_lessons', c:'iit_cards', s:'iit_sessions', r:'iit_card_results', p:'iit_phase6'};
         let count = 0;
-        for (const [short, key] of Object.entries(keys)) {
+
+        // Lessons, cards, sessions, card_results (array merge by id)
+        const arrayKeys = {l:'iit_lessons', c:'iit_cards', s:'iit_sessions', r:'iit_card_results'};
+        for (const [short, key] of Object.entries(arrayKeys)) {
           if (pkg[short]) {
-            // Merge arrays (lessons, cards, sessions, results) by id; phase6 is an object
-            if (short === 'p') {
-              const existing = DB.phase6();
-              const incoming = JSON.parse(pkg[short]);
-              DB.savePhase6({...existing, ...incoming});
-            } else {
-              const existing = DB._g(key, []);
-              const incoming = JSON.parse(pkg[short]);
-              const existingIds = new Set(existing.map(x=>x.id));
-              const merged = [...existing, ...incoming.filter(x=>!existingIds.has(x.id))];
-              DB._s(key, merged);
-            }
+            const existing = DB._g(key, []);
+            const incoming = JSON.parse(pkg[short]);
+            const existingIds = new Set(existing.map(x=>x.id));
+            DB._s(key, [...existing, ...incoming.filter(x=>!existingIds.has(x.id))]);
             count++;
           }
         }
-        showToast(`Daten aus ${count} Kategorien importiert`, 'success');
+
+        // Phase-6: accept either old {card_id: {...}} dict (key "p")
+        // or new array format from card_phase6_state table (key "p6_raw")
+        if (pkg.p6_raw) {
+          const existing = DB.phase6();
+          const rows = JSON.parse(pkg.p6_raw);
+          // rows: [{card_id, phase, next_review_at, last_reviewed_at, correct_streak}]
+          rows.forEach(r => {
+            existing[r.card_id] = {
+              phase: r.phase,
+              correct_streak: r.correct_streak || 0,
+              next_review_at: r.next_review_at,
+              last_reviewed_at: r.last_reviewed_at || '',
+            };
+          });
+          DB.savePhase6(existing);
+          count++;
+        } else if (pkg.p) {
+          const existing = DB.phase6();
+          DB.savePhase6({...existing, ...JSON.parse(pkg.p)});
+          count++;
+        }
+
+        const lessons = DB._g('iit_lessons', []).length;
+        const cards   = DB._g('iit_cards', []).length;
+        const p6count = Object.keys(DB.phase6()).length;
+        showToast(`Importiert: ${lessons} Lektionen · ${cards} Karten · ${p6count} Phase-6-Einträge`, 'success', 5000);
         closeImport();
         loadStats();
       }
