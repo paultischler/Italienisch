@@ -112,11 +112,11 @@ const CelebrationFX = (() => {
     if (!targetEl) return;
     const rect = targetEl.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
+    const cy = rect.top + 12;
 
     glowPulse(targetEl);
     confetti(cx, cy, 35);
-    sparkles(cx, cy - 30, 12);
+    sparkles(cx, cy, 12);
     if (navigator.vibrate) navigator.vibrate(60);
   }
 
