@@ -207,7 +207,7 @@ async function apiFetch(url, options = {}) {
     const today = new Date().toISOString().slice(0,10);
     const studiedToday = days.includes(today);
     let streak = 0, streakStart = null, cur = studiedToday ? today : new Date(Date.now()-86400000).toISOString().slice(0,10);
-    for (let i=0; i<30; i++) {
+    for (let i=0; i<400; i++) {
       if (days.includes(cur)) { streak++; streakStart=cur; const d=new Date(cur); d.setDate(d.getDate()-1); cur=d.toISOString().slice(0,10); }
       else break;
     }
