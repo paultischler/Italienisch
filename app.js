@@ -217,7 +217,8 @@ async function apiFetch(url, options = {}) {
       const ds = sessions.filter(s=>s.completed_at.slice(0,10)===day);
       if (ds.length>0) {
         const dc=ds.reduce((s,x)=>s+(x.correct_first_try||0),0), dt=ds.reduce((s,x)=>s+(x.total_cards||0),0);
-        dailySessions.push({day, count:ds.length, success_rate:dt>0?Math.round(dc/dt*100):0});
+        const dur=ds.reduce((s,x)=>s+(x.duration_seconds||0),0);
+        dailySessions.push({day, count:ds.length, duration:dur, success_rate:dt>0?Math.round(dc/dt*100):0});
       }
     }
     const lessonStats = lessons.map(l=>{
