@@ -117,7 +117,7 @@ const CelebrationFX = (() => {
     glowPulse(targetEl);
     confetti(cx, cy, 35);
     sparkles(cx, cy - 30, 12);
-    checkmark(cx, cy - 40);
+    if (navigator.vibrate) navigator.vibrate(60);
   }
 
   return { confetti, sparkles, glowPulse, checkmark, celebrate };
