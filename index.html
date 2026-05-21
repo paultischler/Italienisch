@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260523" />
+  <link rel="stylesheet" href="./style.css?v=20260524" />
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -395,18 +395,18 @@
         </div>
       </div>
 
-      <!-- Data Import Section -->
+      <!-- Export / Import Section -->
       <div class="stats-section" style="margin-top:1.5rem">
-        <h3 class="stats-section-title">Daten importieren</h3>
+        <h3 class="stats-section-title">Backup &amp; Geräteübertragung</h3>
         <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.8rem">
-          Lernfortschritt aus einer anderen Instanz übernehmen. Exportiere die Daten dort per Browser-Konsole und füge sie hier ein.
+          Alle Daten (Lektionen, Karten, Sessions, Phase-6, Quiz-Fortschritt) als eine Datei sichern oder auf ein anderes Gerät übertragen.
         </p>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <button class="btn btn-ghost btn-sm" id="importQuizBtn" style="text-align:left">
-            📥 Quiz-Fortschritt importieren (impara_mastery)
+          <button class="btn btn-primary btn-sm" id="exportAllBtn" style="text-align:center">
+            📤 Alles exportieren
           </button>
-          <button class="btn btn-ghost btn-sm" id="importAppBtn" style="text-align:left">
-            📥 Lektionen &amp; Karten importieren (iit_*)
+          <button class="btn btn-ghost btn-sm" id="importAllBtn" style="text-align:left">
+            📥 Backup importieren
           </button>
         </div>
       </div>
@@ -415,7 +415,7 @@
       <div class="confirm-overlay" id="importOverlay" style="display:none">
         <div class="confirm-dialog" style="max-width:480px;width:92vw">
           <h4 class="confirm-title" id="importTitle">Daten importieren</h4>
-          <p class="confirm-message" id="importDesc" style="font-size:0.8rem;margin-bottom:0.6rem"></p>
+          <p id="importDesc" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.6rem"></p>
           <label class="btn btn-ghost btn-sm" style="display:block;text-align:center;margin-bottom:0.5rem;cursor:pointer">
             📂 Datei auswählen
             <input type="file" id="importFileInput" accept=".json,.txt" style="display:none" />
@@ -675,6 +675,6 @@
     </button>
   </nav>
 
-  <script src="./app.js?v=20260523"></script>
+  <script src="./app.js?v=20260524"></script>
 </body>
 </html>
