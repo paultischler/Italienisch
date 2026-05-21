@@ -128,13 +128,15 @@ body {
 /* ---- App Header ---- */
 .app-header {
   position: fixed; top: 0; left: 0; right: 0;
-  height: var(--header-h); background: var(--bg);
+  height: calc(var(--header-h) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  background: var(--bg);
   z-index: 100; border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   background: rgba(249,247,244,0.88);
 }
 .header-inner {
-  max-width: var(--max-w); margin: 0 auto; height: 100%;
+  max-width: var(--max-w); margin: 0 auto; height: var(--header-h);
   display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
 }
 .header-logo { display: flex; align-items: center; gap: 10px; }
@@ -150,7 +152,7 @@ body {
 /* ---- Main ---- */
 .app-main {
   max-width: var(--max-w); margin: 0 auto;
-  padding: calc(var(--header-h) + 16px) 16px calc(var(--nav-h) + 16px);
+  padding: calc(var(--header-h) + env(safe-area-inset-top) + 16px) 16px calc(var(--nav-h) + 16px);
   min-height: 100dvh; position: relative; z-index: 1;
 }
 .app-main::before { display: none; }
