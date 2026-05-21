@@ -1093,6 +1093,38 @@ function initLearnTab() {
   $('showAnswerBtn').addEventListener('click', showAnswer);
   $('correctBtn').addEventListener('click', () => gradeCard(true));
   $('wrongBtn').addEventListener('click', () => gradeCard(false));
+
+  $('sessionEditToggle').addEventListener('click', () => {
+    const card = state.sessionCards[state.sessionIndex];
+    if (!card) return;
+    $('editCardFront').value = card.front || '';
+    $('editCardBack').value = card.back || '';
+    $('editCardExample').value = card.example || '';
+    $('editCardNotes').value = card.notes || '';
+    $('sessionEditForm').style.display = 'block';
+    $('sessionEditToggle').style.display = 'none';
+  });
+
+  $('cancelSessionEditBtn').addEventListener('click', () => {
+    $('sessionEditForm').style.display = 'none';
+    $('sessionEditToggle').style.display = '';
+  });
+
+  $('saveSessionCardBtn').addEventListener('click', () => {
+    const card = state.sessionCards[state.sessionIndex];
+    if (!card) return;
+    card.front = $('editCardFront').value.trim();
+    card.back = $('editCardBack').value.trim();
+    card.example = $('editCardExample').value.trim();
+    card.notes = $('editCardNotes').value.trim();
+    const allCards = DB.cards();
+    const idx = allCards.findIndex(c => c.id === card.id);
+    if (idx !== -1) { allCards[idx] = { ...allCards[idx], ...card }; DB.saveCards(allCards); }
+    showCurrentCard();
+    $('sessionEditForm').style.display = 'none';
+    $('sessionEditToggle').style.display = '';
+    showToast('Karte gespeichert ✓', 'success');
+  });
   $('flipCard').addEventListener('click', () => {
     if (!state.sessionFlipped) {
       showAnswer();
@@ -1301,6 +1333,9 @@ function showCurrentCard() {
     frontBadge.style.display = 'none';
     backBadge.style.display = 'none';
   }
+  // Reset edit form when card changes
+  if ($('sessionEditForm')) $('sessionEditForm').style.display = 'none';
+  if ($('sessionEditToggle')) $('sessionEditToggle').style.display = '';
 }
 
 function updateSessionProgress() {
@@ -2432,29 +2467,44 @@ function renderPhase6Distribution(stats) {
   container.innerHTML = html;
 }
 
-async function startPhase6Session() {
-  if (state.phase6DueCards.length === 0) {
-    showToast('Keine Karten fällig', 'info');
-    return;
-  }
-
-  // Use up to 20 cards per session
-  const cards = state.phase6DueCards.slice(0, 20);
-
+async function startPhase6Session(cardCount) {
+  cardCount = cardCount || 20;
+  if (state.phase6DueCards.length === 0) { showToast('Keine Karten fällig', 'info'); return; }
+  const cards = state.phase6DueCards.slice(0, cardCount);
   state.sessionMode = 'phase6';
   state.sessionLessonId = null;
-  // Collect unique lesson IDs from due cards
   state.sessionLessonIds = [...new Set(cards.map(c => c.lesson_id))];
   state.sessionIsWeakMode = false;
   state.learnQuestionCount = 'all';
-
-  // Hide Phase-6 view, start session
   $('learnPhase6View').style.display = 'none';
   startSession(cards, cards[0]?.lesson_id || null);
 }
 
 function initPhase6() {
-  $('startPhase6Btn').addEventListener('click', startPhase6Session);
+  var p6CardCount = 20;
+
+  $('startPhase6Btn').addEventListener('click', function() {
+    if (state.phase6DueCards.length === 0) { showToast('Keine Karten fällig', 'info'); return; }
+    $('phase6CountPicker').style.display = 'block';
+    $('startPhase6Btn').style.display = 'none';
+  });
+
+  var picker = $('phase6CountPicker');
+  if (picker) {
+    picker.querySelectorAll('.count-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        picker.querySelectorAll('.count-btn').forEach(function(b) { b.classList.remove('count-btn--active'); });
+        btn.classList.add('count-btn--active');
+        p6CardCount = parseInt(btn.dataset.p6count, 10);
+      });
+    });
+  }
+
+  $('startPhase6ConfirmBtn').addEventListener('click', function() {
+    $('phase6CountPicker').style.display = 'none';
+    $('startPhase6Btn').style.display = '';
+    startPhase6Session(p6CardCount);
+  });
 }
 
 /* ============================================================
@@ -3008,6 +3058,7 @@ function initQuizTab() {
   var qQueue = [], qCorrectSet = {}, qWrongCounts = {}, qCurrent = null;
   var qTimerInterval = null, qTimeLeft = 5;
   var qRecognition = null, qQuizActive = false, qAnswered = false;
+  var qSessionStart = null;
   var qWordToken = 0;
   var qJokersLeft = 3;
   var qTimerLaunched = false;
@@ -3098,6 +3149,7 @@ function initQuizTab() {
 
   function qStartQuiz(words) {
     qCurrentRound = words;
+    qSessionStart = Date.now();
     qQueue = words.slice();
     qCorrectSet = {}; qWrongCounts = {};
     words.forEach(function(v) { qWrongCounts[v.de] = 0; });
@@ -3263,6 +3315,18 @@ function initQuizTab() {
     var rb = qEl('q-result-box');
     if (rb) rb.innerHTML = html;
     qRenderStats();
+    if (qSessionStart) {
+      var qElapsed = Math.round((Date.now() - qSessionStart) / 1000);
+      var qTotal = qCurrentRound.length;
+      var qCorrect = qCurrentRound.filter(function(v) { return qWrongCounts[v.de] === 0; }).length;
+      var qSessions = DB.sessions();
+      var qNextId = qSessions.length > 0 ? Math.max.apply(null, qSessions.map(function(x){return x.id||0})) + 1 : 1;
+      qSessions.push({ id: qNextId, lesson_id: null, type: 'quiz',
+        completed_at: new Date().toISOString(), duration_seconds: qElapsed,
+        total_cards: qTotal, correct_first_try: qCorrect });
+      DB.saveSessions(qSessions);
+      qSessionStart = null;
+    }
     qShowScreen('result');
   }
 

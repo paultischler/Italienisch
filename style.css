@@ -1135,3 +1135,20 @@ html.dark .grammar-table thead th {
 }
 html.dark .grammar-table td.person { background: var(--surface-warm); }
 html.dark .grammar-table tbody tr:nth-child(even) { background: var(--surface-dim); }
+
+/* Phase 6 count picker */
+.phase6-count-picker {
+  background: var(--surface-dim); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; margin-top: -8px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.phase6-picker-label { font-size: 14px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+
+/* Session card edit */
+.session-edit-wrap { margin-top: 8px; padding-bottom: 24px; }
+.session-edit-toggle { width: 100%; justify-content: center; color: var(--text-3); font-size: 13px; }
+.session-edit-toggle:hover { color: var(--primary); }
+.session-edit-form {
+  background: var(--surface-dim); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 16px; margin-top: 8px;
+}
