@@ -2453,42 +2453,63 @@ function initPhase6() {
 }
 
 /* ============================================================
-   DATA IMPORT
+   EXPORT & IMPORT
    ============================================================ */
 function initImport() {
-  const overlay  = $('importOverlay');
-  const titleEl  = $('importTitle');
-  const descEl   = $('importDesc');
-  const input    = $('importInput');
-  const okBtn    = $('importOk');
-  const cancelBtn= $('importCancel');
+  const overlay   = $('importOverlay');
+  const titleEl   = $('importTitle');
+  const descEl    = $('importDesc');
+  const input     = $('importInput');
+  const okBtn     = $('importOk');
+  const cancelBtn = $('importCancel');
   if (!overlay) return;
 
-  let importMode = null; // 'quiz' | 'app'
+  /* ---- EXPORT ---- */
+  function doExport() {
+    const pkg = {
+      _version: 2,
+      _exported: new Date().toISOString(),
+      l: localStorage.getItem('iit_lessons')   || '[]',
+      c: localStorage.getItem('iit_cards')     || '[]',
+      s: localStorage.getItem('iit_sessions')  || '[]',
+      r: localStorage.getItem('iit_card_results') || '[]',
+      p: localStorage.getItem('iit_phase6')    || '{}',
+      q: localStorage.getItem('impara_mastery') || '{}',
+    };
+    const json = JSON.stringify(pkg, null, 2);
+    const blob = new Blob([json], {type: 'application/json'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const date = new Date().toISOString().slice(0,10);
+    a.href     = url;
+    a.download = `impara-backup-${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Backup heruntergeladen', 'success');
+  }
 
-  function openImport(mode) {
-    importMode = mode;
+  const exportBtn = $('exportAllBtn');
+  if (exportBtn) exportBtn.addEventListener('click', doExport);
+
+  /* ---- IMPORT MODAL ---- */
+  function openImport() {
     input.value = '';
-    if (mode === 'quiz') {
-      titleEl.textContent = 'Quiz-Fortschritt importieren';
-      descEl.innerHTML = 'Führe in der alten App folgendes in der Browser-Konsole aus und füge das Ergebnis hier ein:<br>' +
-        '<code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:0.75rem">' +
-        'localStorage.getItem(\'impara_mastery\')</code>';
-    } else {
-      titleEl.textContent = 'Lektionen & Karten importieren';
-      descEl.innerHTML = 'Führe in der alten App folgendes in der Browser-Konsole aus und füge das Ergebnis hier ein:<br>' +
-        '<code style="background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-size:0.75rem">' +
-        'JSON.stringify({l:localStorage.getItem(\'iit_lessons\'),c:localStorage.getItem(\'iit_cards\'),' +
-        's:localStorage.getItem(\'iit_sessions\'),r:localStorage.getItem(\'iit_card_results\'),' +
-        'p:localStorage.getItem(\'iit_phase6\')})</code>';
-    }
+    titleEl.textContent = 'Backup importieren';
+    descEl.textContent  = 'Wähle eine Backup-Datei aus oder füge den JSON-Inhalt ein.';
     overlay.style.display = 'flex';
-    setTimeout(() => input.focus(), 100);
   }
 
   function closeImport() { overlay.style.display = 'none'; }
 
-  // File picker: read file into textarea
+  const importAllBtn = $('importAllBtn');
+  if (importAllBtn) importAllBtn.addEventListener('click', openImport);
+
+  cancelBtn.addEventListener('click', closeImport);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeImport(); });
+
+  // File picker
   const fileInput = $('importFileInput');
   if (fileInput) {
     fileInput.addEventListener('change', () => {
@@ -2497,7 +2518,6 @@ function initImport() {
       const reader = new FileReader();
       reader.onload = e => {
         let text = e.target.result.trim();
-        // Strip ===EXPORT=== / ===ENDE=== markers if present
         const m = text.match(/===EXPORT===\s*([\s\S]*?)\s*===ENDE===/);
         if (m) text = m[1].trim();
         input.value = text;
@@ -2508,72 +2528,55 @@ function initImport() {
     });
   }
 
-  $('importQuizBtn').addEventListener('click', () => openImport('quiz'));
-  $('importAppBtn').addEventListener('click',  () => openImport('app'));
-  cancelBtn.addEventListener('click', closeImport);
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeImport(); });
-
   okBtn.addEventListener('click', () => {
     const raw = input.value.trim();
     if (!raw) { showToast('Kein Inhalt eingefügt', 'error'); return; }
     try {
-      if (importMode === 'quiz') {
-        const data = JSON.parse(raw);
-        if (typeof data !== 'object' || Array.isArray(data)) throw new Error('Ungültiges Format');
-        // Merge: keep higher value for each word
+      const pkg = JSON.parse(raw);
+
+      // Array tables: merge by id (no duplicates)
+      const arrayKeys = {l:'iit_lessons', c:'iit_cards', s:'iit_sessions', r:'iit_card_results'};
+      for (const [short, key] of Object.entries(arrayKeys)) {
+        if (!pkg[short]) continue;
+        const existing   = DB._g(key, []);
+        const incoming   = JSON.parse(pkg[short]);
+        const existingIds = new Set(existing.map(x => x.id));
+        DB._s(key, [...existing, ...incoming.filter(x => !existingIds.has(x.id))]);
+      }
+
+      // Phase-6: native backup format (key "p") or Perplexity array format (key "p6_raw")
+      if (pkg.p6_raw) {
+        const existing = DB.phase6();
+        JSON.parse(pkg.p6_raw).forEach(r => {
+          existing[r.card_id] = {phase: r.phase, correct_streak: r.correct_streak || 0,
+                                  next_review_at: r.next_review_at, last_reviewed_at: r.last_reviewed_at || ''};
+        });
+        DB.savePhase6(existing);
+      } else if (pkg.p) {
+        DB.savePhase6({...DB.phase6(), ...JSON.parse(pkg.p)});
+      }
+
+      // Quiz mastery
+      if (pkg.q) {
         let existing = {};
         try { existing = JSON.parse(localStorage.getItem('impara_mastery') || '{}'); } catch(e) {}
-        for (const [k,v] of Object.entries(data)) {
+        const incoming = JSON.parse(pkg.q);
+        for (const [k,v] of Object.entries(incoming)) {
           existing[k] = Math.max(existing[k] || 0, parseInt(v) || 0);
         }
         localStorage.setItem('impara_mastery', JSON.stringify(existing));
-        showToast(`${Object.keys(data).length} Vokabeln importiert`, 'success');
-        closeImport();
-      } else {
-        const pkg = JSON.parse(raw);
-        let count = 0;
-
-        // Lessons, cards, sessions, card_results (array merge by id)
-        const arrayKeys = {l:'iit_lessons', c:'iit_cards', s:'iit_sessions', r:'iit_card_results'};
-        for (const [short, key] of Object.entries(arrayKeys)) {
-          if (pkg[short]) {
-            const existing = DB._g(key, []);
-            const incoming = JSON.parse(pkg[short]);
-            const existingIds = new Set(existing.map(x=>x.id));
-            DB._s(key, [...existing, ...incoming.filter(x=>!existingIds.has(x.id))]);
-            count++;
-          }
-        }
-
-        // Phase-6: accept either old {card_id: {...}} dict (key "p")
-        // or new array format from card_phase6_state table (key "p6_raw")
-        if (pkg.p6_raw) {
-          const existing = DB.phase6();
-          const rows = JSON.parse(pkg.p6_raw);
-          // rows: [{card_id, phase, next_review_at, last_reviewed_at, correct_streak}]
-          rows.forEach(r => {
-            existing[r.card_id] = {
-              phase: r.phase,
-              correct_streak: r.correct_streak || 0,
-              next_review_at: r.next_review_at,
-              last_reviewed_at: r.last_reviewed_at || '',
-            };
-          });
-          DB.savePhase6(existing);
-          count++;
-        } else if (pkg.p) {
-          const existing = DB.phase6();
-          DB.savePhase6({...existing, ...JSON.parse(pkg.p)});
-          count++;
-        }
-
-        const lessons = DB._g('iit_lessons', []).length;
-        const cards   = DB._g('iit_cards', []).length;
-        const p6count = Object.keys(DB.phase6()).length;
-        showToast(`Importiert: ${lessons} Lektionen · ${cards} Karten · ${p6count} Phase-6-Einträge`, 'success', 5000);
-        closeImport();
-        loadStats();
       }
+
+      const lessons = DB._g('iit_lessons', []).length;
+      const cards   = DB._g('iit_cards', []).length;
+      const p6count = Object.keys(DB.phase6()).length;
+      const qcount  = Object.keys(JSON.parse(localStorage.getItem('impara_mastery') || '{}')).length;
+      showToast(
+        `Importiert: ${lessons} Lektionen · ${cards} Karten · ${p6count} Phase-6 · ${qcount} Quiz-Wörter`,
+        'success', 5000
+      );
+      closeImport();
+      loadStats();
     } catch(e) {
       showToast('Fehler beim Parsen: ' + e.message, 'error');
     }
