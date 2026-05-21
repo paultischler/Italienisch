@@ -1323,6 +1323,11 @@ function gradeCard(correct) {
   const card = state.sessionCards[state.sessionIndex];
   const result = state.sessionResults[card.id];
 
+  if (correct && typeof CelebrationFX !== 'undefined') {
+    const flipCard = $('flipCard');
+    if (flipCard) CelebrationFX.celebrate(flipCard);
+  }
+
   // Accumulate time for this card, capped at 180 seconds (3 min)
   const cardTime = Date.now() - (state.sessionCardShownAt || Date.now());
   state.sessionActiveTime += Math.min(cardTime, 180000);
