@@ -1079,6 +1079,7 @@ html.dark .dark-toggle-moon { display: none; }
    DARK MODE
    ============================================================ */
 html.dark {
+  color-scheme: dark;
   --bg: #1e1b18;
   --surface: #27231f;
   --surface-dim: #312d29;
