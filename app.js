@@ -1898,7 +1898,7 @@ function renderGrammarUnits() {
 
     const hasCards = unit.lessonIds && unit.lessonIds.length > 0;
     const practiceHtml = hasCards
-      ? `<div class="grammar-practice-wrap"><button class="btn btn-primary btn-sm grammar-practice-btn" data-unit-id="${unit.id}">🎓 5 Karten üben</button></div>`
+      ? `<div class="grammar-practice-wrap"><button class="btn btn-primary btn-sm grammar-practice-btn" data-unit-id="${unit.id}">5 Karten üben</button></div>`
       : '';
 
     el.innerHTML = `

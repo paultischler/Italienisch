@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260526" />
+  <link rel="stylesheet" href="./style.css?v=20260527" />
   <script>
     (function(){var d=localStorage.getItem('iit_dark');if(d==='1')document.documentElement.classList.add('dark');})();
   </script>
@@ -702,7 +702,7 @@
         <!-- Result screen -->
         <div id="q-screen-result" style="display:none">
           <div id="q-result-box"></div>
-          <button class="btn btn-primary" id="q-next-btn" style="width:100%;margin-top:1rem">Categorie</button>
+          <button class="btn btn-primary" id="q-next-btn" style="width:100%;margin-top:1rem">Ancora</button>
         </div>
 
       </div>
@@ -739,7 +739,7 @@
     </button>
     <button class="nav-item" data-tab="quiz" onclick="switchTab('quiz')">
       <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 9a6 6 0 0012 0M10 15v3m-3 0h6" stroke-linecap="round"/></svg></span>
-      <span class="nav-label">Quiz</span>
+      <span class="nav-label">Abfragen</span>
     </button>
     <button class="nav-item" data-tab="stats" onclick="switchTab('stats')">
       <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17V10m4.5 7V6M12 17V8m4.5 9V3"/></svg></span>
@@ -751,7 +751,15 @@
     </button>
   </nav>
 
-  <script src="./effects.js?v=20260526"></script>
-  <script src="./app.js?v=20260526"></script>
+  <script src="./effects.js?v=20260527"></script>
+  <script src="./app.js?v=20260527"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    }
+  </script>
 </body>
 </html>
