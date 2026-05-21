@@ -1057,3 +1057,80 @@ body {
 .tab-title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .tab-subtitle { font-size: 14px; color: var(--text-3); margin-top: 4px; }
 .tab-content { position: relative; }
+
+/* ============================================================
+   DARK MODE TOGGLE BUTTON
+   ============================================================ */
+.dark-toggle {
+  width: 36px; height: 36px; border-radius: var(--r-pill);
+  border: 1px solid var(--border-s); background: var(--surface);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--text-2); transition: all var(--t); box-shadow: var(--sh-xs);
+  -webkit-tap-highlight-color: transparent;
+}
+.dark-toggle:hover { background: var(--surface-dim); color: var(--text); box-shadow: var(--sh-sm); }
+.dark-toggle:active { transform: scale(0.93); }
+.dark-toggle-sun { display: none; }
+.dark-toggle-moon { display: block; }
+html.dark .dark-toggle-sun { display: block; }
+html.dark .dark-toggle-moon { display: none; }
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+html.dark {
+  --bg: #1e1b18;
+  --surface: #27231f;
+  --surface-dim: #312d29;
+  --surface-warm: #2c2824;
+
+  --text: #f0ece7;
+  --text-2: #b5afa8;
+  --text-3: #7a736c;
+  --text-inv: #1e1b18;
+
+  --border: rgba(255,240,225,0.08);
+  --border-s: rgba(255,240,225,0.15);
+
+  --sh-xs: 0 1px 2px rgba(0,0,0,0.25);
+  --sh-sm: 0 1px 3px rgba(0,0,0,0.30),0 1px 2px rgba(0,0,0,0.20);
+  --sh-md: 0 4px 14px rgba(0,0,0,0.35);
+  --sh-lg: 0 8px 28px rgba(0,0,0,0.45);
+  --sh-card: 0 1px 4px rgba(0,0,0,0.28),0 2px 8px rgba(0,0,0,0.18);
+
+  /* Keep accent colors; slightly warmer variants */
+  --primary: #cf7e56;
+  --primary-hover: #b86a42;
+  --primary-light: #3a2416;
+  --primary-muted: #8a5535;
+
+  --success: #5a9c7a;
+  --success-light: #162b20;
+  --success-hover: #4a8c6a;
+
+  --error: #d0574a;
+  --error-light: #2e1210;
+
+  --gold: #d4a040;
+  --gold-light: #2c2008;
+
+  --info: #6a8fb8;
+  --info-light: #101e2c;
+}
+
+html.dark .app-header { background: rgba(30,27,24,0.88); }
+html.dark .bottom-nav { background: rgba(30,27,24,0.92); }
+
+html.dark .flip-card-back {
+  background: linear-gradient(135deg, var(--success-light), #1a2e22);
+}
+
+html.dark .form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23b5afa8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}
+
+html.dark .grammar-table thead th {
+  background: var(--surface-dim); color: var(--text);
+}
+html.dark .grammar-table td.person { background: var(--surface-warm); }
+html.dark .grammar-table tbody tr:nth-child(even) { background: var(--surface-dim); }
