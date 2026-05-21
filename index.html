@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260520" />
+  <link rel="stylesheet" href="./style.css?v=20260521" />
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -416,11 +416,15 @@
         <div class="confirm-dialog" style="max-width:480px;width:92vw">
           <h4 class="confirm-title" id="importTitle">Daten importieren</h4>
           <p class="confirm-message" id="importDesc" style="font-size:0.8rem;margin-bottom:0.6rem"></p>
-          <textarea id="importInput" rows="6"
+          <label class="btn btn-ghost btn-sm" style="display:block;text-align:center;margin-bottom:0.5rem;cursor:pointer">
+            📂 Datei auswählen
+            <input type="file" id="importFileInput" accept=".json,.txt" style="display:none" />
+          </label>
+          <textarea id="importInput" rows="5"
             style="width:100%;box-sizing:border-box;font-size:0.78rem;font-family:monospace;
                    background:var(--paper);border:2px solid rgba(0,0,0,0.2);border-radius:var(--radius-md);
                    padding:0.6rem;resize:vertical;outline:none"
-            placeholder='Hier JSON einfügen…'></textarea>
+            placeholder='Oder JSON hier einfügen…'></textarea>
           <div class="confirm-actions" style="margin-top:0.8rem">
             <button class="btn btn-ghost" id="importCancel">Abbrechen</button>
             <button class="btn btn-primary" id="importOk">Importieren</button>
@@ -671,6 +675,6 @@
     </button>
   </nav>
 
-  <script src="./app.js?v=20260520"></script>
+  <script src="./app.js?v=20260521"></script>
 </body>
 </html>

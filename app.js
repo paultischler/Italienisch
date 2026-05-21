@@ -2488,6 +2488,26 @@ function initImport() {
 
   function closeImport() { overlay.style.display = 'none'; }
 
+  // File picker: read file into textarea
+  const fileInput = $('importFileInput');
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        let text = e.target.result.trim();
+        // Strip ===EXPORT=== / ===ENDE=== markers if present
+        const m = text.match(/===EXPORT===\s*([\s\S]*?)\s*===ENDE===/);
+        if (m) text = m[1].trim();
+        input.value = text;
+        showToast('Datei geladen — jetzt auf Importieren klicken', 'info');
+      };
+      reader.readAsText(file);
+      fileInput.value = '';
+    });
+  }
+
   $('importQuizBtn').addEventListener('click', () => openImport('quiz'));
   $('importAppBtn').addEventListener('click',  () => openImport('app'));
   cancelBtn.addEventListener('click', closeImport);
