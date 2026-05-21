@@ -2604,6 +2604,11 @@ function escHtml(str) {
 /* ============================================================
    INIT
    ============================================================ */
+window.toggleDarkMode = function() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('iit_dark', isDark ? '1' : '0');
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initUploadTab();
   initLibraryTab();

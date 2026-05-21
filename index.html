@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css?v=20260521" />
+  <script>
+    (function(){var d=localStorage.getItem('iit_dark');if(d==='1')document.documentElement.classList.add('dark');})();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
@@ -44,6 +47,8 @@
     <symbol id="i-save" viewBox="0 0 20 20"><path d="M15 17H5a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v7a2 2 0 01-2 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 17v-5H7v5M7 3v3h5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
     <symbol id="i-trophy" viewBox="0 0 20 20"><path d="M6 3h8v5a4 4 0 01-8 0V3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 5H4a1 1 0 00-1 1v1a3 3 0 003 3M14 5h2a1 1 0 011 1v1a3 3 0 01-3 3M8 14h4M10 12v2M7 16h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
     <symbol id="i-repeat" viewBox="0 0 20 20"><path d="M2 10a8 8 0 0114-5.3M18 10a8 8 0 01-14 5.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 2v4h-4M4 18v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 20 20"><path d="M17 12.5A7.5 7.5 0 017.5 3a7.5 7.5 0 000 14 7.5 7.5 0 009.5-4.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
   </svg>
 
   <!-- App Header -->
@@ -53,7 +58,12 @@
         <span class="logo-flag"></span>
         <span class="logo-text">Impara Italiano</span>
       </div>
-      <div class="header-actions" id="headerActions"></div>
+      <div class="header-actions" id="headerActions">
+        <button class="dark-toggle" id="darkToggleBtn" aria-label="Darkmode umschalten" onclick="toggleDarkMode()">
+          <svg class="icon dark-toggle-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon dark-toggle-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -68,12 +78,15 @@
           <h2 class="section-title">Bibliothek</h2>
           <p class="section-subtitle" id="librarySubtitle">Deine Lektionen</p>
         </div>
+        <button class="btn btn-primary btn-sm" onclick="switchTab('new')" style="flex-shrink:0">
+          <svg class="icon-sm" aria-hidden="true"><use href="#i-plus"/></svg> Neue Lektion
+        </button>
       </div>
 
       <!-- Search & Filter -->
       <div class="library-controls">
         <div class="search-wrap">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></span>
           <input type="text" class="search-input" id="librarySearch" placeholder="Lektion suchen…" />
         </div>
         <div class="filter-chips" id="libraryCategoryFilter">
@@ -685,10 +698,6 @@
       <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L1 7l9 5 9-5-9-5z"/><path d="M4 9v5c0 2 3 3.5 6 3.5s6-1.5 6-3.5V9"/><path d="M17 7v6"/></svg></span>
       <span class="nav-label">Lernen</span>
     </button>
-    <button class="nav-item" data-tab="library" onclick="switchTab('library')">
-      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 3h5a2 2 0 012 2v12a1.5 1.5 0 00-1.5-1.5H3V3zm14 0h-5a2 2 0 00-2 2v12a1.5 1.5 0 011.5-1.5H17V3z"/></svg></span>
-      <span class="nav-label">Bibliothek</span>
-    </button>
     <button class="nav-item" data-tab="quiz" onclick="switchTab('quiz')">
       <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 9a6 6 0 0012 0M10 15v3m-3 0h6" stroke-linecap="round"/></svg></span>
       <span class="nav-label">Quiz</span>
@@ -697,9 +706,9 @@
       <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17V10m4.5 7V6M12 17V8m4.5 9V3"/></svg></span>
       <span class="nav-label">Statistik</span>
     </button>
-    <button class="nav-item" data-tab="new" onclick="switchTab('new')">
-      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg></span>
-      <span class="nav-label">Neu</span>
+    <button class="nav-item" data-tab="library" onclick="switchTab('library')">
+      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 3h5a2 2 0 012 2v12a1.5 1.5 0 00-1.5-1.5H3V3zm14 0h-5a2 2 0 00-2 2v12a1.5 1.5 0 011.5-1.5H17V3z"/></svg></span>
+      <span class="nav-label">Bibliothek</span>
     </button>
   </nav>
 
