@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260522" />
+  <link rel="stylesheet" href="./style.css?v=20260523" />
   <script>
     (function(){var d=localStorage.getItem('iit_dark');if(d==='1')document.documentElement.classList.add('dark');})();
   </script>
@@ -308,6 +308,36 @@
             <button class="btn btn-correct" id="correctBtn">✓ Richtig</button>
           </div>
         </div>
+        <!-- Inline card edit -->
+        <div class="session-edit-wrap" id="sessionEditWrap">
+          <button class="btn btn-ghost btn-sm session-edit-toggle" id="sessionEditToggle">
+            <svg class="icon-sm" aria-hidden="true"><use href="#i-edit"/></svg> Karte bearbeiten
+          </button>
+          <div class="session-edit-form" id="sessionEditForm" style="display:none">
+            <div class="card-editor-row" style="margin-bottom:10px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Vorderseite (DE)</label>
+                <input type="text" class="form-input" id="editCardFront" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Rückseite (IT)</label>
+                <input type="text" class="form-input" id="editCardBack" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Beispielsatz</label>
+              <input type="text" class="form-input" id="editCardExample" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notizen</label>
+              <input type="text" class="form-input" id="editCardNotes" />
+            </div>
+            <div class="form-row-btns">
+              <button class="btn btn-primary btn-sm" id="saveSessionCardBtn">Speichern</button>
+              <button class="btn btn-ghost btn-sm" id="cancelSessionEditBtn">Abbrechen</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Session Summary -->
@@ -366,6 +396,15 @@
               <span class="phase6-due-label">Karten fällig</span>
             </div>
             <button class="btn btn-primary" id="startPhase6Btn">Jetzt lernen</button>
+          </div>
+          <!-- Count picker (shown after clicking Jetzt lernen) -->
+          <div class="phase6-count-picker" id="phase6CountPicker" style="display:none">
+            <span class="phase6-picker-label">Wie viele Karten?</span>
+            <div class="count-options">
+              <button class="count-btn" data-p6count="10">10</button>
+              <button class="count-btn count-btn--active" data-p6count="20">20</button>
+            </div>
+            <button class="btn btn-primary" id="startPhase6ConfirmBtn">Starten</button>
           </div>
 
           <!-- Phase distribution bars -->
@@ -712,7 +751,7 @@
     </button>
   </nav>
 
-  <script src="./effects.js?v=20260522"></script>
-  <script src="./app.js?v=20260522"></script>
+  <script src="./effects.js?v=20260523"></script>
+  <script src="./app.js?v=20260523"></script>
 </body>
 </html>
