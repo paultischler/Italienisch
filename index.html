@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260524" />
+  <link rel="stylesheet" href="./style.css?v=20260525" />
   <script>
     (function(){var d=localStorage.getItem('iit_dark');if(d==='1')document.documentElement.classList.add('dark');})();
   </script>
@@ -154,7 +154,7 @@
 
         <div class="detail-start">
           <button class="btn btn-primary btn-large" id="startLearningFromDetailBtn">
-            🎓 Lernen beginnen
+            Lernen beginnen
           </button>
         </div>
 
@@ -374,7 +374,7 @@
           </div>
           <div id="summaryAttemptBreakdown" class="summary-attempt-breakdown" style="display:none"></div>
           <div class="summary-actions">
-            <button class="btn btn-primary btn-large" id="repeatLessonBtn">🔄 Wiederholen</button>
+            <button class="btn btn-primary btn-large" id="repeatLessonBtn">Wiederholen</button>
             <button class="btn btn-ghost btn-large" id="backToPickerBtn">← Lektion wählen</button>
           </div>
         </div>
@@ -400,11 +400,11 @@
           <!-- Count picker (shown after clicking Jetzt lernen) -->
           <div class="phase6-count-picker" id="phase6CountPicker" style="display:none">
             <span class="phase6-picker-label">Wie viele Karten?</span>
-            <div class="count-options">
+            <div class="phase6-picker-row">
               <button class="count-btn" data-p6count="10">10</button>
               <button class="count-btn count-btn--active" data-p6count="20">20</button>
+              <button class="btn btn-primary phase6-start-btn" id="startPhase6ConfirmBtn">Starten</button>
             </div>
-            <button class="btn btn-primary" id="startPhase6ConfirmBtn">Starten</button>
           </div>
 
           <!-- Phase distribution bars -->
@@ -751,7 +751,7 @@
     </button>
   </nav>
 
-  <script src="./effects.js?v=20260524"></script>
-  <script src="./app.js?v=20260524"></script>
+  <script src="./effects.js?v=20260525"></script>
+  <script src="./app.js?v=20260525"></script>
 </body>
 </html>

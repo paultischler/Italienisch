@@ -603,7 +603,7 @@ body {
   transition: all 0.15s ease; min-width: 44px; text-align: center;
 }
 .count-btn:hover:not(:disabled) { background: var(--surface-dim); }
-.count-btn--active { background: var(--primary); color: var(--text-inv); border-color: transparent; }
+.count-btn--active { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 .count-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .learn-start-btn { width: 100%; }
 
@@ -1140,9 +1140,11 @@ html.dark .grammar-table tbody tr:nth-child(even) { background: var(--surface-di
 .phase6-count-picker {
   background: var(--surface-dim); border: 1px solid var(--border);
   border-radius: var(--r-md); padding: 16px; margin-top: -8px; margin-bottom: 20px;
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
-.phase6-picker-label { font-size: 14px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+.phase6-picker-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 10px; }
+.phase6-picker-row { display: flex; align-items: center; gap: 8px; }
+.phase6-picker-row .count-btn { flex: 0 0 auto; }
+.phase6-start-btn { margin-left: auto; }
 
 /* Session card edit */
 .session-edit-wrap { margin-top: 8px; padding-bottom: 24px; }
