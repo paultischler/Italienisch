@@ -1039,7 +1039,7 @@ body {
 .q-mpip.max { background: var(--success); }
 
 #q-joker-fab {
-  position: fixed; bottom: calc(var(--nav-h) + 1rem); right: 1.2rem;
+  position: fixed; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 1rem); right: 1.2rem;
   width: 56px; height: 56px; border-radius: 50%;
   background: var(--primary); border: none; box-shadow: var(--sh-md);
   cursor: pointer; display: none; flex-direction: column;
