@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css?v=20260531" />
+  <link rel="stylesheet" href="./style.css?v=20260522" />
   <script>
     (function(){var d=localStorage.getItem('iit_dark');if(d==='1')document.documentElement.classList.add('dark');})();
   </script>
@@ -681,10 +681,15 @@
         <div id="q-screen-start">
           <p class="q-section-label">Grundwortschatz</p>
           <div id="q-category-grid"></div>
+          <div id="q-stats-bar"></div>
           <p class="q-section-label">Grammatik</p>
           <div id="q-grammar-grid"></div>
-          <button class="q-mix-btn" id="q-mix-btn">Mix – alles zusammen</button>
-          <div id="q-stats-bar"></div>
+          <div id="q-grammar-stats-bar"></div>
+          <div class="q-mix-row">
+            <button class="q-mix-btn" id="q-mix-vocab-btn">Mix Grundwortschatz</button>
+            <button class="q-mix-btn" id="q-mix-grammar-btn">Mix Grammatik</button>
+            <button class="q-mix-btn q-mix-btn--all" id="q-mix-all-btn">Mix Grundwortschatz + Grammatik</button>
+          </div>
         </div>
 
         <!-- Quiz screen -->
@@ -760,8 +765,8 @@
     </button>
   </nav>
 
-  <script src="./effects.js?v=20260531"></script>
-  <script src="./app.js?v=20260531"></script>
+  <script src="./effects.js?v=20260522"></script>
+  <script src="./app.js?v=20260522"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js');

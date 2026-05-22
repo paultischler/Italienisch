@@ -961,11 +961,14 @@ body {
 }
 .q-mix-btn:hover { background: var(--primary-hover); box-shadow: var(--sh-md); }
 
-#q-stats-bar {
-  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
-  font-size: 0.85rem; color: var(--text-3); text-align: center; line-height: 2;
+#q-stats-bar, #q-grammar-stats-bar {
+  margin-top: 0.6rem; padding: 0.6rem 0.8rem; border-radius: var(--r-md);
+  background: var(--surface-dim); font-size: 0.82rem; color: var(--text-3);
+  text-align: center; line-height: 2;
 }
-#q-stats-bar b { color: var(--text); }
+#q-stats-bar b, #q-grammar-stats-bar b { color: var(--text); }
+.q-mix-row { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1rem; }
+.q-mix-btn--all { background: var(--primary-dark, #3d6b55); }
 .q-stp { display: inline-flex; gap: 3px; vertical-align: middle; margin: 0 2px; }
 .q-stp span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--surface-dim); }
 .q-stp span.on { background: var(--success); }

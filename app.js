@@ -3207,23 +3207,26 @@ function initQuizTab() {
   function qSaveMastery() { try { localStorage.setItem('impara_mastery', JSON.stringify(qMastery)); } catch(e) {} }
 
   function qRenderStats() {
-    var total = 0, seen = {};
-    var lvl = [0,0,0,0];
-    Q_CATEGORIES.forEach(function(c) {
-      c.words.forEach(function(w) {
-        if (!seen[w.it]) { seen[w.it]=1; total++; lvl[Math.min(qMastery[w.it]||0,3)]++; }
-      });
-    });
-    var open = lvl[0]+lvl[1]+lvl[2];
     function pips(filled) {
       var h='<span class="q-stp">';
       for (var i=0;i<3;i++) h+='<span'+(i<filled?' class="on"':'')+' ></span>';
       return h+'</span>';
     }
-    var el = document.getElementById('q-stats-bar');
-    if (!el) return;
-    el.innerHTML = '<b>'+open+'</b> offen &nbsp;·&nbsp; <b>'+lvl[3]+'</b> gemeistert &nbsp;·&nbsp; '+
-      pips(1)+'&nbsp;<b>'+lvl[1]+'</b>&nbsp; '+pips(2)+'&nbsp;<b>'+lvl[2]+'</b>';
+    function renderBar(id, categories) {
+      var seen = {}, lvl = [0,0,0,0];
+      categories.forEach(function(c) {
+        c.words.forEach(function(w) {
+          var key = w.it+'\x00'+w.de;
+          if (!seen[key]) { seen[key]=1; lvl[Math.min(qMastery[w.it]||0,3)]++; }
+        });
+      });
+      var open = lvl[0]+lvl[1]+lvl[2];
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = '<b>'+open+'</b> offen &nbsp;·&nbsp; <b>'+lvl[3]+'</b> gemeistert &nbsp;·&nbsp; '+
+        pips(1)+'&nbsp;<b>'+lvl[1]+'</b>&nbsp; '+pips(2)+'&nbsp;<b>'+lvl[2]+'</b>';
+    }
+    renderBar('q-stats-bar', Q_CATEGORIES);
+    renderBar('q-grammar-stats-bar', Q_GRAMMAR_CATEGORIES);
   }
 
   /* ---------- State ---------- */
@@ -3274,8 +3277,12 @@ function initQuizTab() {
     });
   }
 
-  var mixBtn = qEl('q-mix-btn');
-  if (mixBtn) mixBtn.onclick = function() { qPickCategory('mix', -1); };
+  var mixVocabBtn = qEl('q-mix-vocab-btn');
+  if (mixVocabBtn) mixVocabBtn.onclick = function() { qPickCategory('vocab', -1); };
+  var mixGrammarBtn = qEl('q-mix-grammar-btn');
+  if (mixGrammarBtn) mixGrammarBtn.onclick = function() { qPickCategory('grammar', -1); };
+  var mixAllBtn = qEl('q-mix-all-btn');
+  if (mixAllBtn) mixAllBtn.onclick = function() { qPickCategory('mix', -1); };
 
   /* ---------- Answer input: keyboard entry ---------- */
   function qEnterTypingMode() {
@@ -3335,10 +3342,12 @@ function initQuizTab() {
       arr.forEach(function(w) { if (!seen[w.it+w.de]) { seen[w.it+w.de]=1; pool.push(w); } });
     }
     if (type === 'vocab') {
-      addWords(Q_CATEGORIES[idx].words);
+      if (idx === -1) { Q_CATEGORIES.forEach(function(c) { addWords(c.words); }); }
+      else { addWords(Q_CATEGORIES[idx].words); }
     } else if (type === 'grammar') {
-      addWords(Q_GRAMMAR_CATEGORIES[idx].words);
-    } else { // mix
+      if (idx === -1) { Q_GRAMMAR_CATEGORIES.forEach(function(c) { addWords(c.words); }); }
+      else { addWords(Q_GRAMMAR_CATEGORIES[idx].words); }
+    } else { // mix all
       Q_CATEGORIES.forEach(function(c) { addWords(c.words); });
       Q_GRAMMAR_CATEGORIES.forEach(function(c) { addWords(c.words); });
     }
