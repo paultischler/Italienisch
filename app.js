@@ -3088,6 +3088,20 @@ function initQuizTab() {
         { de: 'su + la =',  it: 'sulla',   alt: [] },
         { de: 'su + i =',   it: 'sui',     alt: [] },
         { de: 'su + le =',  it: 'sulle',   alt: [] },
+        { de: 'Vado ___ cinema.',            it: 'al',     alt: [], sentence: true, hint: 'a + il' },
+        { de: 'Andiamo ___ ristorante.',     it: 'al',     alt: [], sentence: true, hint: 'a + il' },
+        { de: 'Il gatto dorme ___ divano.',  it: 'sul',    alt: [], sentence: true, hint: 'su + il' },
+        { de: 'I libri sono ___ tavolo.',    it: 'sul',    alt: [], sentence: true, hint: 'su + il' },
+        { de: 'La chiave è ___ borsa.',      it: 'nella',  alt: [], sentence: true, hint: 'in + la' },
+        { de: 'Abito ___ città.',            it: 'nella',  alt: [], sentence: true, hint: 'in + la' },
+        { de: 'La festa è ___ giardino.',    it: 'nel',    alt: [], sentence: true, hint: 'in + il' },
+        { de: 'Parlo ___ professore.',       it: 'del',    alt: [], sentence: true, hint: 'di + il' },
+        { de: 'Il colore ___ cielo.',        it: 'del',    alt: [], sentence: true, hint: 'di + il' },
+        { de: 'È la macchina ___ vicini.',   it: 'dei',    alt: [], sentence: true, hint: 'di + i' },
+        { de: 'Esco ___ casa.',              it: 'dalla',  alt: [], sentence: true, hint: 'da + la' },
+        { de: 'Vengo ___ montagne.',         it: 'dalle',  alt: [], sentence: true, hint: 'da + le' },
+        { de: 'Penso ___ vacanze.',          it: 'alle',   alt: [], sentence: true, hint: 'a + le' },
+        { de: 'Metto i piatti ___ tavoli.',  it: 'sui',    alt: [], sentence: true, hint: 'su + i' },
       ]
     },
     {
@@ -3218,6 +3232,7 @@ function initQuizTab() {
   var qTimerInterval = null, qTimeLeft = 5;
   var qRecognition = null, qQuizActive = false, qAnswered = false;
   var qSessionStart = null;
+  var qTypingMode = false;
   var qWordToken = 0;
   var qJokersLeft = 3;
   var qTimerLaunched = false;
@@ -3262,13 +3277,30 @@ function initQuizTab() {
   var mixBtn = qEl('q-mix-btn');
   if (mixBtn) mixBtn.onclick = function() { qPickCategory('mix', -1); };
 
-  /* ---------- Answer input enter key ---------- */
+  /* ---------- Answer input: keyboard entry ---------- */
+  function qEnterTypingMode() {
+    if (qAnswered || !qQuizActive || qTypingMode) return;
+    qTypingMode = true;
+    clearInterval(qTimerInterval);
+    qStopRecognition();
+    qRenderTimer('✎', 'grace');
+    qSetMicStatus('Tastatur — tippen & prüfen');
+  }
   var answerInput = qEl('q-answer');
   if (answerInput) {
     answerInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') qOnEnter();
     });
+    // Tapping or typing switches to keyboard mode: pause timer, free the mic
+    answerInput.addEventListener('focus', qEnterTypingMode);
+    answerInput.addEventListener('input', qEnterTypingMode);
   }
+  var submitBtn = qEl('q-submit-btn');
+  if (submitBtn) submitBtn.addEventListener('click', qOnEnter);
+
+  /* ---------- Abort round ---------- */
+  var abortBtn = qEl('q-abort-btn');
+  if (abortBtn) abortBtn.addEventListener('click', qShowCategoryScreen);
 
   /* ---------- Joker FAB ---------- */
   var jokerFab = qEl('q-joker-fab');
@@ -3340,10 +3372,20 @@ function initQuizTab() {
     var token = qWordToken;
     qTimerLaunched = false;
     qAnswered = false;
+    qTypingMode = false;
     qCurrent = qQueue.shift();
 
     var elW = qEl('q-word');
-    if (elW) elW.textContent = qCurrent.de;
+    if (elW) {
+      if (qCurrent.sentence) {
+        elW.classList.add('q-word--sentence');
+        elW.innerHTML = escHtml(qCurrent.de) +
+          (qCurrent.hint ? '<span class="q-word-hint">' + escHtml(qCurrent.hint) + '</span>' : '');
+      } else {
+        elW.classList.remove('q-word--sentence');
+        elW.textContent = qCurrent.de;
+      }
+    }
     var inp = qEl('q-answer');
     if (inp) inp.value = '';
     var elH = qEl('q-heard');
@@ -3529,13 +3571,13 @@ function initQuizTab() {
       rec.interimResults = true;
 
       rec.onstart = function() {
-        if (qWordToken !== token) return;
+        if (qWordToken !== token || qTypingMode) return;
         qSetMicStatus('Microfono attivo');
         qLaunchTimerOnce(token);
       };
 
       rec.onresult = function(e) {
-        if (qWordToken !== token || qAnswered) return;
+        if (qWordToken !== token || qAnswered || qTypingMode) return;
         var last = e.results[e.results.length-1];
         var t = last[0].transcript.toLowerCase().replace(/^\s+|\s+$/g,'');
         var inp = qEl('q-answer'); if (inp) inp.value = t;
@@ -3549,7 +3591,7 @@ function initQuizTab() {
       };
 
       rec.onerror = function(e) {
-        if (qWordToken !== token || qAnswered) return;
+        if (qWordToken !== token || qAnswered || qTypingMode) return;
         if (e.error === 'not-allowed') {
           QSpeechAPI = null;
           qSetMicStatus('Texteingabe');
@@ -3560,10 +3602,10 @@ function initQuizTab() {
       };
 
       rec.onend = function() {
-        if (qWordToken !== token || qAnswered) return;
+        if (qWordToken !== token || qAnswered || qTypingMode) return;
         try { rec.start(); } catch(ex) {
           setTimeout(function() {
-            if (qWordToken === token && !qAnswered) qStartWordRecognition(token);
+            if (qWordToken === token && !qAnswered && !qTypingMode) qStartWordRecognition(token);
           }, 150);
         }
       };
