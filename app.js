@@ -3028,6 +3028,164 @@ function initQuizTab() {
     },
   ];
 
+  /* ---------- Grammar categories ---------- */
+  var Q_GRAMMAR_CATEGORIES = [
+    {
+      name: 'Modalverben',
+      words: [
+        { de: 'ich will (volere)',           it: 'voglio',    alt: [] },
+        { de: 'du willst (volere)',          it: 'vuoi',      alt: [] },
+        { de: 'er/sie will (volere)',        it: 'vuole',     alt: [] },
+        { de: 'wir wollen (volere)',         it: 'vogliamo',  alt: [] },
+        { de: 'ihr wollt (volere)',          it: 'volete',    alt: [] },
+        { de: 'sie wollen (volere)',         it: 'vogliono',  alt: [] },
+        { de: 'ich kann (potere)',           it: 'posso',     alt: [] },
+        { de: 'du kannst (potere)',          it: 'puoi',      alt: [] },
+        { de: 'er/sie kann (potere)',        it: 'può',       alt: ['puo'] },
+        { de: 'wir können (potere)',         it: 'possiamo',  alt: [] },
+        { de: 'ihr könnt (potere)',          it: 'potete',    alt: [] },
+        { de: 'sie können (potere)',         it: 'possono',   alt: [] },
+        { de: 'ich muss (dovere)',           it: 'devo',      alt: ['debbo'] },
+        { de: 'du musst (dovere)',           it: 'devi',      alt: [] },
+        { de: 'er/sie muss (dovere)',        it: 'deve',      alt: [] },
+        { de: 'wir müssen (dovere)',         it: 'dobbiamo',  alt: [] },
+        { de: 'ihr müsst (dovere)',          it: 'dovete',    alt: [] },
+        { de: 'sie müssen (dovere)',         it: 'devono',    alt: ['debbono'] },
+        { de: 'ich weiß/kann (sapere)',      it: 'so',        alt: [] },
+        { de: 'du weißt/kannst (sapere)',    it: 'sai',       alt: [] },
+        { de: 'er/sie weiß/kann (sapere)',   it: 'sa',        alt: [] },
+        { de: 'wir wissen/können (sapere)',  it: 'sappiamo',  alt: [] },
+        { de: 'ihr wisst/könnt (sapere)',    it: 'sapete',    alt: [] },
+        { de: 'sie wissen/können (sapere)', it: 'sanno',     alt: [] },
+      ]
+    },
+    {
+      name: 'Präpositionen',
+      words: [
+        { de: 'a + il =',   it: 'al',      alt: [] },
+        { de: 'a + lo =',   it: 'allo',    alt: [] },
+        { de: 'a + la =',   it: 'alla',    alt: [] },
+        { de: 'a + i =',    it: 'ai',      alt: [] },
+        { de: 'a + gli =',  it: 'agli',    alt: [] },
+        { de: 'a + le =',   it: 'alle',    alt: [] },
+        { de: 'di + il =',  it: 'del',     alt: [] },
+        { de: 'di + lo =',  it: 'dello',   alt: [] },
+        { de: 'di + la =',  it: 'della',   alt: [] },
+        { de: 'di + i =',   it: 'dei',     alt: [] },
+        { de: 'di + gli =', it: 'degli',   alt: [] },
+        { de: 'di + le =',  it: 'delle',   alt: [] },
+        { de: 'in + il =',  it: 'nel',     alt: [] },
+        { de: 'in + lo =',  it: 'nello',   alt: [] },
+        { de: 'in + la =',  it: 'nella',   alt: [] },
+        { de: 'in + i =',   it: 'nei',     alt: [] },
+        { de: 'in + gli =', it: 'negli',   alt: [] },
+        { de: 'in + le =',  it: 'nelle',   alt: [] },
+        { de: 'da + il =',  it: 'dal',     alt: [] },
+        { de: 'da + la =',  it: 'dalla',   alt: [] },
+        { de: 'da + i =',   it: 'dai',     alt: [] },
+        { de: 'da + le =',  it: 'dalle',   alt: [] },
+        { de: 'su + il =',  it: 'sul',     alt: [] },
+        { de: 'su + la =',  it: 'sulla',   alt: [] },
+        { de: 'su + i =',   it: 'sui',     alt: [] },
+        { de: 'su + le =',  it: 'sulle',   alt: [] },
+      ]
+    },
+    {
+      name: 'Präsenz',
+      words: [
+        { de: 'ich spreche (parlare)',    it: 'parlo',     alt: [] },
+        { de: 'du sprichst (parlare)',    it: 'parli',     alt: [] },
+        { de: 'er/sie spricht (parlare)',it: 'parla',     alt: [] },
+        { de: 'wir sprechen (parlare)',   it: 'parliamo',  alt: [] },
+        { de: 'ihr sprecht (parlare)',    it: 'parlate',   alt: [] },
+        { de: 'sie sprechen (parlare)',   it: 'parlano',   alt: [] },
+        { de: 'ich schreibe (scrivere)', it: 'scrivo',    alt: [] },
+        { de: 'du schreibst (scrivere)', it: 'scrivi',    alt: [] },
+        { de: 'er/sie schreibt (scrivere)',it:'scrive',   alt: [] },
+        { de: 'wir schreiben (scrivere)',it: 'scriviamo', alt: [] },
+        { de: 'ihr schreibt (scrivere)', it: 'scrivete',  alt: [] },
+        { de: 'sie schreiben (scrivere)',it: 'scrivono',  alt: [] },
+        { de: 'ich schlafe (dormire)',    it: 'dormo',     alt: [] },
+        { de: 'du schläfst (dormire)',   it: 'dormi',     alt: [] },
+        { de: 'er/sie schläft (dormire)',it: 'dorme',     alt: [] },
+        { de: 'wir schlafen (dormire)',   it: 'dormiamo',  alt: [] },
+        { de: 'ihr schlaft (dormire)',    it: 'dormite',   alt: [] },
+        { de: 'sie schlafen (dormire)',   it: 'dormono',   alt: [] },
+        { de: 'ich verstehe (capire)',    it: 'capisco',   alt: [] },
+        { de: 'du verstehst (capire)',    it: 'capisci',   alt: [] },
+        { de: 'er/sie versteht (capire)',it: 'capisce',   alt: [] },
+        { de: 'wir verstehen (capire)',   it: 'capiamo',   alt: [] },
+        { de: 'sie verstehen (capire)',   it: 'capiscono', alt: [] },
+        { de: 'ich bin (essere)',         it: 'sono',      alt: [] },
+        { de: 'du bist (essere)',         it: 'sei',       alt: [] },
+        { de: 'er/sie ist (essere)',      it: 'è',         alt: ['e'] },
+        { de: 'wir sind (essere)',        it: 'siamo',     alt: [] },
+        { de: 'ihr seid (essere)',        it: 'siete',     alt: [] },
+        { de: 'sie sind (essere)',        it: 'sono',      alt: [] },
+        { de: 'ich habe (avere)',         it: 'ho',        alt: [] },
+        { de: 'du hast (avere)',          it: 'hai',       alt: [] },
+        { de: 'er/sie hat (avere)',       it: 'ha',        alt: [] },
+        { de: 'wir haben (avere)',        it: 'abbiamo',   alt: [] },
+        { de: 'ihr habt (avere)',         it: 'avete',     alt: [] },
+        { de: 'sie haben (avere)',        it: 'hanno',     alt: [] },
+        { de: 'ich gehe (andare)',        it: 'vado',      alt: [] },
+        { de: 'du gehst (andare)',        it: 'vai',       alt: [] },
+        { de: 'er/sie geht (andare)',     it: 'va',        alt: [] },
+        { de: 'wir gehen (andare)',       it: 'andiamo',   alt: [] },
+        { de: 'ihr geht (andare)',        it: 'andate',    alt: [] },
+        { de: 'sie gehen (andare)',       it: 'vanno',     alt: [] },
+        { de: 'ich mache (fare)',         it: 'faccio',    alt: [] },
+        { de: 'du machst (fare)',         it: 'fai',       alt: [] },
+        { de: 'er/sie macht (fare)',      it: 'fa',        alt: [] },
+        { de: 'wir machen (fare)',        it: 'facciamo',  alt: [] },
+        { de: 'ihr macht (fare)',         it: 'fate',      alt: [] },
+        { de: 'sie machen (fare)',        it: 'fanno',     alt: [] },
+        { de: 'ich komme (venire)',       it: 'vengo',     alt: [] },
+        { de: 'du kommst (venire)',       it: 'vieni',     alt: [] },
+        { de: 'er/sie kommt (venire)',    it: 'viene',     alt: [] },
+        { de: 'wir kommen (venire)',      it: 'veniamo',   alt: [] },
+        { de: 'sie kommen (venire)',      it: 'vengono',   alt: [] },
+      ]
+    },
+    {
+      name: 'Vergangenheit',
+      words: [
+        { de: 'ich habe gesprochen (parlare)',   it: 'ho parlato',       alt: [] },
+        { de: 'du hast gesprochen (parlare)',    it: 'hai parlato',      alt: [] },
+        { de: 'er/sie hat gesprochen (parlare)', it: 'ha parlato',       alt: [] },
+        { de: 'wir haben gesprochen (parlare)',  it: 'abbiamo parlato',  alt: [] },
+        { de: 'ihr habt gesprochen (parlare)',   it: 'avete parlato',    alt: [] },
+        { de: 'sie haben gesprochen (parlare)',  it: 'hanno parlato',    alt: [] },
+        { de: 'ich habe geschrieben (scrivere)', it: 'ho scritto',       alt: [] },
+        { de: 'du hast geschrieben (scrivere)',  it: 'hai scritto',      alt: [] },
+        { de: 'er/sie hat geschrieben (scrivere)',it:'ha scritto',       alt: [] },
+        { de: 'wir haben geschrieben (scrivere)',it:'abbiamo scritto',   alt: [] },
+        { de: 'ich habe geschlafen (dormire)',   it: 'ho dormito',       alt: [] },
+        { de: 'du hast geschlafen (dormire)',    it: 'hai dormito',      alt: [] },
+        { de: 'er/sie hat geschlafen (dormire)', it: 'ha dormito',       alt: [] },
+        { de: 'ich habe gemacht (fare)',         it: 'ho fatto',         alt: [] },
+        { de: 'du hast gemacht (fare)',          it: 'hai fatto',        alt: [] },
+        { de: 'er/sie hat gemacht (fare)',       it: 'ha fatto',         alt: [] },
+        { de: 'wir haben gemacht (fare)',        it: 'abbiamo fatto',    alt: [] },
+        { de: 'ich bin gegangen (andare)',       it: 'sono andato',      alt: ['sono andata'] },
+        { de: 'du bist gegangen (andare)',       it: 'sei andato',       alt: ['sei andata'] },
+        { de: 'er ist gegangen (andare)',        it: 'è andato',         alt: [] },
+        { de: 'sie ist gegangen (andare)',       it: 'è andata',         alt: [] },
+        { de: 'wir sind gegangen (andare)',      it: 'siamo andati',     alt: ['siamo andate'] },
+        { de: 'ich bin gewesen (essere)',        it: 'sono stato',       alt: ['sono stata'] },
+        { de: 'du bist gewesen (essere)',        it: 'sei stato',        alt: ['sei stata'] },
+        { de: 'er/sie ist gewesen (essere)',     it: 'è stato',          alt: ['è stata'] },
+        { de: 'wir sind gewesen (essere)',       it: 'siamo stati',      alt: ['siamo state'] },
+        { de: 'ich bin gekommen (venire)',       it: 'sono venuto',      alt: ['sono venuta'] },
+        { de: 'du bist gekommen (venire)',       it: 'sei venuto',       alt: ['sei venuta'] },
+        { de: 'er/sie ist gekommen (venire)',    it: 'è venuto',         alt: ['è venuta'] },
+        { de: 'ich habe gehabt (avere)',         it: 'ho avuto',         alt: [] },
+        { de: 'du hast gehabt (avere)',          it: 'hai avuto',        alt: [] },
+        { de: 'er/sie hat gehabt (avere)',       it: 'ha avuto',         alt: [] },
+      ]
+    },
+  ];
+
   /* ---------- Mastery ---------- */
   var qMastery = {};
   try { qMastery = JSON.parse(localStorage.getItem('impara_mastery') || '{}'); } catch(e) {}
@@ -3086,13 +3244,23 @@ function initQuizTab() {
       var btn = document.createElement('button');
       btn.className = 'q-cat-btn';
       btn.textContent = cat.name;
-      btn.onclick = (function(idx) { return function() { qPickCategory(idx); }; })(i);
+      btn.onclick = (function(idx) { return function() { qPickCategory('vocab', idx); }; })(i);
       grid.appendChild(btn);
+    });
+  }
+  var grammarGrid = qEl('q-grammar-grid');
+  if (grammarGrid) {
+    Q_GRAMMAR_CATEGORIES.forEach(function(cat, i) {
+      var btn = document.createElement('button');
+      btn.className = 'q-cat-btn q-cat-btn--grammar';
+      btn.textContent = cat.name;
+      btn.onclick = (function(idx) { return function() { qPickCategory('grammar', idx); }; })(i);
+      grammarGrid.appendChild(btn);
     });
   }
 
   var mixBtn = qEl('q-mix-btn');
-  if (mixBtn) mixBtn.onclick = function() { qPickCategory(-1); };
+  if (mixBtn) mixBtn.onclick = function() { qPickCategory('mix', -1); };
 
   /* ---------- Answer input enter key ---------- */
   var answerInput = qEl('q-answer');
@@ -3128,16 +3296,19 @@ function initQuizTab() {
     qShowScreen('start');
   }
 
-  function qPickCategory(idx) {
-    var pool;
-    if (idx === -1) {
-      var seen = {};
-      pool = [];
-      Q_CATEGORIES.forEach(function(c) {
-        c.words.forEach(function(w) { if (!seen[w.it]) { seen[w.it]=1; pool.push(w); } });
-      });
-    } else {
-      pool = Q_CATEGORIES[idx].words;
+  function qPickCategory(type, idx) {
+    var pool = [];
+    var seen = {};
+    function addWords(arr) {
+      arr.forEach(function(w) { if (!seen[w.it+w.de]) { seen[w.it+w.de]=1; pool.push(w); } });
+    }
+    if (type === 'vocab') {
+      addWords(Q_CATEGORIES[idx].words);
+    } else if (type === 'grammar') {
+      addWords(Q_GRAMMAR_CATEGORIES[idx].words);
+    } else { // mix
+      Q_CATEGORIES.forEach(function(c) { addWords(c.words); });
+      Q_GRAMMAR_CATEGORIES.forEach(function(c) { addWords(c.words); });
     }
     var active = pool.filter(function(w) { return !qIsMastered(w); });
     if (active.length === 0) {
