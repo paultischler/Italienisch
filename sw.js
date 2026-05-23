@@ -1,6 +1,6 @@
 /* Impara Italiano — Service Worker
    Bump CACHE_VERSION with every deployment to force fresh assets. */
-const CACHE_VERSION = 'impara-v20260522c';
+const CACHE_VERSION = 'impara-v20260522d';
 
 self.addEventListener('install', () => {
   self.skipWaiting();

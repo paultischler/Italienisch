@@ -3026,6 +3026,41 @@ function initQuizTab() {
         { de: 'das Foto',           it: 'la foto',           alt: ['foto','fotografia'] },
       ]
     },
+    {
+      name: 'Adverbien & Ausdrücke',
+      words: [
+        { de: 'manchmal',           it: 'a volte',           alt: ['qualche volta'] },
+        { de: 'normalerweise',      it: 'di solito',         alt: ['normalmente','solitamente'] },
+        { de: 'immer',              it: 'sempre',            alt: [] },
+        { de: 'nie',                it: 'mai',               alt: ['non mai'] },
+        { de: 'oft',                it: 'spesso',            alt: [] },
+        { de: 'selten',             it: 'raramente',         alt: ['di rado'] },
+        { de: 'jeden Tag',          it: 'ogni giorno',       alt: [] },
+        { de: 'ab und zu',          it: 'ogni tanto',        alt: ['di tanto in tanto'] },
+        { de: 'sofort',             it: 'subito',            alt: [] },
+        { de: 'bald',               it: 'presto',            alt: [] },
+        { de: 'endlich',            it: 'finalmente',        alt: [] },
+        { de: 'schon',              it: 'già',               alt: [] },
+        { de: 'noch nicht',         it: 'non ancora',        alt: [] },
+        { de: 'vielleicht',         it: 'forse',             alt: [] },
+        { de: 'wahrscheinlich',     it: 'probabilmente',     alt: [] },
+        { de: 'natürlich',          it: 'naturalmente',      alt: ['certo','certamente'] },
+        { de: 'leider',             it: 'purtroppo',         alt: [] },
+        { de: 'zum Glück',          it: 'per fortuna',       alt: ['fortunatamente'] },
+        { de: 'ungefähr',           it: 'circa',             alt: ['più o meno'] },
+        { de: 'fast',               it: 'quasi',             alt: [] },
+        { de: 'genug',              it: 'abbastanza',        alt: [] },
+        { de: 'ein bisschen',       it: 'un po\'',           alt: ['un poco'] },
+        { de: 'besonders',          it: 'soprattutto',       alt: ['specialmente','particolarmente'] },
+        { de: 'zusammen',           it: 'insieme',           alt: [] },
+        { de: 'alleine',            it: 'da solo',           alt: ['da sola'] },
+        { de: 'trotzdem',           it: 'comunque',          alt: ['lo stesso','nonostante'] },
+        { de: 'außerdem',           it: 'inoltre',           alt: ['per di più'] },
+        { de: 'also / deshalb',     it: 'quindi',            alt: ['perciò','dunque'] },
+        { de: 'wenigstens',         it: 'almeno',            alt: [] },
+        { de: 'übrigens',           it: 'tra l\'altro',      alt: ['per inciso'] },
+      ]
+    },
   ];
 
   /* ---------- Grammar categories ---------- */
