@@ -3688,3 +3688,45 @@ function initQuizTab() {
   }
 
 } // end initQuizTab
+
+/* ============================================================
+   PULL-TO-REFRESH
+   ============================================================ */
+(function() {
+  var THRESHOLD = 72;
+  var startY = 0, curDY = 0, active = false;
+
+  var ind = document.createElement('div');
+  ind.id = 'ptr-indicator';
+  ind.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>';
+  document.body.appendChild(ind);
+
+  document.addEventListener('touchstart', function(e) {
+    if (window.scrollY === 0) { startY = e.touches[0].clientY; active = true; }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', function(e) {
+    if (!active) return;
+    curDY = e.touches[0].clientY - startY;
+    if (curDY <= 0) { ind.className = ''; return; }
+    var pct = Math.min(curDY / THRESHOLD, 1);
+    var travel = Math.min(curDY * 0.45, 44);
+    ind.style.opacity = pct;
+    ind.style.transform = 'translateX(-50%) translateY(' + travel + 'px) rotate(' + (pct * 270) + 'deg)';
+    ind.className = curDY >= THRESHOLD ? 'ptr-ready' : '';
+  }, { passive: true });
+
+  document.addEventListener('touchend', function() {
+    if (!active) return;
+    active = false;
+    if (curDY >= THRESHOLD) {
+      ind.className = 'ptr-spinning';
+      setTimeout(function() { location.reload(); }, 200);
+    } else {
+      ind.style.opacity = '0';
+      ind.style.transform = 'translateX(-50%) translateY(0)';
+      ind.className = '';
+    }
+    curDY = 0;
+  });
+})();

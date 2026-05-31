@@ -1189,3 +1189,18 @@ html.dark .grammar-table tbody tr:nth-child(even) { background: var(--surface-di
   background: var(--surface-dim); border: 1px solid var(--border);
   border-radius: var(--r-md); padding: 16px; margin-top: 8px;
 }
+
+/* ---- Pull-to-refresh indicator ---- */
+#ptr-indicator {
+  position: fixed; top: calc(env(safe-area-inset-top) - 32px); left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--surface); box-shadow: var(--sh-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary); opacity: 0; z-index: 9998;
+  transition: opacity 0.1s, box-shadow 0.15s;
+  pointer-events: none;
+}
+#ptr-indicator.ptr-ready { color: var(--success); box-shadow: var(--sh-lg); }
+#ptr-indicator.ptr-spinning { opacity: 1 !important; animation: ptrSpin 0.6s linear infinite; }
+@keyframes ptrSpin { to { transform: translateX(-50%) translateY(44px) rotate(360deg); } }
