@@ -3258,7 +3258,7 @@ function initQuizTab() {
       var open = lvl[0]+lvl[1]+lvl[2];
       var el = document.getElementById(id);
       if (el) el.innerHTML = '<b>'+open+'</b> offen &nbsp;·&nbsp; <b>'+lvl[3]+'</b> gemeistert &nbsp;·&nbsp; '+
-        pips(1)+'&nbsp;<b>'+lvl[1]+'</b>&nbsp; '+pips(2)+'&nbsp;<b>'+lvl[2]+'</b>';
+        '<b>'+lvl[1]+'</b>&nbsp;'+pips(1)+'&nbsp;&nbsp;&nbsp;<b>'+lvl[2]+'</b>&nbsp;'+pips(2);
     }
     renderBar('q-stats-bar', Q_CATEGORIES);
     renderBar('q-grammar-stats-bar', Q_GRAMMAR_CATEGORIES);

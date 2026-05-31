@@ -934,7 +934,7 @@ body {
 #q-screen-start { padding-top: 1.5rem; }
 .q-section-label {
   font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-3); margin: 1.1rem 0 0.5rem;
+  color: var(--text-3); margin: 0.7rem 0 0.4rem;
 }
 .q-section-label:first-child { margin-top: 0; }
 #q-category-grid, #q-grammar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.25rem; }
@@ -962,9 +962,9 @@ body {
 .q-mix-btn:hover { background: var(--primary-hover); box-shadow: var(--sh-md); }
 
 #q-stats-bar, #q-grammar-stats-bar {
-  margin-top: 0.6rem; padding: 0.6rem 0.8rem; border-radius: var(--r-md);
+  margin-top: 0.4rem; padding: 0.45rem 0.8rem; border-radius: var(--r-md);
   background: var(--surface-dim); font-size: 0.82rem; color: var(--text-3);
-  text-align: center; line-height: 2;
+  text-align: center; line-height: 1.8;
 }
 #q-stats-bar b, #q-grammar-stats-bar b { color: var(--text); }
 .q-mix-row { display: flex; gap: 0.4rem; }
