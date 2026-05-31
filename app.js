@@ -3266,6 +3266,7 @@ function initQuizTab() {
 
   /* ---------- State ---------- */
   var qCurrentRound = [];
+  var qLastType = 'vocab', qLastIdx = 0;
   var qQueue = [], qCorrectSet = {}, qWrongCounts = {}, qCurrent = null;
   var qTimerInterval = null, qTimeLeft = 5;
   var qRecognition = null, qQuizActive = false, qAnswered = false;
@@ -3350,7 +3351,9 @@ function initQuizTab() {
 
   /* ---------- Next / back button ---------- */
   var nextBtn = qEl('q-next-btn');
-  if (nextBtn) nextBtn.addEventListener('click', qShowCategoryScreen);
+  if (nextBtn) nextBtn.addEventListener('click', function() { qPickCategory(qLastType, qLastIdx); });
+  var menuBtn = qEl('q-menu-btn');
+  if (menuBtn) menuBtn.addEventListener('click', qShowCategoryScreen);
 
   /* ---------- Show start screen ---------- */
   qRenderStats();
@@ -3371,6 +3374,7 @@ function initQuizTab() {
   }
 
   function qPickCategory(type, idx) {
+    qLastType = type; qLastIdx = idx;
     var pool = [];
     var seen = {};
     function addWords(arr) {
