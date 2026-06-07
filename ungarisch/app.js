@@ -3124,6 +3124,32 @@ function initQuizTab() {
     },
   ];
 
+  /* ---------- One-time auto-seed of the flashcard library ----------
+     On first launch (empty library, never seeded) the built-in vocabulary
+     is turned into lessons + cards so the app is usable out of the box.
+     Respects the user afterwards: if they delete everything it won't refill. */
+  try {
+    if (!localStorage.getItem('hun_seeded') && DB.lessons().length === 0) {
+      var _now = new Date().toISOString();
+      var _lessons = [], _cards = [], _lid = 1, _cid = 1;
+      [].concat(Q_CATEGORIES, Q_GRAMMAR_CATEGORIES).forEach(function(cat) {
+        var _cat = /Konjugation|Präsens|Präsenz|Vergangenheit|Modalverben/i.test(cat.name) ? 'konjugation'
+                 : (/Präposition|Fälle|Endungen|Vokalharmonie|Artikel/i.test(cat.name) ? 'grammatik' : 'vokabeln');
+        _lessons.push({ id: _lid, title: cat.name, category: _cat,
+          description: cat.words.length + ' Karten', created_at: _now, updated_at: _now });
+        cat.words.forEach(function(w) {
+          _cards.push({ id: _cid, lesson_id: _lid, front: w.de, back: w.it, example: '',
+            notes: (w.alt && w.alt.length ? 'auch: ' + w.alt.join(', ') : ''), created_at: _now });
+          _cid++;
+        });
+        _lid++;
+      });
+      DB.saveLessons(_lessons);
+      DB.saveCards(_cards);
+      localStorage.setItem('hun_seeded', '1');
+    }
+  } catch (e) {}
+
   /* ---------- Mastery ---------- */
   var qMastery = {};
   try { qMastery = JSON.parse(localStorage.getItem('hun_mastery') || '{}'); } catch(e) {}
