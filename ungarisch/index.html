@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Tanulj Magyarul</title>
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABYElEQVR42u3SQQ0AIAwEwepBBB/eaEEpmoqBIqDJXFbBZeKOKZWFCwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDcAgOwSHBITgEh+AQHIJDcKgtjjT7DA6Dw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDuuLY50tlcEhOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDbXs08hAGFPfpXwAAAABJRU5ErkJggg==" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABYElEQVR42u3SQQ0AIAwEwepBBB/eaEEpmoqBIqDJXFbBZeKOKZWFCwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDcAgOwSHBITgEh+AQHIJDcKgtjjT7DA6Dw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDuuLY50tlcEhOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDbXs08hAGFPfpXwAAAABJRU5ErkJggg==" />
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABYElEQVR42u3SQQ0AIAwEwepBBB/eaEEpmoqBIqDJXFbBZeKOKZWFCwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDcAgOwSHBITgEh+AQHIJDcKgtjjT7DA6Dw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DCDw+AwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDoPD4DA4zOAwOAwOg8PgMDgMDuuLY50tlcEhOASH4BAcgkNwCA7BITgEhwSH4BAcgkNwCA7BITgEh+CQ4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDcEhwCA7BITgEh+AQHIJDcAgOCQ7BITgEh+AQHIJDbXs08hAGFPfpXwAAAABJRU5ErkJggg==" />
+  <meta name="apple-mobile-web-app-title" content="Magyar" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css?v=20260522g" />
+  <script>
+    (function(){var d=localStorage.getItem('hun_dark');if(d==='1')document.documentElement.classList.add('dark');})();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- SVG Icon Sprite -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-search" viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 20 20"><path d="M11.5 3.5l5 5L7 18H2v-5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M11.5 3.5l5 5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 20 20"><path d="M3 6h14M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m2 0v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6h12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-grad" viewBox="0 0 20 20"><path d="M10 2L1 7l9 5 9-5-9-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 9v5c0 2 3 3.5 6 3.5s6-1.5 6-3.5V9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M17 7v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 20 20"><path d="M3 3h5a2 2 0 012 2v12a1.5 1.5 0 00-1.5-1.5H3V3zm14 0h-5a2 2 0 00-2 2v12a1.5 1.5 0 011.5-1.5H17V3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 20 20"><rect x="7" y="2" width="6" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 9a6 6 0 0012 0M10 15v3m-3 0h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 20 20"><path d="M3 17V10m4.5 7V6M12 17V8m4.5 9V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 20 20"><path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cards" viewBox="0 0 20 20"><rect x="3" y="5" width="11" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 5V3a2 2 0 012-2h6a2 2 0 012 2v9a2 2 0 01-2 2h-1" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 20 20"><path d="M10 18V10m0-8a4 4 0 00-4 4 3 3 0 00-3 3 3.5 3.5 0 001 6h2m4-13a4 4 0 014 4 3 3 0 013 3 3.5 3.5 0 01-1 6h-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-list" viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-target" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="10" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 20 20"><path d="M7 4l-1.5 2H3a1 1 0 00-1 1v9a1 1 0 001 1h14a1 1 0 001-1V7a1 1 0 00-1-1h-2.5L13 4H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="11" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 20 20"><path d="M4 10l5 5L16 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 20 20"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4.5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 20 20"><path d="M10 2c0 3-4 5-4 9a4 4 0 008 0c0-4-4-6-4-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 20 20"><path d="M10 3v10m0 0l-4-4m4 4l4-4M3 15v2h14v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 20 20"><path d="M10 13V3m0 0L6 7m4-4l4 4M3 15v2h14v-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-save" viewBox="0 0 20 20"><path d="M15 17H5a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v7a2 2 0 01-2 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 17v-5H7v5M7 3v3h5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 20 20"><path d="M6 3h8v5a4 4 0 01-8 0V3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 5H4a1 1 0 00-1 1v1a3 3 0 003 3M14 5h2a1 1 0 011 1v1a3 3 0 01-3 3M8 14h4M10 12v2M7 16h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 20 20"><path d="M2 10a8 8 0 0114-5.3M18 10a8 8 0 01-14 5.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 2v4h-4M4 18v-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 20 20"><path d="M17 12.5A7.5 7.5 0 017.5 3a7.5 7.5 0 000 14 7.5 7.5 0 009.5-4.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <span class="logo-flag"></span>
+        <span class="logo-text">Tanulj Magyarul</span>
+      </div>
+      <div class="header-actions" id="headerActions">
+        <button class="dark-toggle" id="darkToggleBtn" aria-label="Darkmode umschalten" onclick="toggleDarkMode()">
+          <svg class="icon dark-toggle-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon dark-toggle-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="app-main" id="appMain">
+    <div class="watercolor-bg" aria-hidden="true"></div>
+
+    <!-- ==================== TAB: BIBLIOTHEK ==================== -->
+    <section class="tab-panel" id="tab-library" style="display:none">
+      <div class="section-header section-header--row">
+        <div>
+          <h2 class="section-title">Bibliothek</h2>
+          <p class="section-subtitle" id="librarySubtitle">Deine Lektionen</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="switchTab('new')" style="flex-shrink:0">
+          <svg class="icon-sm" aria-hidden="true"><use href="#i-plus"/></svg> Neue Lektion
+        </button>
+      </div>
+
+      <!-- Search & Filter -->
+      <div class="library-controls">
+        <div class="search-wrap">
+          <span class="search-icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <input type="text" class="search-input" id="librarySearch" placeholder="Lektion suchen…" />
+        </div>
+        <div class="filter-chips" id="libraryCategoryFilter">
+          <button class="chip chip--active" data-cat="all">Alle</button>
+          <button class="chip" data-cat="vokabeln">Vokabeln</button>
+          <button class="chip" data-cat="konjugation">Konjugation</button>
+          <button class="chip" data-cat="grammatik">Grammatik</button>
+          <button class="chip" data-cat="redewendungen">Redewendungen</button>
+        </div>
+      </div>
+
+      <!-- Lessons Grid -->
+      <div class="lessons-grid" id="lessonsGrid">
+        <div class="loading-state" id="libraryLoading">
+          <div class="spinner"></div>
+          <p>Lektionen werden geladen…</p>
+        </div>
+      </div>
+
+      <!-- Lesson Detail View (overlay) -->
+      <div class="lesson-detail" id="lessonDetail" style="display:none">
+        <div class="detail-header">
+          <button class="btn btn-ghost btn-icon" id="backToLibraryBtn">← Zurück</button>
+          <div class="detail-title-wrap">
+            <h3 class="detail-title" id="detailLessonTitle">Lektion</h3>
+            <span class="category-badge" id="detailCategoryBadge"></span>
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-ghost btn-sm" id="editLessonMetaBtn">✏️ Bearbeiten</button>
+            <button class="btn btn-danger btn-sm" id="deleteLessonBtn">🗑 Löschen</button>
+          </div>
+        </div>
+
+        <!-- Edit lesson meta form -->
+        <div class="lesson-meta-edit" id="lessonMetaEdit" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-input" id="editLessonTitle" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategorie</label>
+            <select class="form-select" id="editLessonCategory">
+              <option value="vokabeln">Vokabeln</option>
+              <option value="konjugation">Konjugation</option>
+              <option value="grammatik">Grammatik</option>
+              <option value="redewendungen">Redewendungen</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="editLessonDescription" rows="2"></textarea>
+          </div>
+          <div class="form-row-btns">
+            <button class="btn btn-primary btn-sm" id="saveLessonMetaBtn">Speichern</button>
+            <button class="btn btn-ghost btn-sm" id="cancelLessonMetaBtn">Abbrechen</button>
+          </div>
+        </div>
+
+        <p class="detail-description" id="detailDescription"></p>
+
+        <div class="detail-stats-row">
+          <span class="detail-stat" id="detailCardCount"></span>
+          <span class="detail-stat" id="detailLastStudied"></span>
+        </div>
+
+        <div class="detail-start">
+          <button class="btn btn-primary btn-large" id="startLearningFromDetailBtn">
+            Lernen beginnen
+          </button>
+        </div>
+
+        <!-- Cards List -->
+        <div class="cards-list-header">
+          <h4 class="cards-list-title">Alle Karten</h4>
+          <button class="btn btn-ghost btn-sm" id="addCardToLessonBtn">+ Karte hinzufügen</button>
+        </div>
+
+        <!-- Add card form -->
+        <div class="add-card-form" id="addCardInlineForm" style="display:none">
+          <div class="card-editor-row">
+            <div class="form-group">
+              <label class="form-label">Vorderseite (DE)</label>
+              <input type="text" class="form-input" id="newCardFront" placeholder="Deutsch…" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rückseite (IT)</label>
+              <input type="text" class="form-input" id="newCardBack" placeholder="Magyarul…" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beispielsatz</label>
+            <input type="text" class="form-input" id="newCardExample" placeholder="z.B. Io sono felice." />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notizen</label>
+            <input type="text" class="form-input" id="newCardNotes" placeholder="Zusätzliche Hinweise…" />
+          </div>
+          <div class="form-row-btns">
+            <button class="btn btn-primary btn-sm" id="saveNewCardBtn">Karte speichern</button>
+            <button class="btn btn-ghost btn-sm" id="cancelNewCardBtn">Abbrechen</button>
+          </div>
+        </div>
+
+        <div id="detailCardsList" class="detail-cards-list"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB: LERNEN ==================== -->
+    <section class="tab-panel" id="tab-learn">
+
+      <!-- Learn Sub-Navigation -->
+      <div class="learn-subnav">
+        <button class="learn-subnav-btn learn-subnav-btn--active" id="learnSubnavUnits" data-view="units">
+          <span class="subnav-icon">📖</span>
+          <span class="subnav-label">Lerneinheiten</span>
+        </button>
+        <button class="learn-subnav-btn" id="learnSubnavCards" data-view="cards">
+          <span class="subnav-icon">🃏</span>
+          <span class="subnav-label">Lernkarten</span>
+        </button>
+        <button class="learn-subnav-btn" id="learnSubnavPhase6" data-view="phase6">
+          <span class="subnav-icon">🧠</span>
+          <span class="subnav-label">Phase 6</span>
+        </button>
+      </div>
+
+      <!-- Lesson Picker -->
+      <div id="learnLessonPicker" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Lernen</h2>
+          <p class="section-subtitle">Wähle eine oder mehrere Lektionen zum Lernen</p>
+        </div>
+
+        <!-- Weak cards option -->
+        <div class="weak-cards-banner" id="weakCardsBanner" style="display:none">
+          <div class="weak-banner-content">
+            <span class="weak-banner-icon">🎯</span>
+            <div>
+              <strong>Schwierige Karten üben</strong>
+              <p>Übe die 10 Karten, bei denen du am häufigsten Fehler machst</p>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="startWeakCardsBtn">Starten</button>
+        </div>
+        <div class="learn-direction-toggle">
+          <span class="direction-label">Lernrichtung:</span>
+          <div class="toggle-wrap">
+            <button class="toggle-btn toggle-btn--active" id="dirDE2IT">DE → IT</button>
+            <button class="toggle-btn" id="dirIT2DE">IT → DE</button>
+          </div>
+        </div>
+        <div class="lessons-grid learn-select-grid" id="learnLessonsGrid">
+          <div class="loading-state" id="learnLoading">
+            <div class="spinner"></div>
+            <p>Lektionen werden geladen…</p>
+          </div>
+        </div>
+
+        <!-- Session config bar (appears when lessons selected) -->
+        <div class="learn-start-bar" id="learnStartBar" style="display:none">
+          <div class="learn-start-bar-top">
+            <span class="learn-selected-count" id="learnSelectedCount">0 Lektionen gewählt</span>
+            <span class="learn-total-cards" id="learnTotalCards">0 Karten</span>
+          </div>
+          <div class="learn-count-selector">
+            <span class="count-label">Anzahl Fragen:</span>
+            <div class="count-options" id="countOptions">
+              <button class="count-btn" data-count="10">10</button>
+              <button class="count-btn" data-count="15">15</button>
+              <button class="count-btn" data-count="20">20</button>
+              <button class="count-btn count-btn--active" data-count="all">Alle</button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-large learn-start-btn" id="startMultiLessonBtn">🎓 Lernen starten</button>
+        </div>
+
+      </div>
+
+      <!-- Learning Session -->
+      <div id="learnSession" style="display:none">
+        <div class="session-header">
+          <button class="btn btn-ghost btn-icon" id="exitSessionBtn">✕</button>
+          <div class="session-progress-wrap">
+            <div class="session-progress-bar">
+              <div class="session-progress-fill" id="sessionProgressFill" style="width:0%"></div>
+            </div>
+            <span class="session-progress-label" id="sessionProgressLabel">0 / 0</span>
+          </div>
+          <span class="session-round" id="sessionRoundLabel">Runde 1</span>
+        </div>
+
+        <div class="session-card-wrap">
+          <div class="flip-card" id="flipCard">
+            <div class="flip-card-inner" id="flipCardInner">
+              <div class="flip-card-front">
+                <div class="card-side-label">Frage</div>
+                <span class="card-phase-badge" id="cardPhaseFront"></span>
+                <div class="card-question" id="cardQuestion"></div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-side-label">Antwort</div>
+                <span class="card-phase-badge" id="cardPhaseBack"></span>
+                <div class="card-answer" id="cardAnswer"></div>
+                <div class="card-example" id="cardExample"></div>
+                <div class="card-notes" id="cardNotes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="session-scratch-wrap">
+          <textarea class="session-scratch" id="sessionScratch" rows="3" placeholder="Notizen (werden nicht gespeichert)"></textarea>
+        </div>
+
+        <div class="session-actions">
+          <button class="btn btn-reveal" id="showAnswerBtn">Antwort zeigen</button>
+          <div class="grade-btns" id="gradeBtns" style="display:none">
+            <button class="btn btn-wrong" id="wrongBtn">✗ Falsch</button>
+            <button class="btn btn-correct" id="correctBtn">✓ Richtig</button>
+          </div>
+        </div>
+        <!-- Inline card edit -->
+        <div class="session-edit-wrap" id="sessionEditWrap">
+          <button class="btn btn-ghost btn-sm session-edit-toggle" id="sessionEditToggle">
+            <svg class="icon-sm" aria-hidden="true"><use href="#i-edit"/></svg> Karte bearbeiten
+          </button>
+          <div class="session-edit-form" id="sessionEditForm" style="display:none">
+            <div class="card-editor-row" style="margin-bottom:10px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Vorderseite (DE)</label>
+                <input type="text" class="form-input" id="editCardFront" />
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">Rückseite (IT)</label>
+                <input type="text" class="form-input" id="editCardBack" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Beispielsatz</label>
+              <input type="text" class="form-input" id="editCardExample" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notizen</label>
+              <input type="text" class="form-input" id="editCardNotes" />
+            </div>
+            <div class="form-row-btns">
+              <button class="btn btn-primary btn-sm" id="saveSessionCardBtn">Speichern</button>
+              <button class="btn btn-ghost btn-sm" id="cancelSessionEditBtn">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Summary -->
+      <div id="learnSummary" style="display:none">
+        <div class="summary-container">
+          <div class="summary-icon" id="summaryIcon">🎉</div>
+          <h2 class="summary-title">Lektion abgeschlossen!</h2>
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryCorrect">0</span>
+              <span class="summary-stat-label">Beim ersten Versuch richtig</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryTotal">0</span>
+              <span class="summary-stat-label">Karten gesamt</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryRounds">0</span>
+              <span class="summary-stat-label">Runden</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat-value" id="summaryTime">0:00</span>
+              <span class="summary-stat-label">Zeit</span>
+            </div>
+          </div>
+          <div class="summary-score-wrap">
+            <div class="summary-score-circle">
+              <svg viewBox="0 0 100 100" class="score-svg">
+                <circle cx="50" cy="50" r="42" class="score-bg" />
+                <circle cx="50" cy="50" r="42" class="score-arc" id="scoreArc" />
+              </svg>
+              <span class="score-pct" id="summaryScorePct">0%</span>
+            </div>
+          </div>
+          <div id="summaryAttemptBreakdown" class="summary-attempt-breakdown" style="display:none"></div>
+          <div class="summary-actions">
+            <button class="btn btn-primary btn-large" id="repeatLessonBtn">Wiederholen</button>
+            <button class="btn btn-ghost btn-large" id="backToPickerBtn">← Lektion wählen</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PHASE 6 SPACED REPETITION ==================== -->
+      <div id="learnPhase6View" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Phase-6-Training</h2>
+          <p class="section-subtitle" id="phase6Subtitle">Spaced Repetition für langfristiges Lernen</p>
+        </div>
+
+        <!-- Phase-6 Dashboard -->
+        <div class="phase6-dashboard" id="phase6Dashboard">
+          <div class="phase6-due-banner" id="phase6DueBanner">
+            <div class="phase6-due-icon">🧠</div>
+            <div class="phase6-due-info">
+              <span class="phase6-due-count" id="phase6DueCount">0</span>
+              <span class="phase6-due-label">Karten fällig</span>
+            </div>
+            <button class="btn btn-primary" id="startPhase6Btn">Jetzt lernen</button>
+          </div>
+          <!-- Count picker (shown after clicking Jetzt lernen) -->
+          <div class="phase6-count-picker" id="phase6CountPicker" style="display:none">
+            <span class="phase6-picker-label">Wie viele Karten?</span>
+            <div class="phase6-picker-row">
+              <button class="count-btn" data-p6count="10">10</button>
+              <button class="count-btn count-btn--active" data-p6count="20">20</button>
+              <button class="btn btn-primary phase6-start-btn" id="startPhase6ConfirmBtn">Starten</button>
+            </div>
+          </div>
+
+          <!-- Phase distribution bars -->
+          <div class="phase6-distribution" id="phase6Distribution">
+            <h4 class="phase6-dist-title">Phasenverteilung</h4>
+            <div class="phase6-bars" id="phase6Bars"></div>
+            <div class="phase6-legend">
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--1"></span>Phase 1</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--2"></span>Phase 2</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--3"></span>Phase 3</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--4"></span>Phase 4</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--5"></span>Phase 5</span>
+              <span class="phase6-legend-item"><span class="phase6-dot phase6-dot--6"></span>Phase 6</span>
+            </div>
+          </div>
+
+          <!-- Interval info -->
+          <div class="phase6-info-card">
+            <h4 class="phase6-info-title">So funktioniert Phase 6</h4>
+            <div class="phase6-info-steps">
+              <div class="phase6-step"><span class="phase6-step-num">1</span><span>Richtig → nächste Phase. Falsch → zurück auf Phase 1.</span></div>
+              <div class="phase6-step"><span class="phase6-step-num">2</span><span>Jede Phase hat längere Wiederholungsabstände.</span></div>
+              <div class="phase6-step"><span class="phase6-step-num">3</span><span>Phase 6 = Langzeitgedächtnis (90 Tage Abstand).</span></div>
+            </div>
+            <div class="phase6-intervals">
+              <span class="phase6-interval">P1: sofort</span>
+              <span class="phase6-interval">P2: 1 Tag</span>
+              <span class="phase6-interval">P3: 3 Tage</span>
+              <span class="phase6-interval">P4: 10 Tage</span>
+              <span class="phase6-interval">P5: 30 Tage</span>
+              <span class="phase6-interval">P6: 90 Tage</span>
+            </div>
+          </div>
+
+          <!-- Empty state when no cards due -->
+          <div class="phase6-empty" id="phase6Empty" style="display:none">
+            <div class="empty-state">
+              <div class="empty-icon">✨</div>
+              <p class="empty-title">Alles gelernt!</p>
+              <p class="empty-subtitle" id="phase6NextReview">Keine Karten fällig. Nächste Wiederholung bald.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== LERNEINHEITEN (Grammar Reference) ==================== -->
+      <div id="learnUnitsView">
+        <div class="section-header">
+          <h2 class="section-title">Lerneinheiten</h2>
+          <p class="section-subtitle">Übersicht und Erklärungen zu den wichtigsten Grammatik-Themen</p>
+        </div>
+        <div id="grammarUnitsContainer" class="grammar-units-container"></div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB: STATISTIK ==================== -->
+    <section class="tab-panel" id="tab-stats" style="display:none">
+      <div class="section-header">
+        <h2 class="section-title">Statistiken</h2>
+        <p class="section-subtitle">Dein Lernfortschritt auf einen Blick</p>
+      </div>
+
+      <div id="statsContent">
+        <div class="loading-state" id="statsLoading">
+          <div class="spinner"></div>
+          <p>Statistiken werden geladen…</p>
+        </div>
+      </div>
+
+      <!-- Export / Import Section -->
+      <div class="stats-section" style="margin-top:1.5rem">
+        <h3 class="stats-section-title">Backup &amp; Geräteübertragung</h3>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.8rem">
+          Alle Daten (Lektionen, Karten, Sessions, Phase-6, Quiz-Fortschritt) als eine Datei sichern oder auf ein anderes Gerät übertragen.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <button class="btn btn-primary btn-sm" id="exportAllBtn" style="text-align:center">
+            📤 Alles exportieren
+          </button>
+          <button class="btn btn-ghost btn-sm" id="importAllBtn" style="text-align:left">
+            📥 Backup importieren
+          </button>
+        </div>
+      </div>
+
+      <!-- Import Modal -->
+      <div class="confirm-overlay" id="importOverlay" style="display:none">
+        <div class="confirm-dialog" style="max-width:480px;width:92vw">
+          <h4 class="confirm-title" id="importTitle">Daten importieren</h4>
+          <p id="importDesc" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.6rem"></p>
+          <label class="btn btn-ghost btn-sm" style="display:block;text-align:center;margin-bottom:0.5rem;cursor:pointer">
+            📂 Datei auswählen
+            <input type="file" id="importFileInput" accept=".json,.txt" style="display:none" />
+          </label>
+          <textarea id="importInput" rows="5"
+            style="width:100%;box-sizing:border-box;font-size:0.78rem;font-family:monospace;
+                   background:var(--paper);border:2px solid rgba(0,0,0,0.2);border-radius:var(--radius-md);
+                   padding:0.6rem;resize:vertical;outline:none"
+            placeholder='Oder JSON hier einfügen…'></textarea>
+          <div class="confirm-actions" style="margin-top:0.8rem">
+            <button class="btn btn-ghost" id="importCancel">Abbrechen</button>
+            <button class="btn btn-primary" id="importOk">Importieren</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB: NEU ==================== -->
+    <section class="tab-panel" id="tab-new" style="display:none">
+
+      <!-- Neu Sub-Navigation -->
+      <div class="learn-subnav">
+        <button class="learn-subnav-btn learn-subnav-btn--active" id="newSubnavManual" data-newview="manual">
+          <span class="subnav-icon">✏️</span>
+          <span class="subnav-label">Manuell</span>
+        </button>
+        <button class="learn-subnav-btn" id="newSubnavUpload" data-newview="upload">
+          <span class="subnav-icon">📷</span>
+          <span class="subnav-label">Screenshot</span>
+        </button>
+      </div>
+
+      <!-- Manual Lesson Creation -->
+      <div id="newManualView">
+        <div class="section-header">
+          <h2 class="section-title">Neue Lektion</h2>
+          <p class="section-subtitle">Erstelle manuell eine neue Lektion mit Karteikarten</p>
+        </div>
+
+        <div class="new-lesson-form">
+          <div class="form-group">
+            <label class="form-label">Titel <span class="required">*</span></label>
+            <input type="text" class="form-input" id="newLessonTitle" placeholder="z.B. Haushaltsgeräte" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kategorie</label>
+            <select class="form-select" id="newLessonCategory">
+              <option value="vokabeln">Vokabeln</option>
+              <option value="konjugation">Konjugation</option>
+              <option value="grammatik">Grammatik</option>
+              <option value="redewendungen">Redewendungen</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="newLessonDescription" rows="2" placeholder="Kurze Beschreibung…"></textarea>
+          </div>
+
+          <!-- New lesson cards -->
+          <div class="cards-editor">
+            <div class="cards-editor-header">
+              <h4 class="cards-editor-title">Karteikarten</h4>
+              <span class="card-count-badge" id="newLessonCardCount">0 Karten</span>
+            </div>
+            <div id="newLessonCards" class="builder-cards-list"></div>
+            <button class="btn btn-ghost btn-sm add-card-btn" id="newLessonAddCardBtn">
+              + Karte hinzufügen
+            </button>
+          </div>
+
+          <div class="builder-actions">
+            <button class="btn btn-primary btn-large" id="saveNewLessonBtn">
+              <span>💾 Lektion speichern</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot Upload -->
+      <div id="newUploadView" style="display:none">
+        <div class="section-header">
+          <h2 class="section-title">Screenshot hochladen</h2>
+          <p class="section-subtitle">Lade ein Bild deines Lernmaterials hoch — der Text wird automatisch erkannt</p>
+        </div>
+
+        <!-- Drop Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept="image/*" hidden />
+          <div class="upload-zone-inner" id="uploadZoneInner">
+            <div class="upload-icon">📷</div>
+            <p class="upload-text">Bild hier ablegen oder tippen zum Auswählen</p>
+            <p class="upload-hint">JPG, PNG, WEBP bis 10 MB</p>
+            <button class="btn btn-primary upload-btn" id="uploadBtn">Bild auswählen</button>
+          </div>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="upload-preview" id="uploadPreview" style="display:none">
+          <img id="previewImg" class="preview-image" src="" alt="Vorschau" />
+          <button class="btn btn-ghost btn-sm" id="removeImageBtn">✕ Bild entfernen</button>
+        </div>
+
+        <!-- OCR Progress -->
+        <div class="ocr-progress" id="ocrProgress" style="display:none">
+          <div class="progress-label" id="ocrProgressLabel">OCR wird durchgeführt…</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="ocrProgressBar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- OCR Result -->
+        <div class="ocr-result" id="ocrResult" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Erkannter Text <span class="label-hint">(bearbeitbar)</span></label>
+            <textarea class="form-textarea" id="ocrText" rows="8" placeholder="Der erkannte Text erscheint hier…"></textarea>
+          </div>
+          <button class="btn btn-secondary" id="parseTextBtn">
+            <span>🔍 Text analysieren & Karten erstellen</span>
+          </button>
+        </div>
+
+        <!-- Lesson Builder from OCR -->
+        <div class="lesson-builder" id="lessonBuilder" style="display:none">
+          <div class="builder-header">
+            <h3 class="builder-title">Neue Lektion erstellen</h3>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Titel <span class="required">*</span></label>
+            <input type="text" class="form-input" id="builderTitle" placeholder="z.B. Verben: essere & avere" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Kategorie</label>
+              <select class="form-select" id="builderCategory">
+                <option value="vokabeln">Vokabeln</option>
+                <option value="konjugation">Konjugation</option>
+                <option value="grammatik">Grammatik</option>
+                <option value="redewendungen">Redewendungen</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="builderDescription" rows="2" placeholder="Kurze Beschreibung der Lektion…"></textarea>
+          </div>
+
+          <!-- Cards Preview -->
+          <div class="cards-editor">
+            <div class="cards-editor-header">
+              <h4 class="cards-editor-title">Erkannte Karten</h4>
+              <span class="card-count-badge" id="builderCardCount">0 Karten</span>
+            </div>
+            <div id="builderCards" class="builder-cards-list"></div>
+            <button class="btn btn-ghost btn-sm add-card-btn" id="builderAddCardBtn">
+              + Karte hinzufügen
+            </button>
+          </div>
+
+          <div class="builder-actions">
+            <button class="btn btn-primary btn-large" id="saveUploadLessonBtn">
+              <span>💾 Lektion speichern</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB: QUIZ ==================== -->
+    <section class="tab-panel" id="tab-quiz" style="display:none">
+      <div class="tab-header">
+        <h2 class="tab-title">Gioco di Vocabolario</h2>
+        <p class="tab-subtitle">Kategorie wählen – 5 zufällige Vokabeln</p>
+      </div>
+      <div class="tab-content">
+
+        <!-- Start screen -->
+        <div id="q-screen-start">
+          <p class="q-section-label">Grundwortschatz</p>
+          <div id="q-category-grid"></div>
+          <div id="q-stats-bar"></div>
+          <p class="q-section-label">Grammatik</p>
+          <div id="q-grammar-grid"></div>
+          <div id="q-grammar-stats-bar"></div>
+          <p class="q-section-label">Mix-Abfrage</p>
+          <div class="q-mix-row">
+            <button class="q-mix-btn" id="q-mix-vocab-btn">Grundwortschatz</button>
+            <button class="q-mix-btn" id="q-mix-grammar-btn">Grammatik</button>
+            <button class="q-mix-btn q-mix-btn--all" id="q-mix-all-btn">Beides</button>
+          </div>
+        </div>
+
+        <!-- Quiz screen -->
+        <div id="q-screen-quiz" style="display:none">
+          <div class="q-topbar">
+            <button id="q-abort-btn" aria-label="Runde abbrechen">
+              <svg class="icon-sm" aria-hidden="true"><use href="#i-x"/></svg>
+            </button>
+            <div id="q-progress"></div>
+            <div id="q-timer">5</div>
+          </div>
+          <div id="q-dots"></div>
+          <div id="q-word"></div>
+          <div id="q-mic-status"></div>
+          <div class="q-input-row">
+            <input id="q-answer" type="text" placeholder="Magyarul …"
+                   autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <button id="q-submit-btn" class="btn btn-primary">Prüfen</button>
+          </div>
+          <div id="q-heard"></div>
+          <div id="q-feedback"></div>
+        </div>
+
+        <!-- Result screen -->
+        <div id="q-screen-result" style="display:none">
+          <div id="q-result-box"></div>
+          <div class="q-result-actions">
+            <button class="btn btn-primary" id="q-menu-btn">Menü</button>
+            <button class="btn btn-primary" id="q-next-btn">Újra</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Joker FAB (above bottom nav) -->
+  <button id="q-joker-fab" style="display:none">
+    <span id="q-joker-label">+3s</span>
+    <div id="q-joker-pips"></div>
+  </button>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Confirm Dialog -->
+  <div class="confirm-overlay" id="confirmOverlay" style="display:none">
+    <div class="confirm-dialog">
+      <h4 class="confirm-title" id="confirmTitle">Bestätigung</h4>
+      <p class="confirm-message" id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirmCancel">Abbrechen</button>
+        <button class="btn btn-danger" id="confirmOk">Löschen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item nav-item--active" data-tab="learn" onclick="switchTab('learn')">
+      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L1 7l9 5 9-5-9-5z"/><path d="M4 9v5c0 2 3 3.5 6 3.5s6-1.5 6-3.5V9"/><path d="M17 7v6"/></svg></span>
+      <span class="nav-label">Lernen</span>
+    </button>
+    <button class="nav-item" data-tab="quiz" onclick="switchTab('quiz')">
+      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="6" height="10" rx="3"/><path d="M4 9a6 6 0 0012 0M10 15v3m-3 0h6" stroke-linecap="round"/></svg></span>
+      <span class="nav-label">Abfragen</span>
+    </button>
+    <button class="nav-item" data-tab="stats" onclick="switchTab('stats')">
+      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17V10m4.5 7V6M12 17V8m4.5 9V3"/></svg></span>
+      <span class="nav-label">Statistik</span>
+    </button>
+    <button class="nav-item" data-tab="library" onclick="switchTab('library')">
+      <span class="nav-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 3h5a2 2 0 012 2v12a1.5 1.5 0 00-1.5-1.5H3V3zm14 0h-5a2 2 0 00-2 2v12a1.5 1.5 0 011.5-1.5H17V3z"/></svg></span>
+      <span class="nav-label">Bibliothek</span>
+    </button>
+  </nav>
+
+  <script src="./effects.js?v=20260522g"></script>
+  <script src="./app.js?v=20260522g"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    }
+  </script>
+</body>
+</html>
