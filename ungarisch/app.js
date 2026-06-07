@@ -113,6 +113,31 @@ function dbUpdatePhase6(cardId, isCorrect) {
   DB.savePhase6(p6);
 }
 
+/* How many cards Phase 6 offers at once: due reviews first, then topped up
+   with random not-yet-learned cards until this target is reached. As new
+   cards get studied they leave the "new" pool, so the queue refills over
+   several sessions until every card has been introduced. */
+const PHASE6_NEW_TARGET = 20;
+
+function computePhase6Due(p6, cards) {
+  const now = new Date();
+  const reviews = [];
+  const newPool = [];
+  cards.forEach(c => {
+    const e = p6[c.id];
+    if (e) { if (new Date(e.next_review_at) <= now) reviews.push(c); }
+    else { newPool.push(c); }
+  });
+  reviews.sort((a, b) => new Date(p6[a.id].next_review_at) - new Date(p6[b.id].next_review_at));
+  const slots = Math.max(0, PHASE6_NEW_TARGET - reviews.length);
+  // Fisher–Yates shuffle so the new cards are picked at random
+  for (let i = newPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newPool[i], newPool[j]] = [newPool[j], newPool[i]];
+  }
+  return { reviews, newCards: newPool.slice(0, slots) };
+}
+
 async function apiFetch(url, options = {}) {
   const method = (options.method || 'GET').toUpperCase();
   const body = options.body ? JSON.parse(options.body) : null;
@@ -232,12 +257,13 @@ async function apiFetch(url, options = {}) {
       return {...s, lesson_title:l?l.title:'Unbekannt', score_pct:s.total_cards>0?Math.round((s.correct_first_try||0)/s.total_cards*100):0};
     });
     const p6E=Object.entries(p6);
+    const p6due=computePhase6Due(p6, cards);
     return {
       total_lessons:lessons.length, total_cards:cards.length, total_sessions:sessions.length,
       overall_success_rate:results.length?Math.round(results.filter(r=>r.correct).length/results.length*100):null,
       total_duration:totalDuration, streak, streak_start:streakStart, studied_today:studiedToday,
       daily_sessions:dailySessions, lesson_stats:lessonStats, recent_sessions:recentSessions,
-      phase6:{due_count:p6E.filter(([,v])=>new Date(v.next_review_at)<=new Date()).length,
+      phase6:{due_count:p6due.reviews.length + p6due.newCards.length,
                mastered_count:p6E.filter(([,v])=>v.phase===6).length, total_cards:p6E.length,
                phase_distribution:[1,2,3,4,5,6].map(ph=>({phase:ph,count:p6E.filter(([,v])=>v.phase===ph).length}))},
     };
@@ -265,18 +291,15 @@ async function apiFetch(url, options = {}) {
     const sub = params.get('sub'); const p6 = DB.phase6(); const cards = DB.cards();
     if (sub === 'due_cards') {
       const limit = parseInt(params.get('limit')||'50');
-      return Object.entries(p6)
-        .filter(([,v])=>new Date(v.next_review_at)<=new Date())
-        .sort((a,b)=>new Date(a[1].next_review_at)-new Date(b[1].next_review_at))
-        .slice(0,limit)
-        .map(([cid])=>{
-          const c=cards.find(x=>x.id===parseInt(cid)); if(!c) return null;
-          return {...c, phase:p6[parseInt(cid)].phase};
-        }).filter(Boolean);
+      const d = computePhase6Due(p6, cards);
+      const list = d.reviews.map(c => ({...c, phase: p6[c.id].phase}))
+        .concat(d.newCards.map(c => ({...c, phase: 1})));
+      return list.slice(0, limit);
     }
     if (sub === 'stats') {
       const p6E=Object.entries(p6);
-      return {due_count:p6E.filter(([,v])=>new Date(v.next_review_at)<=new Date()).length,
+      const d = computePhase6Due(p6, cards);
+      return {due_count:d.reviews.length + d.newCards.length,
               mastered_count:p6E.filter(([,v])=>v.phase===6).length, total_cards:p6E.length,
               phase_distribution:[1,2,3,4,5,6].map(ph=>({phase:ph,count:p6E.filter(([,v])=>v.phase===ph).length}))};
     }

@@ -1,6 +1,6 @@
 /* Tanulj Magyarul — Service Worker
    Bump CACHE_VERSION with every deployment to force fresh assets. */
-const CACHE_VERSION = 'magyar-v20260607a';
+const CACHE_VERSION = 'magyar-v20260607b';
 
 self.addEventListener('install', () => {
   self.skipWaiting();
