@@ -10,7 +10,6 @@ const TRIP = { start: '2026-08-02', end: '2026-08-16' };
 const PEOPLE = [
   { id: 'maria', name: 'Maria', emoji: '🌻', color: '#e8467c', role: 'Mama' },
   { id: 'paul',  name: 'Paul',  emoji: '🧔', color: '#2f7ce0', role: 'ich' },
-  { id: 'carla', name: 'Carla', emoji: '🎧', color: '#9b5de5', role: 'wird am 9.8. sechzehn 🎂' },
   { id: 'felix', name: 'Felix', emoji: '🎬', color: '#12b28a', role: '16 Jahre' },
   { id: 'emmi',  name: 'Emmi',  emoji: '🦄', color: '#f4a020', role: '10 Jahre' },
 ];
@@ -51,7 +50,7 @@ const IDEAS = [
     title: 'Lina Lapelytė im Hamburger Bahnhof',
     sub: '„We Make Years Out of Hours“ · Invalidenstraße 50–51',
     tags: ['bis 10.1.2027', { t: 'unter 18 frei', k: 'good' }, '400.000 Holzwürfel'],
-    info: 'Das ist die Ausstellung mit dem komplizierten Namen: <b>Lina Lapelytė – „We Make Years Out of Hours“</b> (CHANEL Commission, 1.5.2026 – 10.1.2027). Die litauische Künstlerin verwandelt die große historische Halle in eine Landschaft aus <b>400.000 Holzwürfeln</b>, die von Performer:innen <b>und Besucher:innen</b> immer wieder umgebaut wird – dazu kollektiver Gesang aus kurzen Gedichtzeilen über Gemeinschaft, Liebe und Hoffnung.<br><br>Also eine Ausstellung zum Mitmachen und Anfassen – das dürfte für Emmi genauso funktionieren wie für die Großen.<br><br>Im selben Haus laufen außerdem <b>Shilpa Gupta – „What Still Holds“</b> (bis 3.1.2027), <b>Giulia Andreani – „Sabotage“</b> und <b>Saâdane Afif – „Five Preludes“</b> (beide nur noch bis 13.9.) sowie <b>„Tausendmal Berlin“</b> aus der Sammlung. Bei den Staatlichen Museen ist der Eintritt für alle unter 18 frei – Carla, Felix und Emmi kommen also umsonst rein.',
+    info: 'Das ist die Ausstellung mit dem komplizierten Namen: <b>Lina Lapelytė – „We Make Years Out of Hours“</b> (CHANEL Commission, 1.5.2026 – 10.1.2027). Die litauische Künstlerin verwandelt die große historische Halle in eine Landschaft aus <b>400.000 Holzwürfeln</b>, die von Performer:innen <b>und Besucher:innen</b> immer wieder umgebaut wird – dazu kollektiver Gesang aus kurzen Gedichtzeilen über Gemeinschaft, Liebe und Hoffnung.<br><br>Also eine Ausstellung zum Mitmachen und Anfassen – das dürfte für Emmi genauso funktionieren wie für die Großen.<br><br>Im selben Haus laufen außerdem <b>Shilpa Gupta – „What Still Holds“</b> (bis 3.1.2027), <b>Giulia Andreani – „Sabotage“</b> und <b>Saâdane Afif – „Five Preludes“</b> (beide nur noch bis 13.9.) sowie <b>„Tausendmal Berlin“</b> aus der Sammlung. Bei den Staatlichen Museen ist der Eintritt für alle unter 18 frei – Felix und Emmi kommen also umsonst rein.',
     url: 'https://www.smb.museum/ausstellungen/detail/chanel-commission-lina-lapelyte/',
   },
   {
@@ -67,7 +66,7 @@ const IDEAS = [
     title: 'Fotografiska Berlin',
     sub: 'Oranienburger Straße 54, Mitte · täglich 10–23 Uhr',
     tags: [{ t: 'zwei Ausstellungen enden am 11.8.', k: 'warn' }, 'bis 23 Uhr offen', 'drinnen'],
-    info: 'Vier Ausstellungen parallel im alten Kunsthaus Tacheles:<br><br>• <b>Anton Corbijn – „Corbijn, Anton“</b> (bis 20.9.) – der Fotograf von Depeche Mode, U2 und Joy Division. Wahrscheinlich das, was Felix und Carla am meisten abholt.<br>• <b>Bruce Gilden – „Why These?“</b> (bis 23.8.) – knallharte Straßenporträts.<br>• <b>The Anonymous Project / Lee Shulman – „No Place Like Home“</b> (bis 1.11.) – gefundene Familiendias aus den 50ern/60ern, sehr warm und für alle verständlich.<br>• <b>Bob Jones – „587 Blitze“</b> und <b>Dagmar Schürrer – „Undula“</b> – <b>nur noch bis 11.8.</b><br><br>Bis 23 Uhr geöffnet – geht also auch als Abendprogramm.',
+    info: 'Vier Ausstellungen parallel im alten Kunsthaus Tacheles:<br><br>• <b>Anton Corbijn – „Corbijn, Anton“</b> (bis 20.9.) – der Fotograf von Depeche Mode, U2 und Joy Division. Wahrscheinlich das, was Felix am meisten abholt.<br>• <b>Bruce Gilden – „Why These?“</b> (bis 23.8.) – knallharte Straßenporträts.<br>• <b>The Anonymous Project / Lee Shulman – „No Place Like Home“</b> (bis 1.11.) – gefundene Familiendias aus den 50ern/60ern, sehr warm und für alle verständlich.<br>• <b>Bob Jones – „587 Blitze“</b> und <b>Dagmar Schürrer – „Undula“</b> – <b>nur noch bis 11.8.</b><br><br>Bis 23 Uhr geöffnet – geht also auch als Abendprogramm.',
     url: 'https://berlin.fotografiska.com/de/ausstellungen',
   },
   {
@@ -107,7 +106,7 @@ const IDEAS = [
     title: 'Strandbad Weißensee',
     sub: 'Berliner Allee 155, Pankow · täglich 10–20 Uhr',
     tags: ['Familienkarte 23 €', 'Sandstrand', { t: 'bei Regen zu', k: 'warn' }],
-    info: 'Das Freibad am Weißen See: Sandstrand, Liegewiese, Strandbar, im Juni–August täglich 10–20 Uhr geöffnet.<br><br>Preise: 9,50 € Erwachsene, 4 € Kinder bis 12 Jahre (also für Emmi), 6 € ermäßigt (Schüler:innen – für Carla und Felix), <b>Familienkarte 23 €</b>, ab 17/18 Uhr Feierabendtarif 6 €. Bezahlt wird nur elektronisch, also Karte mitnehmen. Bei schlechtem Wetter bleibt das Bad zu.<br><br>Lässt sich super mit der Freilichtbühne gleich nebenan verbinden: nachmittags baden, abends Film.',
+    info: 'Das Freibad am Weißen See: Sandstrand, Liegewiese, Strandbar, im Juni–August täglich 10–20 Uhr geöffnet.<br><br>Preise: 9,50 € Erwachsene, 4 € Kinder bis 12 Jahre (also für Emmi), 6 € ermäßigt (Schüler:innen – für Felix), <b>Familienkarte 23 €</b>, ab 17/18 Uhr Feierabendtarif 6 €. Bezahlt wird nur elektronisch, also Karte mitnehmen. Bei schlechtem Wetter bleibt das Bad zu.<br><br>Lässt sich super mit der Freilichtbühne gleich nebenan verbinden: nachmittags baden, abends Film.',
     url: 'https://www.strandbadweissensee.de/',
   },
   {
@@ -165,17 +164,17 @@ const IDEAS = [
   {
     id: 'carla16', emoji: '🎂', cat: 'fest', img: 'carla16',
     title: 'Carlas 16. Geburtstag',
-    sub: 'Sonntag, 9. August',
-    tags: [{ t: 'fester Termin', k: 'warn' }, 'Carla entscheidet'],
+    sub: 'Pauls Nichte wird 16 · Sonntag, 9. August',
+    tags: [{ t: 'Datum steht fest', k: 'warn' }, 'Carla entscheidet'],
     fixed: { date: '2026-08-09', slot: 'tag', time: '' },
-    info: 'Carla wird <b>16</b>. Der Tag gehört ihr – erst fragen, was sie machen will, dann drumherum planen. Was an dem Wochenende ohnehin läuft: die MUBI Summer Night bei C/O Berlin (freier Eintritt, Open Air, DJ) am 8. und 9. August.<br><br>Am Sonntag ist das Volksbad geschlossen, das fällt für den Tag also weg.',
+    info: 'Pauls Nichte Carla wird <b>16</b>. Der Tag gehört ihr – erst fragen, was sie vorhat und ob ihr dabei seid, dann drumherum planen. Was an dem Wochenende ohnehin läuft: die MUBI Summer Night bei C/O Berlin (freier Eintritt, Open Air, DJ) am 8. und 9. August.<br><br>Am Sonntag ist das Volksbad geschlossen, das fällt für den Tag also weg.',
   },
 ];
 
 /* Bildnachweise – alle Fotos stammen aus Wikimedia Commons */
 const CREDITS = {
   ballon:       { autor: 'Lotse', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Berlin_Hi-Flyer_(2013)_1207-1087-(120).jpg' },
-  carla16:      { autor: 'Schokifaktor', lizenz: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Geburtstagstorte_mit_Kerzen_2_AJ.jpg' },
+  carla16:      { autor: 'Ed g2s', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Birthday_candles.jpg' },
   coberlin:     { autor: 'Raimond Spekking', lizenz: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Amerika-Haus,_Berlin-4514.jpg' },
   dhm:          { autor: 'Avda', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Zeughaus_Berlin_2012.jpg' },
   fotografiska: { autor: 'De-okin', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Kunsthaus_tacheles.berlin.II.JPG' },
@@ -192,7 +191,7 @@ const CREDITS = {
 };
 const IMGCAP = {
   ballon: 'Der Weltballon am Ballongarten in Mitte',
-  carla16: 'Geburtstagstorte',
+  carla16: 'Geburtstagskerzen',
   coberlin: 'Das Amerika Haus – Sitz von C/O Berlin',
   dhm: 'Das Zeughaus Unter den Linden',
   fotografiska: 'Oranienburger Straße 54 – heute Fotografiska',
@@ -212,7 +211,7 @@ const imgSrc = key => './img/' + key + '.jpg';
 const TODOS = [
   { id: 't1', text: 'Spreewald-Unterkunft für zwei Nächte buchen', hint: 'Im August wird es schnell voll' },
   { id: 't2', text: 'Restaurant an der Oder für den 5.8. reservieren', hint: 'Nach der Beisetzung, für alle' },
-  { id: 't3', text: 'Carla fragen, was sie am 9.8. machen möchte', hint: 'Ihr Tag, ihre Entscheidung' },
+  { id: 't3', text: 'Bei Carla nachfragen, was sie am 9.8. vorhat', hint: 'Pauls Nichte wird 16 – seid ihr dabei?' },
   { id: 't4', text: 'Volksbad: kostenloses Zeitfenster-Ticket buchen', hint: 'Online-Shop der Volksbühne, ab 7.8.' },
   { id: 't5', text: 'Fotografiska: Bob Jones & Undula enden am 11.8.', hint: 'Falls ihr die sehen wollt: erste Woche' },
   { id: 't6', text: 'Weltballon: morgens Wetter checken', hint: '030 2327 7500 – fährt nur bei Windstille' },
