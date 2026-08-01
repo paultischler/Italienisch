@@ -424,6 +424,8 @@ main{flex:1;padding:16px 16px calc(96px + var(--safe-b));}
 .dsel.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .dsel.on small{color:rgba(255,255,255,.7);}
 .slotsel{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.slotsel.five{grid-template-columns:repeat(2,1fr);margin-bottom:6px;}
+.slotsel.five .ssel:first-child{grid-column:1 / -1;}
 .ssel{padding:12px 8px;border-radius:13px;background:var(--card);border:1.5px solid var(--line);text-align:center;font-size:13px;font-weight:700;}
 .ssel.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .field{display:block;margin:10px 0;}
