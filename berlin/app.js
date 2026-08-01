@@ -78,7 +78,7 @@ const IDEAS = [
     url: 'https://co-berlin.org/de/programm/ausstellungen',
   },
   {
-    id: 'mubinight', emoji: '🎪', cat: 'fest', pics: ['kino'],
+    id: 'mubinight', emoji: '🎪', cat: 'fest', pics: ['kino'], from: '2026-08-08', to: '2026-08-09',
     title: 'MUBI Summer Night bei C/O Berlin',
     sub: 'Sa 8. & So 9. August · Amerika Haus',
     tags: [{ t: 'Eintritt frei', k: 'good' }, 'Open Air', 'am 8./9.8.'],
@@ -94,7 +94,7 @@ const IDEAS = [
     url: 'https://mubi.com/de/de/go',
   },
   {
-    id: 'volksbad', emoji: '🏊', cat: 'wasser', pics: ['volksbad'],
+    id: 'volksbad', emoji: '🏊', cat: 'wasser', pics: ['volksbad'], from: '2026-08-07',
     title: 'Volksbad vor der Volksbühne',
     sub: 'Rosa-Luxemburg-Platz · ab 7. August',
     tags: [{ t: 'kostenlos', k: 'good' }, 'ab 7.8.', '25-Meter-Becken'],
@@ -300,14 +300,16 @@ const todayIso = () => iso(new Date());
    ============================================================ */
 
 const KEY = 'berlin2026_plan_v1';
-let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, seeded: false };
+let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, unpinned: [], seeded: false };
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) S = Object.assign(S, JSON.parse(raw));
   } catch (e) { /* kaputter Speicher – dann eben frisch */ }
-  if (!S.seeded) { seedFixed(); S.seeded = true; save(); }
+  if (!S.seeded) { seedFixed(); S.seeded = true; }
+  syncPinned();
+  save();
 }
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(S)); return true; }
@@ -552,6 +554,8 @@ function renderDays() {
       }).join('')}
       <div class="slots">${slots}
         ${leer ? '' : `<button class="add" data-add="${d}|tag">＋ Etwas für den ganzen Tag</button>`}
+        ${hintsFor(d).map(i => `<button class="maybe" data-maybe="${i.id}|${d}">
+          <span>${i.emoji}</span> möglich: <b>${esc(i.title)}</b> <em>eintragen ＋</em></button>`).join('')}
       </div>
     </section>`;
   }).join('');
@@ -768,6 +772,7 @@ function sheetEntry(eid) {
     if (e.done) { toast('Abgehakt! ✅'); confetti(); }
   };
   $('#eDel').onclick = () => {
+    if (e.pinned) { S.unpinned = S.unpinned || []; S.unpinned.push(e.ideaId); }
     S.entries = e.group ? S.entries.filter(x => x.group !== e.group) : S.entries.filter(x => x.id !== e.id);
     save(); closeSheet(); renderAll(); toast('Entfernt');
   };
@@ -908,6 +913,7 @@ function sheetIdeaForm(existing) {
     if (e.id) S.custom = S.custom.map(x => x.id === e.id ? idee : x);
     else S.custom.push(idee);
     if (!save()) { S.custom = merk; return; }        // Speicher voll: nichts kaputt machen
+    syncPinned(); save();
     closeSheet(); showView('ideen'); renderAll();
     toast(existing ? 'Gespeichert ✓' : 'Idee aufgenommen! 💡');
     if (!existing) confetti();
@@ -920,6 +926,37 @@ function rangeTag(from, to) {
   const kurz = d => { const f = fmtDay(d); return `${f.num}.8.`; };
   if (from && to) return [{ t: from === to ? `nur am ${kurz(from)}` : `nur ${kurz(from)}–${kurz(to)}`, k: 'warn' }];
   return [{ t: from ? `ab ${kurz(from)}` : `bis ${kurz(to)}`, k: 'warn' }];
+}
+
+/* Ideen mit festem Einzeltag hängen von selbst im Kalender –
+   genau wie die Beisetzung und Carlas Geburtstag. */
+function syncPinned() {
+  S.unpinned = S.unpinned || [];
+  allIdeas().forEach(i => {
+    const tag = (i.from && i.from === i.to) ? i.from : null;
+    const schon = S.entries.filter(e => e.ideaId === i.id && e.pinned);
+
+    if (!tag) {                                   // kein fester Tag (mehr)
+      if (schon.length) S.entries = S.entries.filter(e => !(e.ideaId === i.id && e.pinned));
+      return;
+    }
+    if (S.unpinned.includes(i.id)) return;        // von Hand entfernt – bleibt entfernt
+    if (schon.length) { schon.forEach(e => { e.date = tag; }); return; }   // Datum geändert
+    if (S.entries.some(e => e.ideaId === i.id)) return;                    // schon selbst geplant
+    S.entries.push({ id: uid(), ideaId: i.id, date: tag, slot: 'tag', time: '',
+                     note: '', done: false, fixed: true, pinned: true });
+  });
+}
+
+/* Ideen mit kurzem Zeitfenster als Vormerkung an den passenden Tagen zeigen */
+function hintsFor(date) {
+  return allIdeas().filter(i => {
+    if (!i.from || !i.to || i.from === i.to) return false;
+    const spanne = Math.round((parse(i.to) - parse(i.from)) / 864e5) + 1;
+    if (spanne > 4) return false;                 // längere Zeiträume würden jeden Tag zumüllen
+    if (date < i.from || date > i.to) return false;
+    return !S.entries.some(e => e.ideaId === i.id);
+  });
 }
 
 /* Passt der Tag in den Zeitraum der Idee? */
@@ -1099,7 +1136,7 @@ function renderAll() {
 }
 
 document.addEventListener('click', ev => {
-  const el = ev.target.closest('[data-view],[data-jump],[data-add],[data-entry],[data-cat],[data-vote],[data-plan],[data-more],[data-prog],[data-pdate],[data-pslot],[data-pickidea],[data-delidea],[data-todo],[data-editidea],[data-avatar],[data-setav],[data-delpic],[data-close]');
+  const el = ev.target.closest('[data-view],[data-jump],[data-add],[data-entry],[data-cat],[data-vote],[data-plan],[data-more],[data-prog],[data-pdate],[data-pslot],[data-pickidea],[data-delidea],[data-todo],[data-editidea],[data-avatar],[data-setav],[data-maybe],[data-delpic],[data-close]');
   if (!el) return;
   const D = el.dataset;
 
@@ -1151,6 +1188,7 @@ document.addEventListener('click', ev => {
   }
   if (D.editidea) { return sheetIdeaForm(ideaById(D.editidea)); }
   if (D.delpic !== undefined) { draftPics.splice(+D.delpic, 1); drawDraftPics(); return; }
+  if (D.maybe) { const [id, date] = D.maybe.split('|'); return sheetPlan(id, date, 'nm'); }
   if (D.avatar) { return sheetAvatar(D.avatar); }
   if (D.setav) {
     const [pid, em] = D.setav.split('|');
@@ -1162,6 +1200,7 @@ document.addEventListener('click', ev => {
   if (D.delidea) {
     S.custom = S.custom.filter(i => i.id !== D.delidea);
     S.entries = S.entries.filter(e => e.ideaId !== D.delidea);
+    S.unpinned = (S.unpinned || []).filter(x => x !== D.delidea);
     save(); renderAll(); wireGalleries(); toast('Idee gelöscht');
     return;
   }
@@ -1204,7 +1243,7 @@ $('#btnReset').onclick = () => {
     </div>`);
   $('#rYes').onclick = () => {
     localStorage.removeItem(KEY);
-    S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, seeded: false };
+    S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, unpinned: [], seeded: false };
     seedFixed(); S.seeded = true; save();
     closeSheet(); renderAll(); showView('plan'); toast('Alles auf Anfang');
   };
