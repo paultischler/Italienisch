@@ -38,7 +38,7 @@ const SLOTS = [
 
 const IDEAS = [
   {
-    id: 'ballon', emoji: '🎈', cat: 'action', img: 'ballon',
+    id: 'ballon', emoji: '🎈', cat: 'action', pics: ['ballon'],
     title: 'Mit dem Weltballon aufsteigen',
     sub: 'Zimmerstraße 100 (Ecke Wilhelmstraße), Mitte',
     tags: ['15 Min oben', '150 m hoch', { t: 'nur bei ruhigem Wetter', k: 'warn' }],
@@ -46,7 +46,7 @@ const IDEAS = [
     url: 'https://air-service-berlin.de/produkt/weltballon/',
   },
   {
-    id: 'lapelyte', emoji: '🧱', cat: 'kultur', img: 'hbf',
+    id: 'lapelyte', emoji: '🧱', cat: 'kultur', pics: ['lapelyte-1', 'hbf'],
     title: 'Lina Lapelytė im Hamburger Bahnhof',
     sub: '„We Make Years Out of Hours“ · Invalidenstraße 50–51',
     tags: ['bis 10.1.2027', { t: 'unter 18 frei', k: 'good' }, '400.000 Holzwürfel'],
@@ -54,7 +54,7 @@ const IDEAS = [
     url: 'https://www.smb.museum/ausstellungen/detail/chanel-commission-lina-lapelyte/',
   },
   {
-    id: 'dhm', emoji: '🏛️', cat: 'kultur', img: 'dhm',
+    id: 'dhm', emoji: '🏛️', cat: 'kultur', pics: ['dhm'],
     title: 'Deutsches Historisches Museum — für Felix',
     sub: 'Pei-Bau, Unter den Linden 2 · täglich 10–18 Uhr',
     tags: ['für Geschichts-Fans', { t: '13.8. Eintritt frei', k: 'good' }, 'drinnen'],
@@ -62,7 +62,7 @@ const IDEAS = [
     url: 'https://www.dhm.de/ausstellungen/unsere-ausstellungen/',
   },
   {
-    id: 'fotografiska', emoji: '📸', cat: 'kultur', img: 'fotografiska',
+    id: 'fotografiska', emoji: '📸', cat: 'kultur', pics: ['fotografiska'],
     title: 'Fotografiska Berlin',
     sub: 'Oranienburger Straße 54, Mitte · täglich 10–23 Uhr',
     tags: [{ t: 'zwei Ausstellungen enden am 11.8.', k: 'warn' }, 'bis 23 Uhr offen', 'drinnen'],
@@ -70,7 +70,7 @@ const IDEAS = [
     url: 'https://berlin.fotografiska.com/de/ausstellungen',
   },
   {
-    id: 'coberlin', emoji: '🌀', cat: 'kultur', img: 'coberlin',
+    id: 'coberlin', emoji: '🌀', cat: 'kultur', pics: ['coberlin'],
     title: 'C/O Berlin im Amerika Haus',
     sub: 'Hardenbergstraße 22–24, Charlottenburg · täglich 11–20 Uhr',
     tags: ['bis 2.9.', 'drinnen', 'zwei Ausstellungen'],
@@ -78,7 +78,7 @@ const IDEAS = [
     url: 'https://co-berlin.org/de/programm/ausstellungen',
   },
   {
-    id: 'mubinight', emoji: '🎪', cat: 'fest', img: 'kino',
+    id: 'mubinight', emoji: '🎪', cat: 'fest', pics: ['kino'],
     title: 'MUBI Summer Night bei C/O Berlin',
     sub: 'Sa 8. & So 9. August · Amerika Haus',
     tags: [{ t: 'Eintritt frei', k: 'good' }, 'Open Air', 'am 8./9.8.'],
@@ -86,7 +86,7 @@ const IDEAS = [
     url: 'https://co-berlin.org/de/programm/kalender',
   },
   {
-    id: 'mubigo', emoji: '🎬', cat: 'kino', img: 'mubigo',
+    id: 'mubigo', emoji: '🎬', cat: 'kino', pics: ['mubigo'],
     title: 'Kino mit MUBI GO — Felix & Paul',
     sub: 'jede Woche ein Film, in Berliner Kinos',
     tags: ['1 Ticket pro Woche', 'Felix & Paul', 'drinnen'],
@@ -94,7 +94,7 @@ const IDEAS = [
     url: 'https://mubi.com/de/de/go',
   },
   {
-    id: 'volksbad', emoji: '🏊', cat: 'wasser', img: 'volksbad',
+    id: 'volksbad', emoji: '🏊', cat: 'wasser', pics: ['volksbad'],
     title: 'Volksbad vor der Volksbühne',
     sub: 'Rosa-Luxemburg-Platz · ab 7. August',
     tags: [{ t: 'kostenlos', k: 'good' }, 'ab 7.8.', '25-Meter-Becken'],
@@ -102,7 +102,7 @@ const IDEAS = [
     url: 'https://www.volksbuehne-berlin.de/produktionen/volksbad/',
   },
   {
-    id: 'strandbad', emoji: '🏖️', cat: 'wasser', img: 'strandbad',
+    id: 'strandbad', emoji: '🏖️', cat: 'wasser', pics: ['strandbad'],
     title: 'Strandbad Weißensee',
     sub: 'Berliner Allee 155, Pankow · täglich 10–20 Uhr',
     tags: ['Familienkarte 23 €', 'Sandstrand', { t: 'bei Regen zu', k: 'warn' }],
@@ -110,7 +110,7 @@ const IDEAS = [
     url: 'https://www.strandbadweissensee.de/',
   },
   {
-    id: 'freilicht', emoji: '🎪', cat: 'kino', img: 'freilicht',
+    id: 'freilicht', emoji: '🎪', cat: 'kino', pics: ['freilicht'],
     title: 'Freilichtbühne Weißensee',
     sub: 'Große Seestraße 10 · Open-Air-Kino & Konzerte',
     tags: ['Open Air', 'direkt am See', { t: 'nur bei trockenem Wetter', k: 'warn' }],
@@ -132,7 +132,7 @@ const IDEAS = [
     ],
   },
   {
-    id: 'spreewald', emoji: '🚣', cat: 'ausflug', days: 3, img: 'spreewald',
+    id: 'spreewald', emoji: '🚣', cat: 'ausflug', days: 3, pics: ['spreewald'],
     title: 'Spreewald — zwei Übernachtungen',
     sub: 'Lübbenau / Lehde · ca. 1 Std mit dem RE',
     tags: ['3 Tage / 2 Nächte', 'Kahn & Kanu', { t: 'Unterkunft buchen', k: 'warn' }],
@@ -140,21 +140,29 @@ const IDEAS = [
     url: 'https://www.spreewald.de/',
   },
   {
-    id: 'opafrank', emoji: '👴', cat: 'familie', img: 'opafrank',
+    id: 'opafrank', emoji: '👴', cat: 'familie', pics: ['opafrank-1', 'opafrank-2', 'opafrank'],
     title: 'Zu Opa Frank nach Neuenhagen',
     sub: 'S5 Richtung Strausberg · ca. 30 Min ab Ostkreuz',
     tags: ['halber Tag', 'Tarifbereich C', 'Familie'],
     info: 'Besuch bei Opa Frank in Neuenhagen. Mit der S5 direkt zu erreichen – für den Tarifbereich C braucht ihr ein ABC-Ticket oder einen Anschlussfahrschein.<br><br>Vorher anrufen und einen Tag ausmachen, dann hier eintragen.',
   },
   {
-    id: 'pum', emoji: '👵', cat: 'familie', img: 'pum',
+    id: 'pum', emoji: '👵', cat: 'familie', pics: ['pum-1', 'pum'],
     title: 'Zu Pum nach Schöneiche',
     sub: 'S3 bis Friedrichshagen, dann Tram 88',
     tags: ['halber Tag', 'Tarifbereich C', 'Familie'],
     info: 'Besuch bei Pum in Schöneiche. Mit der S3 bis Friedrichshagen und weiter mit der Schöneicher Tram 88.<br><br>Tipp: Lässt sich gut mit dem Müggelsee verbinden, wenn ihr sowieso schon in Friedrichshagen umsteigt.',
   },
   {
-    id: 'oder', emoji: '⚱️', cat: 'familie', img: 'oder',
+    id: 'wandlitz', emoji: '🍻', cat: 'familie', pics: ['wandlitz-1', 'wandlitz'],
+    title: 'Zu Opa Micha nach Wandlitz',
+    sub: 'S2 bis Karow, dann die Heidekrautbahn RB27',
+    tags: ['halber bis ganzer Tag', 'Tarifbereich C', 'Baden möglich'],
+    info: 'Besuch bei Opa Micha in Wandlitz, nördlich von Berlin. Mit der S2 bis Berlin-Karow und dort in die Heidekrautbahn (RB27) Richtung Groß Schönebeck umsteigen – Halt Wandlitz oder Wandlitzsee. Ihr braucht ein Ticket für den Tarifbereich C.<br><br><b>Tipp für Emmi und Felix:</b> Direkt am Ort liegt der <b>Wandlitzsee</b> mit Strandbad, Steg und Liegewiese. Wenn das Wetter passt, lässt sich der Besuch gut mit einem Badenachmittag verbinden – Badesachen einpacken.<br><br>Vorher anrufen und einen Tag ausmachen, dann hier eintragen.',
+    url: 'https://www.wandlitz.de/',
+  },
+  {
+    id: 'oder', emoji: '⚱️', cat: 'familie', pics: ['oder'],
     title: 'Urnenbeisetzung von Oma Helga',
     sub: 'an der Oder · Mittwoch, 5. August, 10:30 Uhr',
     tags: [{ t: 'fester Termin', k: 'warn' }, 'ganzer Tag', 'Essen an der Oder'],
@@ -162,7 +170,7 @@ const IDEAS = [
     info: 'Die Beisetzung ist am <b>Mittwoch, 5. August um 10:30 Uhr</b> an der Oder, danach geht es zum Essen in ein Restaurant an der Oder.<br><br>Rechnet den ganzen Tag ein: Hinfahrt, Beisetzung, Essen, Rückfahrt. An dem Tag also nichts anderes mehr planen.<br><br><b>Noch zu tun:</b> Restaurant reservieren und die Abfahrtszeit festlegen.',
   },
   {
-    id: 'carla16', emoji: '🎂', cat: 'fest', img: 'carla16',
+    id: 'carla16', emoji: '🎂', cat: 'fest', pics: ['carla16'],
     title: 'Carlas 16. Geburtstag',
     sub: 'Pauls Nichte wird 16 · Sonntag, 9. August',
     tags: [{ t: 'Datum steht fest', k: 'warn' }, 'Carla entscheidet'],
@@ -186,27 +194,62 @@ const CREDITS = {
   opafrank:     { autor: 'Molgreen', lizenz: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:20220809_xl_041736426_S-Bahnhof_Neuenhagen_bei_Berlin.jpg' },
   pum:          { autor: 'Arbalete', lizenz: 'gemeinfrei', url: 'https://commons.wikimedia.org/wiki/File:Sch%C3%B6neicher_Stra%C3%9Fenbahn_Friedrichshagen.JPG' },
   spreewald:    { autor: 'A. Savin', lizenz: 'FAL', url: 'https://commons.wikimedia.org/wiki/File:Spreewald_04-2016_img03_Spree_near_Luebbenau.jpg' },
+  wandlitz:     { autor: '44penguins (Angela M. Arnold)', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Strandbad_W%27see_20110814_AMA_fec_(1).JPG' },
   strandbad:    { autor: 'A. Savin', lizenz: 'FAL', url: 'https://commons.wikimedia.org/wiki/File:Weisser_See_B-Weissensee_06-2017.jpg' },
   volksbad:     { autor: 'Ansgar Koreng', lizenz: 'CC BY-SA 3.0 de', url: 'https://commons.wikimedia.org/wiki/File:Volksb%C3%BChne,_Berlin-Mitte,_170122,_ako.jpg' },
 };
-const IMGCAP = {
-  ballon: 'Der Weltballon am Ballongarten in Mitte',
-  carla16: 'Geburtstagskerzen',
-  coberlin: 'Das Amerika Haus – Sitz von C/O Berlin',
-  dhm: 'Das Zeughaus Unter den Linden',
-  fotografiska: 'Oranienburger Straße 54 – heute Fotografiska',
-  freilicht: 'Die Freilichtbühne im Park am Weißen See',
-  hbf: 'Der Hamburger Bahnhof',
-  kino: 'Open-Air-Kino in Berlin',
-  mubigo: 'Das Kino International an der Karl-Marx-Allee',
-  oder: 'Blick über die Oder',
-  opafrank: 'S-Bahnhof Neuenhagen (b Berlin)',
-  pum: 'Die Tram 88 nach Schöneiche am S-Bahnhof Friedrichshagen',
-  spreewald: 'Die Spree bei Lübbenau im Spreewald',
-  strandbad: 'Der Weiße See in Weißensee',
-  volksbad: 'Die Volksbühne am Rosa-Luxemburg-Platz',
+/* Bildunterschriften. own = eigenes Familienfoto, kein Nachweis nötig. */
+const PICCAP = {
+  'lapelyte-1': { cap: 'Die Holzklötze in der Halle des Hamburger Bahnhofs', own: true },
+  'opafrank-1': { cap: 'Opa Frank in Neuenhagen', own: true },
+  'opafrank-2': { cap: 'Der Pool im Garten in Neuenhagen', own: true },
+  'pum-1':      { cap: 'Der Pool bei Pum in Schöneiche', own: true },
+  'wandlitz-1': { cap: 'Opa Micha in Wandlitz', own: true },
+  ballon:       { cap: 'Der Weltballon am Ballongarten in Mitte' },
+  carla16:      { cap: 'Geburtstagskerzen' },
+  coberlin:     { cap: 'Das Amerika Haus – Sitz von C/O Berlin' },
+  dhm:          { cap: 'Das Zeughaus Unter den Linden' },
+  fotografiska: { cap: 'Oranienburger Straße 54 – heute Fotografiska' },
+  freilicht:    { cap: 'Die Freilichtbühne im Park am Weißen See' },
+  hbf:          { cap: 'Der Hamburger Bahnhof' },
+  kino:         { cap: 'Open-Air-Kino in Berlin' },
+  mubigo:       { cap: 'Das Kino International an der Karl-Marx-Allee' },
+  oder:         { cap: 'Blick über die Oder' },
+  opafrank:     { cap: 'S-Bahnhof Neuenhagen (b Berlin)' },
+  pum:          { cap: 'Die Tram 88 nach Schöneiche am S-Bahnhof Friedrichshagen' },
+  spreewald:    { cap: 'Die Spree bei Lübbenau im Spreewald' },
+  strandbad:    { cap: 'Der Weiße See in Weißensee' },
+  volksbad:     { cap: 'Die Volksbühne am Rosa-Luxemburg-Platz' },
+  wandlitz:     { cap: 'Das Strandbad am Wandlitzsee' },
 };
 const imgSrc = key => './img/' + key + '.jpg';
+const capOf = key => (PICCAP[key] || {}).cap || '';
+const mainPic = idea => (idea && idea.pics && idea.pics[0]) || null;
+
+/* Offizielle Seiten – erscheinen unter „Infos“ bei jeder Idee. */
+const LINKS = {
+  ballon: [['Weltballon – Preise & Zeiten', 'https://air-service-berlin.de/produkt/weltballon/']],
+  lapelyte: [['Lina Lapelytė – Ausstellungsseite', 'https://www.smb.museum/ausstellungen/detail/chanel-commission-lina-lapelyte/'],
+             ['Hamburger Bahnhof – Besuch planen', 'https://www.smb.museum/museen-einrichtungen/hamburger-bahnhof/home/']],
+  dhm: [['DHM – aktuelle Ausstellungen', 'https://www.dhm.de/ausstellungen/unsere-ausstellungen/']],
+  fotografiska: [['Fotografiska Berlin – Ausstellungen', 'https://berlin.fotografiska.com/de/ausstellungen']],
+  coberlin: [['C/O Berlin – Ausstellungen', 'https://co-berlin.org/de/programm/ausstellungen'],
+             ['C/O Berlin – Kalender', 'https://co-berlin.org/de/programm/kalender']],
+  mubinight: [['C/O Berlin – Kalender', 'https://co-berlin.org/de/programm/kalender']],
+  mubigo: [['MUBI GO', 'https://mubi.com/de/de/go'], ['Yorck-Kinos Berlin', 'https://www.yorck.de/']],
+  volksbad: [['Volksbad an der Volksbühne', 'https://www.volksbuehne-berlin.de/produktionen/volksbad/']],
+  strandbad: [['Strandbad Weißensee', 'https://www.strandbadweissensee.de/'],
+              ['Berliner Bäder – Infos & Preise', 'https://www.berlinerbaeder.de/baeder/detail/strandbad-weissensee/']],
+  freilicht: [['Freilichtbühne Weißensee – Programm', 'https://freilichtbuehne-weissensee.de/']],
+  spreewald: [['Spreewald – offizielles Portal', 'https://www.spreewald.de/'],
+              ['Freilandmuseum Lehde', 'https://www.freilandmuseum-lehde.de/']],
+  opafrank: [['Gemeinde Neuenhagen bei Berlin', 'https://www.neuenhagen-bei-berlin.de/'],
+             ['Fahrplanauskunft VBB', 'https://www.vbb.de/']],
+  pum: [['Gemeinde Schöneiche bei Berlin', 'https://www.schoeneiche.de/'],
+        ['Fahrplanauskunft VBB', 'https://www.vbb.de/']],
+  wandlitz: [['Gemeinde Wandlitz', 'https://www.wandlitz.de/'],
+             ['Fahrplanauskunft VBB', 'https://www.vbb.de/']],
+};
 
 const TODOS = [
   { id: 't1', text: 'Spreewald-Unterkunft für zwei Nächte buchen', hint: 'Im August wird es schnell voll' },
@@ -216,7 +259,7 @@ const TODOS = [
   { id: 't5', text: 'Fotografiska: Bob Jones & Undula enden am 11.8.', hint: 'Falls ihr die sehen wollt: erste Woche' },
   { id: 't6', text: 'Weltballon: morgens Wetter checken', hint: '030 2327 7500 – fährt nur bei Windstille' },
   { id: 't7', text: 'MUBI GO: Film der Woche in der App anschauen', hint: 'Felix & Paul, ein Ticket pro Woche' },
-  { id: 't8', text: 'Termine mit Opa Frank und Pum ausmachen', hint: 'Neuenhagen und Schöneiche, Tarifbereich C' },
+  { id: 't8', text: 'Termine mit Opa Frank, Pum und Opa Micha ausmachen', hint: 'Neuenhagen, Schöneiche und Wandlitz – alle im Tarifbereich C' },
 ];
 
 /* ============================================================
@@ -285,6 +328,89 @@ const entriesOf = (date, slot) =>
 const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
 
 /* ============================================================
+   4b. Wetter (Open-Meteo, ohne Schlüssel, mit Zwischenspeicher)
+   ============================================================ */
+
+const WX_KEY = 'berlin2026_wetter_v1';
+const WX_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405'
+             + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max'
+             + '&timezone=Europe%2FBerlin&forecast_days=16';
+
+/* WMO-Codes → Symbol und Klartext */
+const WX_CODES = {
+  0:  ['☀️', 'klar'],            1: ['🌤️', 'meist sonnig'], 2: ['⛅', 'wechselnd bewölkt'],
+  3:  ['☁️', 'bedeckt'],         45: ['🌫️', 'Nebel'],        48: ['🌫️', 'Nebel'],
+  51: ['🌦️', 'leichter Niesel'], 53: ['🌦️', 'Niesel'],       55: ['🌦️', 'starker Niesel'],
+  56: ['🌧️', 'gefrierender Niesel'], 57: ['🌧️', 'gefrierender Niesel'],
+  61: ['🌧️', 'leichter Regen'],  63: ['🌧️', 'Regen'],        65: ['🌧️', 'starker Regen'],
+  66: ['🌧️', 'Eisregen'],        67: ['🌧️', 'Eisregen'],
+  71: ['🌨️', 'leichter Schnee'], 73: ['🌨️', 'Schnee'],       75: ['🌨️', 'starker Schnee'],
+  77: ['🌨️', 'Schneegriesel'],   80: ['🌦️', 'Schauer'],       81: ['🌧️', 'Schauer'],
+  82: ['⛈️', 'kräftige Schauer'], 85: ['🌨️', 'Schneeschauer'], 86: ['🌨️', 'Schneeschauer'],
+  95: ['⛈️', 'Gewitter'],        96: ['⛈️', 'Gewitter mit Hagel'], 99: ['⛈️', 'Gewitter mit Hagel'],
+};
+
+let WX = { days: {}, at: 0 };
+
+function wxOf(date) { return WX.days[date] || null; }
+
+function loadWxCache() {
+  try {
+    const raw = localStorage.getItem(WX_KEY);
+    if (raw) WX = JSON.parse(raw);
+  } catch (e) {}
+}
+
+async function fetchWx(manual) {
+  const frisch = Date.now() - (WX.at || 0) < 3 * 3600e3;
+  if (frisch && !manual) return;
+  try {
+    const r = await fetch(WX_URL, { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const d = j.daily, days = {};
+    d.time.forEach((t, n) => {
+      days[t] = { c: d.weather_code[n], max: Math.round(d.temperature_2m_max[n]),
+                  min: Math.round(d.temperature_2m_min[n]),
+                  rain: d.precipitation_probability_max[n] };
+    });
+    WX = { days, at: Date.now() };
+    localStorage.setItem(WX_KEY, JSON.stringify(WX));
+    renderStrip(); renderDays(); renderWxCard();
+    if (manual) toast('Wetter aktualisiert ☀️');
+  } catch (e) {
+    if (manual) toast(WX.at ? 'Kein Netz – zeige gespeichertes Wetter' : 'Wetter gerade nicht erreichbar');
+  }
+}
+
+function wxBadge(date) {
+  const w = wxOf(date);
+  if (!w) return '';
+  const [em, txt] = WX_CODES[w.c] || ['🌡️', ''];
+  const nass = w.rain != null && w.rain >= 50;
+  return `<span class="wx${nass ? ' wet' : ''}" title="${esc(txt)}">${em} ${w.max}°<small>/${w.min}°</small>${
+    w.rain != null ? ` <b>${w.rain}%</b>` : ''}</span>`;
+}
+
+function renderWxCard() {
+  const box = $('#wxList');
+  if (!box) return;
+  if (!WX.at) { box.innerHTML = '<p class="muted">Noch keine Wetterdaten geladen.</p>'; return; }
+  const stand = new Date(WX.at);
+  box.innerHTML = DAYS.map(d => {
+    const w = wxOf(d), f = fmtDay(d);
+    const [em, txt] = w ? (WX_CODES[w.c] || ['🌡️', '']) : ['–', 'keine Daten'];
+    return `<div class="wxrow${w && w.rain >= 50 ? ' wet' : ''}">
+      <b>${f.wds} ${f.num}.8.</b><span class="e">${em}</span>
+      <span class="t">${w ? w.max + '° / ' + w.min + '°' : '–'}</span>
+      <span class="d">${esc(txt)}</span>
+      ${w && w.rain != null ? `<span class="r">💧 ${w.rain} %</span>` : ''}</div>`;
+  }).join('') + `<p class="muted" style="margin:10px 0 0">Stand: ${
+    d2(stand.getDate())}.${d2(stand.getMonth() + 1)}. um ${d2(stand.getHours())}:${d2(stand.getMinutes())} Uhr
+    · Vorhersage für Berlin-Mitte von Open-Meteo</p>`;
+}
+
+/* ============================================================
    5. Kopf & Held
    ============================================================ */
 
@@ -335,8 +461,10 @@ function renderStrip() {
   $('#dayStrip').innerHTML = DAYS.map(d => {
     const f = fmtDay(d);
     const has = S.entries.some(e => e.date === d);
+    const w = wxOf(d);
+    const wx = w ? `<u>${(WX_CODES[w.c] || ['🌡️'])[0]}<em>${w.max}°</em></u>` : '';
     return `<button class="dchip${has ? ' has' : ''}${d === t ? ' today' : ''}${f.we ? ' we' : ''}" data-jump="${d}">
-      <small>${f.wds}</small><b>${f.num}</b><i></i></button>`;
+      <small>${f.wds}</small><b>${f.num}</b>${wx}<i></i></button>`;
   }).join('');
 }
 
@@ -351,8 +479,9 @@ function entryHtml(e) {
   if (e.groupLabel) bits.push(e.groupLabel);
   if (e.note) bits.push(e.note);
   if (!bits.length && idea.sub) bits.push(idea.sub);
-  const pic = idea.img
-    ? `<span class="em thumb"><img src="${imgSrc(idea.img)}" alt="" loading="lazy"><i>${e.done ? '✅' : idea.emoji}</i></span>`
+  const mp = mainPic(idea);
+  const pic = mp
+    ? `<span class="em thumb"><img src="${imgSrc(mp)}" alt="" loading="lazy"><i>${e.done ? '✅' : idea.emoji}</i></span>`
     : `<span class="em">${e.done ? '✅' : idea.emoji}</span>`;
   return `<button class="entry k-${idea.cat}${e.done ? ' done' : ''}${e.fixed ? ' fixed' : ''}" data-entry="${e.id}">
     ${pic}
@@ -382,11 +511,12 @@ function renderDays() {
             </div></div>`;
         }).join('');
     return `<section class="day${d === t ? ' today' : ''}${f.we ? ' we' : ''}" id="day-${d}">
-      <div class="day-head"><b>${f.wd}</b><span>${f.num}. ${f.mon}</span>${bday}</div>
+      <div class="day-head"><b>${f.wd}</b><span>${f.num}. ${f.mon}</span>${wxBadge(d)}${bday}</div>
       ${banners.map(e => {
         const idea = ideaById(e.ideaId) || { emoji: '📍', title: '' };
-        return `<button class="banner${idea.img ? ' haspic' : ''}" data-entry="${e.id}" style="width:calc(100% - 24px)${
-          idea.img ? `;background-image:linear-gradient(100deg,rgba(255,247,232,.97) 42%,rgba(255,247,232,.35)),url(${imgSrc(idea.img)})` : ''}">
+        const bp = mainPic(idea);
+        return `<button class="banner${bp ? ' haspic' : ''}" data-entry="${e.id}" style="width:calc(100% - 24px)${
+          bp ? `;background-image:linear-gradient(100deg,rgba(255,247,232,.97) 42%,rgba(255,247,232,.35)),url(${imgSrc(bp)})` : ''}">
           <span class="bem">${idea.emoji}</span>
           <span style="text-align:left;flex:1;min-width:0">
             <b>${esc(e.label || idea.title)}</b>
@@ -411,6 +541,43 @@ function renderFilters() {
     `<button class="fchip${filter === c.id ? ' on' : ''}" data-cat="${c.id}">${c.label}</button>`).join('');
 }
 
+/* Offizielle Seiten zu einer Idee */
+function linksHtml(i) {
+  const list = LINKS[i.id] || (i.url ? [['Website öffnen', i.url]] : []);
+  if (!list.length) return '';
+  return `<div class="links"><h5>Offizielle Seiten</h5>${list.map(([label, url]) =>
+    `<a href="${url}" target="_blank" rel="noopener">${esc(label)} <span>↗</span></a>`).join('')}</div>`;
+}
+
+/* Fotostrecke: seitlich durchwischen, Punkte zeigen die Position. */
+function galleryHtml(i) {
+  const pics = i.pics || [];
+  if (!pics.length) return '';
+  return `<div class="gal" data-gal="${i.id}">
+    <div class="gal-track">${pics.map(k => `
+      <figure><img src="${imgSrc(k)}" alt="${esc(capOf(k) || i.title)}" loading="lazy">
+        <figcaption>${esc(capOf(k))}</figcaption></figure>`).join('')}
+    </div>
+    ${pics.length > 1 ? `<div class="dots">${pics.map((_, n) =>
+      `<i class="${n === 0 ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="swipehint">← wischen für mehr Fotos →</div>` : ''}
+  </div>`;
+}
+
+/* Punkte mitlaufen lassen (einmal pro Galerie registriert) */
+function wireGalleries() {
+  $$('.gal').forEach(g => {
+    const track = $('.gal-track', g), dots = $$('.dots i', g);
+    if (!dots.length || track.dataset.wired) return;
+    track.dataset.wired = '1';
+    track.addEventListener('scroll', () => {
+      const n = Math.round(track.scrollLeft / track.clientWidth);
+      dots.forEach((d, k) => d.classList.toggle('on', k === n));
+      g.classList.toggle('scrolled', track.scrollLeft > 8);
+    }, { passive: true });
+  });
+}
+
 function tagHtml(t) {
   if (typeof t === 'string') return `<span class="tag">${esc(t)}</span>`;
   return `<span class="tag ${t.k || ''}">${esc(t.t)}</span>`;
@@ -427,9 +594,7 @@ function renderIdeas() {
         }))].join(', ')
       : '';
     return `<article class="idea k-${i.cat}" data-idea="${i.id}">
-      ${i.img ? `<div class="idea-pic">
-        <img src="${imgSrc(i.img)}" alt="${esc(IMGCAP[i.img] || i.title)}" loading="lazy">
-        <span class="cap">${esc(IMGCAP[i.img] || '')}</span></div>` : ''}
+      ${galleryHtml(i)}
       <div class="idea-top">
         <div class="idea-em">${i.emoji}</div>
         <div class="idea-h"><b>${esc(i.title)}</b><span>${esc(i.sub || '')}</span></div>
@@ -453,10 +618,11 @@ function renderIdeas() {
           return `<li><b>${f.wds}, ${f.num}.8.<br>${p.time}</b><span>${esc(p.title)}</span>
             <button data-prog="${i.id}|${p.date}|${p.time}|${esc(p.title)}">＋ Einplanen</button></li>`;
         }).join('')}</ul>` : ''}
-        ${i.url ? `<p><a href="${i.url}" target="_blank" rel="noopener">Website öffnen ↗</a></p>` : ''}
+        ${linksHtml(i)}
       </div>
     </article>`;
   }).join('') || '<p class="muted" style="text-align:center;padding:30px 0">Hier ist noch nichts. Legt eine eigene Idee an!</p>';
+  wireGalleries();
 }
 
 /* ============================================================
@@ -489,7 +655,7 @@ function drawPlanSheet() {
   const idea = ideaById(pick.ideaId);
   const multi = idea.days > 1;
   const html = `
-    ${idea.img ? `<div class="sheet-pic"><img src="${imgSrc(idea.img)}" alt="${esc(IMGCAP[idea.img] || '')}"></div>` : ''}
+    ${mainPic(idea) ? `<div class="sheet-pic"><img src="${imgSrc(mainPic(idea))}" alt="${esc(capOf(mainPic(idea)))}"></div>` : ''}
     <p class="muted" style="margin-bottom:4px">${idea.emoji} <b>${esc(idea.title)}</b></p>
     <h4>An welchem Tag?</h4>
     <div class="daygrid">${DAYS.map(d => {
@@ -543,7 +709,7 @@ function sheetEntry(eid) {
   const idea = ideaById(e.ideaId) || {};
   const f = fmtDay(e.date);
   openSheet(`${idea.emoji || '📍'} ${esc(e.label || idea.title || '')}`, `
-    ${idea.img ? `<div class="sheet-pic"><img src="${imgSrc(idea.img)}" alt="${esc(IMGCAP[idea.img] || '')}"></div>` : ''}
+    ${mainPic(idea) ? `<div class="sheet-pic"><img src="${imgSrc(mainPic(idea))}" alt="${esc(capOf(mainPic(idea)))}"></div>` : ''}
     <p class="muted">${f.wd}, ${f.num}. ${f.mon} · ${SLOTS.find(s => s.id === e.slot)?.short || ''}</p>
     ${e.groupLabel ? `<div class="hint">Teil des mehrtägigen Ausflugs (${esc(e.groupLabel)}).</div>` : ''}
     <label class="field"><span>Uhrzeit</span><input type="time" id="eTime" value="${e.time || ''}"></label>
@@ -557,8 +723,7 @@ function sheetEntry(eid) {
       <button class="btn btn-danger" id="eDel">🗑 Entfernen</button>
     </div>
     ${idea.info ? `<h4>Infos</h4><div style="font-size:13.5px;color:#3d4454">${idea.info}</div>` : ''}
-    ${idea.url ? `<p style="margin-top:10px"><a href="${idea.url}" target="_blank" rel="noopener"
-       style="color:#1f9ed1;font-weight:700">Website öffnen ↗</a></p>` : ''}
+    ${linksHtml(idea)}
   `);
 
   $('#eSave').onclick = () => {
@@ -589,7 +754,7 @@ function sheetPickIdea(date, slot) {
   openSheet(`＋ ${f.wds}, ${f.num}. August · ${s.short}`, `
     <div class="picklist">${allIdeas().map(i => `
       <button class="pick" data-pickidea="${i.id}|${date}|${slot}">
-        ${i.img ? `<span class="em thumb"><img src="${imgSrc(i.img)}" alt="" loading="lazy"><i>${i.emoji}</i></span>`
+        ${mainPic(i) ? `<span class="em thumb"><img src="${imgSrc(mainPic(i))}" alt="" loading="lazy"><i>${i.emoji}</i></span>`
                 : `<span class="em">${i.emoji}</span>`}
         <span style="flex:1;min-width:0"><b>${esc(i.title)}</b><small>${esc(i.sub || '')}</small></span>
         ${i.days > 1 ? '<span class="tag">' + i.days + ' Tage</span>' : ''}
@@ -774,13 +939,13 @@ function renderCredits() {
   $('#credits').innerHTML = Object.keys(CREDITS).sort().map(k => {
     const c = CREDITS[k];
     return `<li><img src="${imgSrc(k)}" alt="" loading="lazy">
-      <span><b>${esc(IMGCAP[k] || k)}</b><small>${esc(c.autor)} · ${esc(c.lizenz)}</small></span>
+      <span><b>${esc(capOf(k) || k)}</b><small>${esc(c.autor)} · ${esc(c.lizenz)}</small></span>
       <a href="${c.url}" target="_blank" rel="noopener">↗</a></li>`;
   }).join('');
 }
 
 function renderAll() {
-  renderHero(); renderStrip(); renderDays(); renderIdeas(); renderTodos();
+  renderHero(); renderStrip(); renderDays(); renderIdeas(); renderTodos(); renderWxCard();
 }
 
 document.addEventListener('click', ev => {
@@ -796,7 +961,7 @@ document.addEventListener('click', ev => {
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  if (D.cat) { filter = D.cat; renderFilters(); renderIdeas(); return; }
+  if (D.cat) { filter = D.cat; renderFilters(); renderIdeas(); wireGalleries(); return; }
 
   if (D.add) { const [d, s] = D.add.split('|'); return sheetPickIdea(d, s); }
   if (D.entry) return sheetEntry(D.entry);
@@ -831,13 +996,13 @@ document.addEventListener('click', ev => {
     const [ideaId, pid] = D.vote.split('|');
     S.votes[ideaId] = S.votes[ideaId] || {};
     S.votes[ideaId][pid] = ((S.votes[ideaId][pid] || 0) + 1) % 3;
-    save(); renderIdeas(); renderDays();
+    save(); renderIdeas(); wireGalleries(); renderDays();
     return;
   }
   if (D.delidea) {
     S.custom = S.custom.filter(i => i.id !== D.delidea);
     S.entries = S.entries.filter(e => e.ideaId !== D.delidea);
-    save(); renderAll(); toast('Idee gelöscht');
+    save(); renderAll(); wireGalleries(); toast('Idee gelöscht');
     return;
   }
   if (D.todo) {
@@ -857,6 +1022,7 @@ $('#sheetClose').onclick = closeSheet;
 $('#sheetBg').onclick = closeSheet;
 $('#btnAddIdea').onclick = sheetNewIdea;
 $('#btnPrint').onclick = () => print();
+$('#btnWx').onclick = () => fetchWx(true);
 $('#btnText').onclick = () => copyOrShow(planText(), '📋 Unser Plan');
 $('#btnIcs').onclick = () => {
   if (!S.entries.length) return toast('Noch nichts geplant 🙂');
@@ -909,10 +1075,13 @@ function importFromHash() {
    ============================================================ */
 
 load();
+loadWxCache();
 renderCrew();
 renderFilters();
 renderCredits();
 renderAll();
+wireGalleries();
+fetchWx();
 importFromHash();
 
 /* Am heutigen Tag starten, wenn der Urlaub läuft */

@@ -1,6 +1,6 @@
 /* Berlin-Sommer · Service Worker
    CACHE_VERSION bei jeder Änderung hochzählen, damit alle frische Dateien bekommen. */
-const CACHE_VERSION = 'berlin-v20260801a';
+const CACHE_VERSION = 'berlin-v20260801b';
 const PRECACHE = ['./', './index.html', './style.css', './app.js'];
 
 self.addEventListener('install', e => {
@@ -19,6 +19,8 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
+  // Fremde Server (z. B. die Wetter-API) nie zwischenspeichern
+  if (new URL(req.url).origin !== location.origin) return;
 
   // HTML: erst Netz, dann Cache – damit Updates ankommen
   if (req.headers.get('Accept')?.includes('text/html')) {
