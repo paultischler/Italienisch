@@ -222,7 +222,7 @@ const PICCAP = {
   volksbad:     { cap: 'Die Volksbühne am Rosa-Luxemburg-Platz' },
   wandlitz:     { cap: 'Das Strandbad am Wandlitzsee' },
 };
-const imgSrc = key => './img/' + key + '.jpg';
+const imgSrc = key => (key && key.slice(0, 5) === 'data:') ? key : './img/' + key + '.jpg';
 const capOf = key => (PICCAP[key] || {}).cap || '';
 const mainPic = idea => (idea && idea.pics && idea.pics[0]) || null;
 
@@ -300,7 +300,7 @@ const todayIso = () => iso(new Date());
    ============================================================ */
 
 const KEY = 'berlin2026_plan_v1';
-let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, seeded: false };
+let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, seeded: false };
 
 function load() {
   try {
@@ -310,8 +310,16 @@ function load() {
   if (!S.seeded) { seedFixed(); S.seeded = true; save(); }
 }
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+  try { localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+  catch (e) {
+    // Meist der volle Speicher – Fotos sind mit Abstand das Größte darin
+    toast('Speicher voll – bitte ein Foto weniger 📵');
+    return false;
+  }
 }
+
+/* Avatare dürfen überschrieben werden */
+const avatarOf = p => (S.avatars && S.avatars[p.id]) || p.emoji;
 function seedFixed() {
   IDEAS.filter(i => i.fixed).forEach(i => {
     if (S.entries.some(e => e.ideaId === i.id)) return;
@@ -414,14 +422,33 @@ function renderWxCard() {
    5. Kopf & Held
    ============================================================ */
 
+/* Auswahl für die Figuren. Schwarze Haare gibt es in Unicode nicht als
+   eigenes Zeichen – die Standardfigur wird auf iPhone und Android dunkel
+   gezeichnet, deshalb steht sie hier vorn. */
+const AVATARE = ['👨', '🧔', '👨‍🦱', '🧑', '👱‍♂️', '👨‍🦰', '👨‍🦳', '🧑‍🦲',
+                 '👩', '👩‍🦱', '👱‍♀️', '👩‍🦰', '👵', '👴',
+                 '🌻', '🦄', '🎬', '🎧', '🐻', '🦊', '🐬', '🚀', '⚽', '🎸'];
+
 function renderCrew() {
   $('#crewStrip').innerHTML = PEOPLE.map(p =>
-    `<div class="av" style="background:${p.color}22;color:${p.color}" title="${esc(p.name)}">${p.emoji}</div>`).join('');
+    `<div class="av" style="background:${p.color}22;color:${p.color}" title="${esc(p.name)}">${avatarOf(p)}</div>`).join('');
   $('#crewList').innerHTML = PEOPLE.map(p => `
-    <div class="person">
-      <div class="av" style="background:${p.color}22">${p.emoji}</div>
-      <div><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div>
-    </div>`).join('');
+    <button class="person" data-avatar="${p.id}">
+      <span class="av" style="background:${p.color}22">${avatarOf(p)}</span>
+      <span><b>${esc(p.name)}</b><small>${esc(p.role)}</small></span>
+      <span class="edit">✏️</span>
+    </button>`).join('');
+}
+
+function sheetAvatar(pid) {
+  const p = PEOPLE.find(x => x.id === pid);
+  if (!p) return;
+  openSheet(`Figur für ${esc(p.name)}`, `
+    <div class="avgrid">${AVATARE.map(a =>
+      `<button class="avpick${avatarOf(p) === a ? ' on' : ''}" data-setav="${pid}|${a}">${a}</button>`).join('')}</div>
+    <p class="hint">Wie die Figuren genau aussehen, entscheidet das Gerät –
+      auf dem iPhone werden sie anders gezeichnet als auf dem Computer.</p>
+    <div class="sheet-acts"><button class="btn btn-ghost" data-close>Schließen</button></div>`);
 }
 
 function renderHero() {
@@ -473,7 +500,7 @@ function entryHtml(e) {
   const label = e.label || idea.title;
   const votes = S.votes[e.ideaId] || {};
   const who = PEOPLE.filter(p => votes[p.id]).map(p =>
-    `<i style="background:${p.color}22;color:${p.color}">${p.emoji}</i>`).join('');
+    `<i style="background:${p.color}22;color:${p.color}">${avatarOf(p)}</i>`).join('');
   const bits = [];
   if (e.time) bits.push(e.time + ' Uhr');
   if (e.groupLabel) bits.push(e.groupLabel);
@@ -556,7 +583,7 @@ function galleryHtml(i) {
   return `<div class="gal" data-gal="${i.id}">
     <div class="gal-track">${pics.map(k => `
       <figure><img src="${imgSrc(k)}" alt="${esc(capOf(k) || i.title)}" loading="lazy">
-        <figcaption>${esc(capOf(k))}</figcaption></figure>`).join('')}
+        ${capOf(k) ? `<figcaption>${esc(capOf(k))}</figcaption>` : ''}</figure>`).join('')}
     </div>
     ${pics.length > 1 ? `<div class="dots">${pics.map((_, n) =>
       `<i class="${n === 0 ? 'on' : ''}"></i>`).join('')}</div>
@@ -603,13 +630,14 @@ function renderIdeas() {
       <div class="voters"><span class="lbl">Wer will?</span>${PEOPLE.map(p => {
         const v = votes[p.id] || 0;
         return `<button class="vote v${v}" data-vote="${i.id}|${p.id}"
-          style="background:${p.color}22" title="${esc(p.name)}">${p.emoji}</button>`;
+          style="background:${p.color}22" title="${esc(p.name)}">${avatarOf(p)}</button>`;
       }).join('')}</div>
       ${where ? `<div class="planned-on">${esc(where)}</div>` : ''}
       <div class="idea-acts">
         <button class="btn btn-main" data-plan="${i.id}">📅 Einplanen</button>
         <button class="btn btn-ghost" data-more="${i.id}">Infos</button>
-        ${i.custom ? `<button class="btn btn-danger" data-delidea="${i.id}">🗑</button>` : ''}
+        ${i.custom ? `<button class="btn btn-ghost" data-editidea="${i.id}">✏️</button>
+        <button class="btn btn-danger" data-delidea="${i.id}">🗑</button>` : ''}
       </div>
       <div class="detail" id="det-${i.id}">
         <p>${i.info || 'Keine weiteren Infos hinterlegt.'}</p>
@@ -660,9 +688,14 @@ function drawPlanSheet() {
     <h4>An welchem Tag?</h4>
     <div class="daygrid">${DAYS.map(d => {
       const f = fmtDay(d);
-      return `<button class="dsel${pick.date === d ? ' on' : ''}" data-pdate="${d}">
+      const passt = dayFits(idea, d);
+      return `<button class="dsel${pick.date === d ? ' on' : ''}${passt ? '' : ' off'}" data-pdate="${d}">
         <small>${f.wds}</small><b>${f.num}.8.</b></button>`;
     }).join('')}</div>
+    ${(idea.from || idea.to) ? `<div class="hint">Diese Idee geht nur ${
+      idea.from && idea.to ? `vom ${fmtDay(idea.from).num}.8. bis ${fmtDay(idea.to).num}.8.`
+      : idea.from ? `ab dem ${fmtDay(idea.from).num}.8.` : `bis zum ${fmtDay(idea.to).num}.8.`
+      } – die anderen Tage sind ausgegraut.</div>` : ''}
     ${multi ? `<div class="hint">Diese Idee dauert ${idea.days} Tage – sie blockt ab dem gewählten Tag automatisch ${idea.days} Tage.</div>` : `
     <h4>Wann am Tag?</h4>
     <div class="slotsel">${SLOTS.map(s =>
@@ -764,31 +797,137 @@ function sheetPickIdea(date, slot) {
 }
 
 /* --- Eigene Idee --- */
-function sheetNewIdea() {
-  openSheet('💡 Eigene Idee', `
+/* Fotos werden vor dem Speichern verkleinert – sonst ist der
+   Browserspeicher nach drei Handybildern voll. */
+function shrinkPhoto(file, maxPx = 900, quality = .72) {
+  return new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('lesen'));
+    fr.onload = () => {
+      const im = new Image();
+      im.onerror = () => reject(new Error('bild'));
+      im.onload = () => {
+        const s = Math.min(1, maxPx / Math.max(im.width, im.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        resolve(c.toDataURL('image/jpeg', quality));   // ohne EXIF, also ohne GPS
+      };
+      im.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
+const MAXPICS = 4;
+let draftPics = [];
+
+function drawDraftPics() {
+  const box = $('#nPics');
+  if (!box) return;
+  box.innerHTML = draftPics.map((p, n) =>
+    `<div class="thumbpic"><img src="${p}" alt=""><button data-delpic="${n}" title="Foto entfernen">✕</button></div>`).join('')
+    || '<p class="muted" style="margin:0">Noch keine Fotos.</p>';
+  $('#nPicCount').textContent = `${draftPics.length}/${MAXPICS}`;
+}
+
+function sheetIdeaForm(existing) {
+  const e = existing || {};
+  draftPics = (e.pics || []).slice();
+  openSheet(existing ? '✏️ Idee bearbeiten' : '💡 Eigene Idee', `
     <label class="field"><span>Was wollt ihr machen?</span>
-      <input type="text" id="nTitle" placeholder="z. B. Tretboot am Müggelsee"></label>
+      <input type="text" id="nTitle" placeholder="z. B. Tretboot am Müggelsee" value="${esc(e.title || '')}"></label>
     <label class="field"><span>Wo? (optional)</span>
-      <input type="text" id="nSub" placeholder="Ort oder Adresse"></label>
+      <input type="text" id="nSub" placeholder="Ort oder Adresse" value="${esc(e.sub || '')}"></label>
+
+    <h4>Fotos <span style="float:right;font-weight:700" id="nPicCount">0/${MAXPICS}</span></h4>
+    <div class="picgrid" id="nPics"></div>
+    <label class="btn btn-ghost filebtn">📷 Fotos auswählen
+      <input type="file" id="nFile" accept="image/*" multiple hidden></label>
+
+    <h4>Nur an bestimmten Tagen möglich?</h4>
+    <div class="range">
+      <label class="field"><span>von</span>
+        <input type="date" id="nFrom" min="${TRIP.start}" max="${TRIP.end}" value="${e.from || ''}"></label>
+      <label class="field"><span>bis</span>
+        <input type="date" id="nTo" min="${TRIP.start}" max="${TRIP.end}" value="${e.to || ''}"></label>
+    </div>
+    <p class="muted" style="margin:-2px 0 4px">Leer lassen, wenn die Idee an jedem Tag geht.
+      Sonst werden die anderen Tage beim Einplanen ausgegraut.</p>
+
+    <label class="field"><span>Website (optional)</span>
+      <input type="url" id="nUrl" inputmode="url" placeholder="https://…" value="${esc(e.url || '')}"></label>
+
     <label class="field"><span>Emoji</span>
-      <input type="text" id="nEmoji" value="⭐" maxlength="4"></label>
+      <input type="text" id="nEmoji" value="${esc(e.emoji || '⭐')}" maxlength="4"></label>
     <label class="field"><span>Kategorie</span>
       <select id="nCat">${CATS.filter(c => c.id !== 'alle').map(c =>
-        `<option value="${c.id}">${c.label}</option>`).join('')}</select></label>
+        `<option value="${c.id}"${e.cat === c.id ? ' selected' : ''}>${c.label}</option>`).join('')}</select></label>
     <label class="field"><span>Notizen (optional)</span>
-      <textarea id="nInfo" placeholder="Öffnungszeiten, Preise, Link …"></textarea></label>
+      <textarea id="nInfo" placeholder="Öffnungszeiten, Preise, was man mitnehmen muss …">${esc(e.raw || '')}</textarea></label>
     <div class="sheet-acts">
       <button class="btn btn-ghost" data-close>Abbrechen</button>
-      <button class="btn btn-main" id="nSave">Idee anlegen</button>
+      <button class="btn btn-main" id="nSave">${existing ? 'Änderungen sichern' : 'Idee anlegen'}</button>
     </div>`);
+
+  drawDraftPics();
+
+  $('#nFile').onchange = async ev => {
+    const files = Array.from(ev.target.files || []);
+    if (!files.length) return;
+    const platz = MAXPICS - draftPics.length;
+    if (platz <= 0) { toast(`Mehr als ${MAXPICS} Fotos gehen nicht 🙂`); return; }
+    toast('Fotos werden verkleinert …');
+    for (const f of files.slice(0, platz)) {
+      try { draftPics.push(await shrinkPhoto(f)); }
+      catch (err) { toast('Ein Foto ließ sich nicht lesen'); }
+    }
+    if (files.length > platz) toast(`Nur ${platz} Foto(s) passten noch dazu`);
+    drawDraftPics();
+    ev.target.value = '';
+  };
+
   $('#nSave').onclick = () => {
     const title = $('#nTitle').value.trim();
     if (!title) { toast('Die Idee braucht noch einen Namen 🙂'); return; }
-    S.custom.push({ id: 'c' + uid(), emoji: $('#nEmoji').value.trim() || '⭐', cat: $('#nCat').value,
-                    title, sub: $('#nSub').value.trim(), info: esc($('#nInfo').value.trim()).replace(/\n/g, '<br>'),
-                    tags: ['eigene Idee'], custom: true });
-    save(); closeSheet(); showView('ideen'); renderAll(); toast('Idee aufgenommen! 💡'); confetti();
+    let from = $('#nFrom').value, to = $('#nTo').value;
+    if (from && to && to < from) { const x = from; from = to; to = x; }
+    let url = $('#nUrl').value.trim();
+    if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+    const raw = $('#nInfo').value.trim();
+
+    const idee = {
+      id: e.id || 'c' + uid(), custom: true,
+      emoji: $('#nEmoji').value.trim() || '⭐', cat: $('#nCat').value,
+      title, sub: $('#nSub').value.trim(),
+      raw, info: esc(raw).replace(/\n/g, '<br>'),
+      url, from, to, pics: draftPics.slice(),
+      tags: ['eigene Idee'].concat(rangeTag(from, to) || []),
+    };
+    const merk = S.custom.slice();
+    if (e.id) S.custom = S.custom.map(x => x.id === e.id ? idee : x);
+    else S.custom.push(idee);
+    if (!save()) { S.custom = merk; return; }        // Speicher voll: nichts kaputt machen
+    closeSheet(); showView('ideen'); renderAll();
+    toast(existing ? 'Gespeichert ✓' : 'Idee aufgenommen! 💡');
+    if (!existing) confetti();
   };
+}
+
+/* „nur 5.–8.8.“ als Merker auf der Karte */
+function rangeTag(from, to) {
+  if (!from && !to) return null;
+  const kurz = d => { const f = fmtDay(d); return `${f.num}.8.`; };
+  if (from && to) return [{ t: from === to ? `nur am ${kurz(from)}` : `nur ${kurz(from)}–${kurz(to)}`, k: 'warn' }];
+  return [{ t: from ? `ab ${kurz(from)}` : `bis ${kurz(to)}`, k: 'warn' }];
+}
+
+/* Passt der Tag in den Zeitraum der Idee? */
+function dayFits(idea, date) {
+  if (!idea) return true;
+  if (idea.from && date < idea.from) return false;
+  if (idea.to && date > idea.to) return false;
+  return true;
 }
 
 /* ============================================================
@@ -807,7 +946,7 @@ function b64dec(s) {
 }
 
 function shareLink() {
-  const payload = { entries: S.entries, votes: S.votes, custom: S.custom, todos: S.todos };
+  const payload = { entries: S.entries, votes: S.votes, custom: S.custom, todos: S.todos, avatars: S.avatars };
   return location.origin + location.pathname + '#p=' + b64enc(JSON.stringify(payload));
 }
 
@@ -960,7 +1099,7 @@ function renderAll() {
 }
 
 document.addEventListener('click', ev => {
-  const el = ev.target.closest('[data-view],[data-jump],[data-add],[data-entry],[data-cat],[data-vote],[data-plan],[data-more],[data-prog],[data-pdate],[data-pslot],[data-pickidea],[data-delidea],[data-todo],[data-close]');
+  const el = ev.target.closest('[data-view],[data-jump],[data-add],[data-entry],[data-cat],[data-vote],[data-plan],[data-more],[data-prog],[data-pdate],[data-pslot],[data-pickidea],[data-delidea],[data-todo],[data-editidea],[data-avatar],[data-setav],[data-delpic],[data-close]');
   if (!el) return;
   const D = el.dataset;
 
@@ -1010,6 +1149,16 @@ document.addEventListener('click', ev => {
     save(); renderIdeas(); wireGalleries(); renderDays();
     return;
   }
+  if (D.editidea) { return sheetIdeaForm(ideaById(D.editidea)); }
+  if (D.delpic !== undefined) { draftPics.splice(+D.delpic, 1); drawDraftPics(); return; }
+  if (D.avatar) { return sheetAvatar(D.avatar); }
+  if (D.setav) {
+    const [pid, em] = D.setav.split('|');
+    S.avatars = S.avatars || {};
+    S.avatars[pid] = em;
+    save(); closeSheet(); renderCrew(); renderAll(); toast('Figur geändert ✓');
+    return;
+  }
   if (D.delidea) {
     S.custom = S.custom.filter(i => i.id !== D.delidea);
     S.entries = S.entries.filter(e => e.ideaId !== D.delidea);
@@ -1031,7 +1180,7 @@ document.addEventListener('click', ev => {
 
 $('#sheetClose').onclick = closeSheet;
 $('#sheetBg').onclick = closeSheet;
-$('#btnAddIdea').onclick = sheetNewIdea;
+$('#btnAddIdea').onclick = () => sheetIdeaForm();
 $('#btnPrint').onclick = () => print();
 $('#btnWx').onclick = () => fetchWx(true);
 $('#btnText').onclick = () => shareOut({ text: planText(), title: 'Unser Berlin-Plan',
@@ -1055,7 +1204,7 @@ $('#btnReset').onclick = () => {
     </div>`);
   $('#rYes').onclick = () => {
     localStorage.removeItem(KEY);
-    S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, seeded: false };
+    S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, seeded: false };
     seedFixed(); S.seeded = true; save();
     closeSheet(); renderAll(); showView('plan'); toast('Alles auf Anfang');
   };
@@ -1080,7 +1229,8 @@ function importFromHash() {
     $('#impYes').onclick = () => {
       S.entries = data.entries || []; S.votes = data.votes || {};
       S.custom = data.custom || []; S.todos = data.todos || {};
-      save(); closeSheet(); renderAll(); toast('Plan übernommen ✓'); confetti();
+      S.avatars = data.avatars || {};
+      save(); closeSheet(); renderCrew(); renderAll(); toast('Plan übernommen ✓'); confetti();
     };
   } catch (e) { /* kaputter Link – ignorieren */ }
 }
