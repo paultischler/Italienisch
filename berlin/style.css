@@ -342,6 +342,35 @@ main{flex:1;padding:16px 16px calc(96px + var(--safe-b));}
 .wxrow .r{flex:0 0 auto;font-size:11.5px;font-weight:700;color:#20618f;}
 .credits{text-align:center;font-size:11.5px;color:#a9a396;padding:6px 0 20px;}
 
+
+/* ---------- Eigene Idee: Fotos, Zeitraum ---------- */
+.picgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:7px;margin-bottom:9px;}
+.thumbpic{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#efeee9;}
+.thumbpic img{width:100%;height:100%;object-fit:cover;display:block;}
+.thumbpic button{
+  position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;
+  background:rgba(20,22,30,.62);color:#fff;font-size:11px;line-height:1;
+}
+.filebtn{display:block;text-align:center;cursor:pointer;}
+.range{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.range .field{margin:0 0 6px;}
+.dsel.off{opacity:.35;}
+.dsel.off.on{opacity:1;}
+
+/* ---------- Figuren-Auswahl ---------- */
+.person{width:100%;display:flex;align-items:center;gap:11px;text-align:left;
+  padding:7px 9px;border-radius:13px;background:#f7f8fb;}
+.person:active{transform:scale(.99);}
+.person .av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:19px;flex:0 0 38px;}
+.person .edit{margin-left:auto;font-size:13px;opacity:.45;}
+.avgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:7px;}
+.avpick{
+  aspect-ratio:1;display:grid;place-items:center;font-size:24px;border-radius:14px;
+  background:var(--card);border:1.5px solid var(--line);
+}
+.avpick.on{border-color:var(--ink);background:#fff2cf;transform:scale(1.03);}
+.avpick:active{transform:scale(.93);}
+
 /* ---------- Tabbar ---------- */
 .tabbar{
   position:fixed;left:0;right:0;bottom:0;z-index:40;
