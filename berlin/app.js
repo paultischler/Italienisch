@@ -196,7 +196,6 @@ const CREDITS = {
   spreewald:    { autor: 'A. Savin', lizenz: 'FAL', url: 'https://commons.wikimedia.org/wiki/File:Spreewald_04-2016_img03_Spree_near_Luebbenau.jpg' },
   wandlitz:     { autor: '44penguins (Angela M. Arnold)', lizenz: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Strandbad_W%27see_20110814_AMA_fec_(1).JPG' },
   strandbad:    { autor: 'A. Savin', lizenz: 'FAL', url: 'https://commons.wikimedia.org/wiki/File:Weisser_See_B-Weissensee_06-2017.jpg' },
-  volksbad:     { autor: 'Ansgar Koreng', lizenz: 'CC BY-SA 3.0 de', url: 'https://commons.wikimedia.org/wiki/File:Volksb%C3%BChne,_Berlin-Mitte,_170122,_ako.jpg' },
 };
 /* Bildunterschriften. own = eigenes Familienfoto, kein Nachweis nötig. */
 const PICCAP = {
@@ -219,7 +218,7 @@ const PICCAP = {
   pum:          { cap: 'Die Tram 88 nach Schöneiche am S-Bahnhof Friedrichshagen' },
   spreewald:    { cap: 'Die Spree bei Lübbenau im Spreewald' },
   strandbad:    { cap: 'Der Weiße See in Weißensee' },
-  volksbad:     { cap: 'Die Volksbühne am Rosa-Luxemburg-Platz' },
+  volksbad:     { cap: 'Das 25-Meter-Becken vor der Volksbühne' },
   wandlitz:     { cap: 'Das Strandbad am Wandlitzsee' },
 };
 const imgSrc = key => (key && key.slice(0, 5) === 'data:') ? key : './img/' + key + '.jpg';
