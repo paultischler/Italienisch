@@ -548,7 +548,8 @@ function renderDays() {
           <span class="bem">${idea.emoji}</span>
           <span style="text-align:left;flex:1;min-width:0">
             <b>${esc(e.label || idea.title)}</b>
-            <small>${esc([e.time ? e.time + ' Uhr' : 'ganzer Tag', e.groupLabel, e.note].filter(Boolean).join(' · '))}</small>
+            <small>${esc([e.time ? e.time + ' Uhr' : (istFlexibel(idea) ? '🔄 flexibel' : 'ganzer Tag'),
+              e.groupLabel, e.note].filter(Boolean).join(' · '))}</small>
           </span></button>`;
       }).join('')}
       <div class="slots">${slots}
@@ -939,6 +940,9 @@ function sheetIdeaForm(existing) {
 
 /* „am liebsten abends“ als Merker auf der Karte */
 const SLOTWORT = { tag: '🗓️ ganzer Tag', vm: '☀️ vormittags', nm: '🌤️ nachmittags', ab: '🌙 abends' };
+/* Eigene Ideen ohne gewählte Tageszeit sind „flexibel“ – dann ist
+   „ganzer Tag“ die falsche Beschriftung. */
+const istFlexibel = idea => !!(idea && idea.custom && !idea.slot);
 function slotTag(slot) {
   if (!slot) return [{ t: '🔄 flexibel', k: 'good' }];
   return SLOTWORT[slot] ? [{ t: SLOTWORT[slot] }] : null;
@@ -1020,7 +1024,8 @@ function planText() {
     lines.push(`${f.wd}, ${f.num}. ${f.mon}`);
     SLOTS.forEach(s => entriesOf(d, s.id).forEach(e => {
       const idea = ideaById(e.ideaId) || {};
-      const bits = [e.time ? e.time + ' Uhr' : s.short, e.label || idea.title];
+      const bits = [e.time ? e.time + ' Uhr' : (istFlexibel(idea) ? 'flexibel' : s.short),
+                    e.label || idea.title];
       if (e.groupLabel) bits.push('(' + e.groupLabel + ')');
       if (e.note) bits.push('– ' + e.note);
       lines.push('  ' + (e.done ? '✔ ' : '• ') + bits.join(' · '));
