@@ -677,7 +677,8 @@ let pick = { ideaId: null, date: null, slot: null, time: '', label: '', note: ''
 function sheetPlan(ideaId, presetDate, presetSlot) {
   const idea = ideaById(ideaId);
   if (!idea) return;
-  pick = { ideaId, date: presetDate || null, slot: presetSlot || (idea.days ? 'tag' : null),
+  pick = { ideaId, date: presetDate || null,
+           slot: presetSlot || idea.slot || (idea.days ? 'tag' : null),
            time: '', label: '', note: '' };
   drawPlanSheet();
 }
@@ -849,6 +850,15 @@ function sheetIdeaForm(existing) {
     <label class="btn btn-ghost filebtn">📷 Fotos auswählen
       <input type="file" id="nFile" accept="image/*" multiple hidden></label>
 
+    <h4>Wann am besten?</h4>
+    <div class="slotsel five" id="nSlot">
+      <button type="button" class="ssel${!e.slot ? ' on' : ''}" data-nslot="">🔄 Flexibel</button>
+      ${SLOTS.map(x => `<button type="button" class="ssel${e.slot === x.id ? ' on' : ''}"
+        data-nslot="${x.id}">${x.em} ${x.short}</button>`).join('')}
+    </div>
+    <p class="muted" style="margin:-2px 0 4px"><b>Flexibel</b> heißt: passt zu jeder Tageszeit.
+      Sonst schlägt die App beim Einplanen gleich die richtige Zeit vor.</p>
+
     <h4>Nur an bestimmten Tagen möglich?</h4>
     <div class="range">
       <label class="field"><span>von</span>
@@ -875,6 +885,12 @@ function sheetIdeaForm(existing) {
     </div>`);
 
   drawDraftPics();
+
+  $('#nSlot').onclick = ev => {
+    const b = ev.target.closest('[data-nslot]');
+    if (!b) return;
+    $$('#nSlot .ssel').forEach(x => x.classList.toggle('on', x === b));
+  };
 
   $('#nFile').onchange = async ev => {
     const files = Array.from(ev.target.files || []);
@@ -906,7 +922,9 @@ function sheetIdeaForm(existing) {
       title, sub: $('#nSub').value.trim(),
       raw, info: esc(raw).replace(/\n/g, '<br>'),
       url, from, to, pics: draftPics.slice(),
-      tags: ['eigene Idee'].concat(rangeTag(from, to) || []),
+      slot: ($('#nSlot .ssel.on') || {}).dataset ? $('#nSlot .ssel.on').dataset.nslot : '',
+      tags: ['eigene Idee'].concat(slotTag(($('#nSlot .ssel.on') || { dataset: {} }).dataset.nslot) || [])
+                           .concat(rangeTag(from, to) || []),
     };
     const merk = S.custom.slice();
     if (e.id) S.custom = S.custom.map(x => x.id === e.id ? idee : x);
@@ -917,6 +935,13 @@ function sheetIdeaForm(existing) {
     toast(existing ? 'Gespeichert ✓' : 'Idee aufgenommen! 💡');
     if (!existing) confetti();
   };
+}
+
+/* „am liebsten abends“ als Merker auf der Karte */
+const SLOTWORT = { tag: '🗓️ ganzer Tag', vm: '☀️ vormittags', nm: '🌤️ nachmittags', ab: '🌙 abends' };
+function slotTag(slot) {
+  if (!slot) return [{ t: '🔄 flexibel', k: 'good' }];
+  return SLOTWORT[slot] ? [{ t: SLOTWORT[slot] }] : null;
 }
 
 /* „nur 5.–8.8.“ als Merker auf der Karte */
@@ -942,7 +967,7 @@ function syncPinned() {
     if (S.unpinned.includes(i.id)) return;        // von Hand entfernt – bleibt entfernt
     if (schon.length) { schon.forEach(e => { e.date = tag; }); return; }   // Datum geändert
     if (S.entries.some(e => e.ideaId === i.id)) return;                    // schon selbst geplant
-    S.entries.push({ id: uid(), ideaId: i.id, date: tag, slot: 'tag', time: '',
+    S.entries.push({ id: uid(), ideaId: i.id, date: tag, slot: i.slot || 'tag', time: '',
                      note: '', done: false, fixed: true, pinned: true });
   });
 }
