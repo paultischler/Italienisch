@@ -10,7 +10,7 @@
 <meta name="description" content="Urlaubsplaner für zwei Wochen Berlin – Ideen sammeln und auf die Tage verteilen." />
 <title>Berlin-Sommer · Urlaubsplaner</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BB%3C/text%3E%3C/svg%3E" />
-<link rel="stylesheet" href="./style.css?v=1" />
+<link rel="stylesheet" href="./style.css?v=2" />
 </head>
 <body>
 
@@ -67,6 +67,14 @@
       </div>
 
       <div class="card infocard">
+        <h2>🌦️ Wetter für die zwei Wochen</h2>
+        <div class="wxlist" id="wxList"></div>
+        <div class="btnrow" style="margin-top:12px">
+          <button class="btn" id="btnWx">🔄 Wetter neu laden</button>
+        </div>
+      </div>
+
+      <div class="card infocard">
         <h2>📤 Plan teilen &amp; sichern</h2>
         <p class="muted">Der Plan liegt nur auf diesem Gerät. Mit dem Link nehmen die anderen ihn mit.</p>
         <div class="btnrow">
@@ -79,7 +87,8 @@
 
       <div class="card infocard">
         <h2>🖼️ Bildnachweise</h2>
-        <p class="muted">Alle Fotos stammen von Wikimedia Commons und sind frei lizenziert.</p>
+        <p class="muted">Die Familienfotos sind eigene Aufnahmen. Alle Ortsfotos stammen von
+          Wikimedia Commons und sind frei lizenziert:</p>
         <ul class="creditlist" id="credits"></ul>
       </div>
 
@@ -118,6 +127,6 @@
 <div class="toast" id="toast" hidden></div>
 <canvas class="confetti" id="confetti"></canvas>
 
-<script src="./app.js?v=1"></script>
+<script src="./app.js?v=2"></script>
 </body>
 </html>
