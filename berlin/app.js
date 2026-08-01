@@ -9,8 +9,8 @@ const TRIP = { start: '2026-08-02', end: '2026-08-16' };
 
 const PEOPLE = [
   { id: 'maria', name: 'Maria', emoji: '🌻', color: '#e8467c', role: 'Mama' },
-  { id: 'paul',  name: 'Paul',  emoji: '🧔', color: '#2f7ce0', role: 'ich' },
-  { id: 'felix', name: 'Felix', emoji: '🎬', color: '#12b28a', role: '16 Jahre' },
+  { id: 'paul',  name: 'Paul',  emoji: '👨', color: '#2f7ce0', role: 'ich' },
+  { id: 'felix', name: 'Felix', emoji: '👱‍♂️', color: '#12b28a', role: '16 Jahre' },
   { id: 'emmi',  name: 'Emmi',  emoji: '🦄', color: '#f4a020', role: '10 Jahre' },
 ];
 
@@ -869,17 +869,28 @@ function download(name, text, type) {
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 
-async function copyOrShow(text, title) {
+/* Teilen: erst das Teilen-Menü des Handys, sonst Zwischenablage,
+   sonst ein Feld zum Markieren. Abbrechen ist kein Fehler. */
+async function shareOut({ url, text, title, sheetTitle }) {
+  const payload = url ? { title, url } : { title, text };
   try {
-    if (navigator.share && text.length < 900) { await navigator.share({ text }); return; }
-    await navigator.clipboard.writeText(text);
-    toast('Kopiert! 📋');
+    if (navigator.share) { await navigator.share(payload); return; }
   } catch (e) {
-    openSheet(title, `<p class="muted">Markieren und kopieren:</p>
-      <textarea class="share-out" readonly>${esc(text)}</textarea>
-      <div class="sheet-acts"><button class="btn btn-main" data-close>Fertig</button></div>`);
+    if (e && (e.name === 'AbortError' || e.name === 'NotAllowedError')) return;
   }
+  const raw = url || text;
+  try {
+    await navigator.clipboard.writeText(raw);
+    toast('Kopiert! 📋');
+    return;
+  } catch (e) {}
+  openSheet(sheetTitle, `<p class="muted">Markieren und kopieren:</p>
+    <textarea class="share-out" readonly>${esc(raw)}</textarea>
+    <div class="sheet-acts"><button class="btn btn-main" data-close>Fertig</button></div>`);
 }
+
+/* Nur die Adresse der App, ohne Plan – zum Weitergeben an die Familie */
+const appLink = () => location.origin + location.pathname;
 
 /* ============================================================
    10. Deko: Toast & Konfetti
@@ -1023,13 +1034,17 @@ $('#sheetBg').onclick = closeSheet;
 $('#btnAddIdea').onclick = sheetNewIdea;
 $('#btnPrint').onclick = () => print();
 $('#btnWx').onclick = () => fetchWx(true);
-$('#btnText').onclick = () => copyOrShow(planText(), '📋 Unser Plan');
+$('#btnText').onclick = () => shareOut({ text: planText(), title: 'Unser Berlin-Plan',
+                                          sheetTitle: '📋 Unser Plan' });
+$('#btnApp').onclick = () => shareOut({ url: appLink(), title: 'Unser Berlin-Planer',
+                                        sheetTitle: '📲 Link zur App' });
 $('#btnIcs').onclick = () => {
   if (!S.entries.length) return toast('Noch nichts geplant 🙂');
   download('berlin-sommer-2026.ics', icsFile(), 'text/calendar;charset=utf-8');
   toast('Kalenderdatei gespeichert 📅');
 };
-$('#btnShare').onclick = () => copyOrShow(shareLink(), '🔗 Link zum Teilen');
+$('#btnShare').onclick = () => shareOut({ url: shareLink(), title: 'Unser Berlin-Plan',
+                                          sheetTitle: '🔗 Plan-Link' });
 $('#btnReset').onclick = () => {
   openSheet('♻️ Wirklich alles zurücksetzen?', `
     <p class="muted">Alle Termine, Stimmen, Häkchen und eigenen Ideen auf diesem Gerät werden gelöscht.

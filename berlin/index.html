@@ -10,7 +10,7 @@
 <meta name="description" content="Urlaubsplaner für zwei Wochen Berlin – Ideen sammeln und auf die Tage verteilen." />
 <title>Berlin-Sommer · Urlaubsplaner</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BB%3C/text%3E%3C/svg%3E" />
-<link rel="stylesheet" href="./style.css?v=2" />
+<link rel="stylesheet" href="./style.css?v=3" />
 </head>
 <body>
 
@@ -75,10 +75,13 @@
       </div>
 
       <div class="card infocard">
-        <h2>📤 Plan teilen &amp; sichern</h2>
-        <p class="muted">Der Plan liegt nur auf diesem Gerät. Mit dem Link nehmen die anderen ihn mit.</p>
+        <h2>📤 Teilen &amp; sichern</h2>
+        <p class="muted"><b>App-Link</b> gibt nur die Adresse weiter – gut für SMS, damit alle
+          die App auf dem Handy haben. Der <b>Plan-Link</b> nimmt zusätzlich alle Termine mit;
+          er ist sehr lang, schickt ihn lieber per WhatsApp, Signal oder Mail als per SMS.</p>
         <div class="btnrow">
-          <button class="btn" id="btnShare">🔗 Link zum Teilen</button>
+          <button class="btn btn-main" id="btnApp" style="flex:none">📲 App-Link</button>
+          <button class="btn" id="btnShare">🔗 Plan-Link mit Terminen</button>
           <button class="btn" id="btnText">📋 Plan als Text</button>
           <button class="btn" id="btnIcs">📅 In den Kalender (.ics)</button>
           <button class="btn" id="btnPrint">🖨️ Drucken</button>
@@ -127,6 +130,6 @@
 <div class="toast" id="toast" hidden></div>
 <canvas class="confetti" id="confetti"></canvas>
 
-<script src="./app.js?v=2"></script>
+<script src="./app.js?v=3"></script>
 </body>
 </html>
