@@ -311,12 +311,24 @@ function frischeFelder() {
   S.unpinned = S.unpinned || [];
 }
 
+function migriereStempel() {
+  const jetzt = Date.now();
+  ['entries', 'custom'].forEach(art => (S[art] || []).forEach(x => {
+    if (!S.stamp[art][x.id]) S.stamp[art][x.id] = jetzt;
+  }));
+  Object.entries(S.votes || {}).forEach(([idee, v]) => Object.keys(v).forEach(p => {
+    const z = idee + '|' + p;
+    if (!S.stamp.votes[z]) S.stamp.votes[z] = jetzt;
+  }));
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) S = Object.assign(S, JSON.parse(raw));
   } catch (e) { /* kaputter Speicher – dann eben frisch */ }
   frischeFelder();
+  migriereStempel();
   if (!S.seeded) { seedFixed(); S.seeded = true; }
   syncPinned();
   letzterStand = schnappschuss();
@@ -409,7 +421,7 @@ const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
 
 /* Sichtbar machen, welche Fassung ein Gerät wirklich ausführt. Solange
    eines noch eine alte fährt, überschreibt es den Raum für alle. */
-const FASSUNG = 14;
+const FASSUNG = 15;
 const SYNC_KEY = 'berlin2026_raum_v1';
 const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
   let g = localStorage.getItem('berlin2026_geraet');
@@ -489,8 +501,15 @@ function verschmelzen(f) {
     const meins = new Map((S[art] || []).map(x => [x.id, x]));
     (f[art] || []).forEach(x => {
       const tf = zeit(fs[art], x.id), tl = zeit(S.stamp[art], x.id);
-      if (zeit(S.tomb[art], x.id) > tf) return;        // drüben gelöscht, Löschung jünger
-      if (!meins.has(x.id) || tf > tl) { meins.set(x.id, x); S.stamp[art][x.id] = Math.max(tf, tl); }
+      const grab = zeit(S.tomb[art], x.id);
+      if (grab) {
+        if (tf > 0 && grab > tf) return;               // Löschung nachweislich jünger
+        delete S.tomb[art][x.id];                      // sonst gewinnt das Behalten
+      }
+      if (!meins.has(x.id) || tf > tl) {
+        meins.set(x.id, x);
+        S.stamp[art][x.id] = Math.max(tf, tl) || Date.now();
+      }
     });
     // eigene Stücke fallen lassen, die der andere später gelöscht hat
     Array.from(meins.keys()).forEach(id => {
@@ -657,10 +676,38 @@ const beschreibe = (q, wer) => ({
   wer, zeit: Date.now(),
 });
 
+/* Sofort senden und ehrlich berichten, ob es angekommen ist. */
+async function sendeJetzt() {
+  if (!RAUM) { toast('Kein Raum eingerichtet'); return; }
+  if (!RAUMKEY) {                 // direkt nach dem Start kurz warten statt scheitern
+    try { RAUMKEY = await keyAus(RAUM.k); } catch (e) { toast('Schlüssel unlesbar'); return; }
+  }
+  clearTimeout(pushTimer);
+  try {
+    const paket = await verschluesseln(teilbar());
+    const r = await fetch(raumUrl(), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(paket),
+    });
+    if (!r.ok) throw new Error(r.status);
+    letzterPush = kanon(teilbar());
+    raumInhalt = beschreibe(teilbar(), 'diesem Gerät');
+    setStatus('live');
+    toast('Im Raum abgelegt ✓');
+  } catch (e) {
+    setStatus('offline');
+    toast('Senden fehlgeschlagen – kein Netz?');
+  }
+  renderSyncCard();
+}
+
 /* Direkt abholen, ohne auf den Live-Strom angewiesen zu sein.
    Auf iPhones stirbt der Strom gern unbemerkt – das hier geht immer. */
 async function syncPull(laut) {
-  if (!RAUM || !RAUMKEY) return;
+  if (!RAUM) return;
+  if (!RAUMKEY) {
+    try { RAUMKEY = await keyAus(RAUM.k); } catch (e) { return; }
+  }
   try {
     const r = await fetch(raumUrl() + '?_=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error(r.status);
@@ -1700,7 +1747,7 @@ document.addEventListener('click', async ev => {
     return shareOut({ url: familienLink(), title: 'Unser Berlin-Planer (Familien-Link)',
                       sheetTitle: '👨‍👩‍👧 Familien-Link' });
   }
-  if (t.id === 'syncNow') { letzterPush = ''; syncPush(true); toast('Stand gesendet'); return; }
+  if (t.id === 'syncNow') { await sendeJetzt(); return; }
   if (t.id === 'syncGet') { toast('Hole den Raum …'); await syncPull(true); return; }
   if (t.id === 'syncFresh') {
     toast('Hole die neueste Fassung …');
