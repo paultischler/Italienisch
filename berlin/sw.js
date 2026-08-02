@@ -1,6 +1,6 @@
 /* Berlin-Sommer · Service Worker
    CACHE_VERSION bei jeder Änderung hochzählen, damit alle frische Dateien bekommen. */
-const CACHE_VERSION = 'berlin-v20260802b';
+const CACHE_VERSION = 'berlin-v20260802c';
 const PRECACHE = ['./', './index.html', './style.css', './app.js'];
 
 self.addEventListener('install', e => {

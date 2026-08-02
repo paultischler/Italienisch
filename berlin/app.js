@@ -407,6 +407,9 @@ const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
    ausschließlich unlesbare Zeichen.
    ============================================================ */
 
+/* Sichtbar machen, welche Fassung ein Gerät wirklich ausführt. Solange
+   eines noch eine alte fährt, überschreibt es den Raum für alle. */
+const FASSUNG = 12;
 const SYNC_KEY = 'berlin2026_raum_v1';
 const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
   let g = localStorage.getItem('berlin2026_geraet');
@@ -444,7 +447,8 @@ async function entschluesseln(paket) {
 const raumUrl = () => `${RAUM.db.replace(/\/+$/, '')}/rooms/${RAUM.id}.json`;
 const teilbar = () => ({ entries: S.entries, votes: S.votes, custom: S.custom,
                          todos: S.todos, avatars: S.avatars, unpinned: S.unpinned,
-                         stamp: S.stamp, tomb: S.tomb });
+                         stamp: S.stamp, tomb: S.tomb, fassung: FASSUNG });
+let letzteFremdFassung = null, letzterEmpfang = 0;
 
 /* Für den Vergleich: gleiche Inhalte ergeben immer dieselbe Zeichenkette,
    egal in welcher Reihenfolge sie im Speicher stehen. */
@@ -563,6 +567,8 @@ async function uebernehmen(rohdaten) {
 
   try {
     const fremd = await entschluesseln(paket);
+    letzteFremdFassung = fremd.fassung || 0;
+    letzterEmpfang = Date.now();
     const fremdStr = vergleichbar(fremd);
     verschmelzen(fremd);
     syncPinned();
@@ -719,13 +725,27 @@ function renderSyncCard() {
         Wer den Familien-Link bekommt, muss nichts einrichten.</p>`;
     return;
   }
+  const uhr = t => t ? `${d2(new Date(t).getHours())}:${d2(new Date(t).getMinutes())}` : '–';
+  const alt = letzteFremdFassung !== null && letzteFremdFassung < FASSUNG;
   box.innerHTML = `
     <div class="syncstate"><span>${em}</span><b>${esc(txt)}</b></div>
+    ${alt ? `<div class="hint" style="background:#ffe8e2;color:#a3341f"><b>Achtung:</b>
+      Ein anderes Gerät läuft noch mit einer älteren Fassung (${letzteFremdFassung || '?'})
+      und kann Einträge überschreiben. Dort die App einmal ganz schließen und neu öffnen –
+      oder unten „App erneuern“ drücken.</div>` : ''}
     <p class="muted">Alle mit dem Familien-Link sehen Stimmen, Termine und Häkchen sofort.
       Der Plan wird verschlüsselt übertragen – der Schlüssel steckt nur im Link.</p>
+    <div class="diag">
+      <div><b>Fassung</b><span>${FASSUNG}${letzteFremdFassung !== null
+        ? ` · andere: ${letzteFremdFassung || 'alt'}` : ''}</span></div>
+      <div><b>Raum</b><span>${esc(RAUM.id.slice(0, 8))}…</span></div>
+      <div><b>Inhalt</b><span>${S.entries.length} Termine, ${(S.custom || []).length} eigene Ideen</span></div>
+      <div><b>Zuletzt empfangen</b><span>${uhr(letzterEmpfang)} Uhr</span></div>
+    </div>
     <div class="btnrow">
       <button class="btn btn-main" id="syncShare">👨‍👩‍👧 Familien-Link teilen</button>
-      <button class="btn" id="syncNow">🔄 Jetzt abgleichen</button>
+      <button class="btn" id="syncNow">🔄 Meinen Stand senden</button>
+      <button class="btn" id="syncFresh">🔃 App erneuern</button>
       <button class="btn btn-danger" id="syncStop">Abgleich beenden</button>
     </div>`;
 }
@@ -1588,7 +1608,18 @@ document.addEventListener('click', async ev => {
     return shareOut({ url: familienLink(), title: 'Unser Berlin-Planer (Familien-Link)',
                       sheetTitle: '👨‍👩‍👧 Familien-Link' });
   }
-  if (t.id === 'syncNow') { letzterPush = ''; syncPush(true); return; }
+  if (t.id === 'syncNow') { letzterPush = ''; syncPush(true); toast('Stand gesendet'); return; }
+  if (t.id === 'syncFresh') {
+    toast('Hole die neueste Fassung …');
+    try {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+      const namen = await caches.keys();
+      await Promise.all(namen.map(n => caches.delete(n)));
+    } catch (e) {}
+    location.reload();
+    return;
+  }
   if (t.id === 'syncStop') {
     openSheet('Abgleich beenden?', `
       <p class="muted">Euer Plan bleibt auf diesem Gerät erhalten, wird aber nicht mehr
