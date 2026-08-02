@@ -409,7 +409,7 @@ const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
 
 /* Sichtbar machen, welche Fassung ein Gerät wirklich ausführt. Solange
    eines noch eine alte fährt, überschreibt es den Raum für alle. */
-const FASSUNG = 12;
+const FASSUNG = 13;
 const SYNC_KEY = 'berlin2026_raum_v1';
 const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
   let g = localStorage.getItem('berlin2026_geraet');
@@ -537,8 +537,11 @@ function verschmelzen(f) {
 function setStatus(s) { syncStatus = s; renderSyncCard(); }
 
 /* --- verbinden und zuhören --- */
+let neuversuch = null, wartezeit = 2000;
+
 async function syncConnect() {
   if (!RAUM) return;
+  clearTimeout(neuversuch); neuversuch = null;
   try { RAUMKEY = await keyAus(RAUM.k); } catch (e) { setStatus('aus'); return; }
   if (quelle) { quelle.close(); quelle = null; }
   setStatus('verbinde');
@@ -546,9 +549,38 @@ async function syncConnect() {
   quelle = new EventSource(raumUrl());
   quelle.addEventListener('put', ev => uebernehmen(ev.data));
   quelle.addEventListener('patch', ev => uebernehmen(ev.data));
-  quelle.onopen = () => setStatus('live');   // NICHT hochschicken – erst hören!
-  quelle.onerror = () => setStatus('offline');
+  quelle.onopen = () => { wartezeit = 2000; setStatus('live'); };   // erst hören, nicht senden
+  quelle.onerror = () => { setStatus('offline'); spaeterNochmal(); };
 }
+
+/* Eine abgerissene Verbindung kommt von allein nicht immer zurück –
+   auf dem Handy reißt sie bei jedem Sperren des Bildschirms ab. */
+function spaeterNochmal() {
+  if (!RAUM || neuversuch) return;
+  neuversuch = setTimeout(() => {
+    neuversuch = null;
+    wartezeit = Math.min(wartezeit * 2, 30000);
+    syncConnect();
+  }, wartezeit);
+}
+
+/* Prüfen, ob die Leitung wirklich noch steht, und sonst neu aufbauen. */
+function syncPruefen(grund) {
+  if (!RAUM) return;
+  const zu = !quelle || quelle.readyState === 2;          // 2 = geschlossen
+  const stumm = letzterEmpfang && Date.now() - letzterEmpfang > 120000;
+  if (zu || (grund === 'sichtbar' && quelle.readyState !== 1)) {
+    wartezeit = 2000;
+    syncConnect();
+  } else if (grund === 'sichtbar' || stumm) {
+    syncPush();       // eigene Änderungen nachreichen, falls offline etwas dazukam
+  }
+}
+
+addEventListener('online', () => syncPruefen('online'));
+addEventListener('visibilitychange', () => { if (!document.hidden) syncPruefen('sichtbar'); });
+addEventListener('focus', () => syncPruefen('sichtbar'));
+setInterval(() => syncPruefen('herzschlag'), 25000);
 
 async function uebernehmen(rohdaten) {
   setStatus('live');
@@ -563,7 +595,17 @@ async function uebernehmen(rohdaten) {
     letzterPush = ''; syncPush(true);
     return;
   }
-  if (paket.von === GERAET) return;          // das war der eigene Nachhall
+  if (paket.von === GERAET) {
+    // Unser eigener Nachhall. Trotzdem nachsehen, ob wir inzwischen mehr
+    // wissen – etwa Änderungen, die während der Funkstille entstanden sind.
+    letzterEmpfang = Date.now();
+    try {
+      const eigen = await entschluesseln(paket);
+      if (vergleichbar(eigen) !== vergleichbar(teilbar())) { letzterPush = ''; syncPush(true); }
+    } catch (e) {}
+    renderSyncCard();
+    return;
+  }
 
   try {
     const fremd = await entschluesseln(paket);
