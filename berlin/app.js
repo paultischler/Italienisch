@@ -1281,24 +1281,72 @@ $('#btnReset').onclick = () => {
 $('#logo').onclick = confetti;
 
 /* Geteilten Plan aus dem Link übernehmen */
+/* Zwei Pläne zusammenlegen, ohne dass jemandes Eintragungen verlorengehen.
+   Es wird nur ergänzt – nie etwas überschrieben oder gelöscht. */
+function mergePlan(data) {
+  const kennung = e => [e.ideaId, e.date, e.slot, e.time || '', e.label || ''].join('|');
+  const da = new Set(S.entries.map(kennung));
+  let neu = 0, stimmen = 0;
+
+  (data.entries || []).forEach(e => {
+    if (da.has(kennung(e))) return;
+    da.add(kennung(e));
+    S.entries.push(Object.assign({}, e, { id: uid() }));
+    neu++;
+  });
+
+  Object.entries(data.votes || {}).forEach(([ideaId, v]) => {
+    S.votes[ideaId] = S.votes[ideaId] || {};
+    Object.entries(v).forEach(([pid, wert]) => {
+      if (!wert) return;                                   // leere Stimmen nichts überschreiben lassen
+      if (S.votes[ideaId][pid] !== wert) stimmen++;
+      S.votes[ideaId][pid] = wert;
+    });
+  });
+
+  (data.custom || []).forEach(i => { if (!S.custom.some(x => x.id === i.id)) S.custom.push(i); });
+  Object.entries(data.todos || {}).forEach(([k, v]) => { if (v) S.todos[k] = true; });
+  S.avatars = Object.assign({}, S.avatars, data.avatars || {});
+  return { neu, stimmen };
+}
+
 function importFromHash() {
   const m = location.hash.match(/^#p=(.+)$/);
   if (!m) return;
   try {
     const data = JSON.parse(b64dec(m[1]));
     history.replaceState(null, '', location.pathname);
+    const anzStimmen = Object.values(data.votes || {})
+      .reduce((n, v) => n + Object.values(v).filter(Boolean).length, 0);
+    const zahl = (n, ein, viele) => `<b>${n} ${n === 1 ? ein : viele}</b>`;
     openSheet('🔗 Geteilter Plan', `
-      <p class="muted">Jemand aus der Familie hat euch einen Plan geschickt
-      (${(data.entries || []).length} Termine). Übernehmen und den eigenen ersetzen?</p>
+      <p class="muted">Jemand aus der Familie hat euch seinen Stand geschickt:
+        ${zahl((data.entries || []).length, 'Termin', 'Termine')},
+        ${zahl(anzStimmen, 'Stimme', 'Stimmen')}${
+        (data.custom || []).length ? `, ${zahl(data.custom.length, 'eigene Idee', 'eigene Ideen')}` : ''}.</p>
+      <div class="hint"><b>Zusammenführen</b> ergänzt euren Plan um alles, was dort steht,
+        und lässt eure eigenen Eintragungen unangetastet. <b>Ersetzen</b> wirft euren
+        bisherigen Stand weg.</div>
       <div class="sheet-acts">
-        <button class="btn btn-ghost" data-close>Behalten, was ich habe</button>
-        <button class="btn btn-main" id="impYes">Plan übernehmen</button>
+        <button class="btn btn-main" id="impMerge">🔀 Zusammenführen</button>
+      </div>
+      <div class="sheet-acts">
+        <button class="btn btn-ghost" data-close>Abbrechen</button>
+        <button class="btn btn-danger" id="impReplace">Ersetzen</button>
       </div>`);
-    $('#impYes').onclick = () => {
+
+    $('#impMerge').onclick = () => {
+      const { neu, stimmen } = mergePlan(data);
+      syncPinned(); save(); closeSheet(); renderCrew(); renderAll();
+      toast(`${neu} ${neu === 1 ? 'Termin' : 'Termine'} und ${stimmen} ${
+        stimmen === 1 ? 'Stimme' : 'Stimmen'} dazu ✓`); confetti();
+    };
+    $('#impReplace').onclick = () => {
       S.entries = data.entries || []; S.votes = data.votes || {};
       S.custom = data.custom || []; S.todos = data.todos || {};
-      S.avatars = data.avatars || {};
-      save(); closeSheet(); renderCrew(); renderAll(); toast('Plan übernommen ✓'); confetti();
+      S.avatars = data.avatars || {}; S.unpinned = [];
+      syncPinned(); save(); closeSheet(); renderCrew(); renderAll();
+      toast('Plan übernommen ✓'); confetti();
     };
   } catch (e) { /* kaputter Link – ignorieren */ }
 }
@@ -1316,6 +1364,9 @@ renderAll();
 wireGalleries();
 fetchWx();
 importFromHash();
+/* Wird der Link angetippt, während die App schon offen ist, ändert sich
+   nur die Adresse – ohne dieses Signal würde nichts passieren. */
+addEventListener('hashchange', importFromHash);
 
 /* Am heutigen Tag starten, wenn der Urlaub läuft */
 (function jumpToToday() {
