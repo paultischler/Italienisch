@@ -421,7 +421,7 @@ const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
 
 /* Sichtbar machen, welche Fassung ein Gerät wirklich ausführt. Solange
    eines noch eine alte fährt, überschreibt es den Raum für alle. */
-const FASSUNG = 15;
+const FASSUNG = 16;
 const SYNC_KEY = 'berlin2026_raum_v1';
 const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
   let g = localStorage.getItem('berlin2026_geraet');
@@ -461,6 +461,15 @@ const teilbar = () => ({ entries: S.entries, votes: S.votes, custom: S.custom,
                          todos: S.todos, avatars: S.avatars, unpinned: S.unpinned,
                          stamp: S.stamp, tomb: S.tomb, fassung: FASSUNG });
 let letzteFremdFassung = null, letzterEmpfang = 0, raumInhalt = null;
+let letzterFehler = null;        // { was, text, zeit } der letzten misslungenen Übertragung
+let letzterVersand = 0;          // wann zuletzt erfolgreich gesendet wurde
+let letztePaketGroesse = 0;      // Bytes des letzten (versuchten) Pakets
+
+function merkeFehler(was, e) {
+  letzterFehler = { was, text: String((e && e.message) || e || 'unbekannt').slice(0, 80), zeit: Date.now() };
+}
+const mb = n => n > 900000 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB'
+             : Math.max(1, Math.round(n / 1024)) + ' kB';
 
 /* Für den Vergleich: gleiche Inhalte ergeben immer dieselbe Zeichenkette,
    egal in welcher Reihenfolge sie im Speicher stehen. */
@@ -685,18 +694,22 @@ async function sendeJetzt() {
   clearTimeout(pushTimer);
   try {
     const paket = await verschluesseln(teilbar());
+    const body = JSON.stringify(paket);
+    letztePaketGroesse = body.length;
     const r = await fetch(raumUrl(), {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(paket),
+      method: 'PUT', headers: { 'Content-Type': 'application/json' }, body,
     });
-    if (!r.ok) throw new Error(r.status);
+    if (!r.ok) throw new Error('Antwort ' + r.status);
     letzterPush = kanon(teilbar());
     raumInhalt = beschreibe(teilbar(), 'diesem Gerät');
+    letzterVersand = Date.now();
+    letzterFehler = null;
     setStatus('live');
     toast('Im Raum abgelegt ✓');
   } catch (e) {
+    merkeFehler('Senden', e);
     setStatus('offline');
-    toast('Senden fehlgeschlagen – kein Netz?');
+    toast('Senden fehlgeschlagen: ' + ((e && e.message) || 'kein Netz'));
   }
   renderSyncCard();
 }
@@ -712,9 +725,11 @@ async function syncPull(laut) {
     const r = await fetch(raumUrl() + '?_=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error(r.status);
     const paket = await r.json();
+    letzterEmpfang = Date.now();       // erfolgreicher Kontakt zählt, auch bei leerem Raum
     setStatus('live');
     await verarbeitePaket(paket, laut);
   } catch (e) {
+    merkeFehler('Abholen', e);
     setStatus('offline');
     if (laut) toast('Raum nicht erreichbar');
   }
@@ -729,14 +744,18 @@ function syncPush(sofort) {
     if (inhalt === letzterPush) return;              // nichts Neues
     try {
       const paket = await verschluesseln(teilbar());
+      const body = JSON.stringify(paket);
+      letztePaketGroesse = body.length;
       const r = await fetch(raumUrl(), {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(paket),
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body,
       });
-      if (!r.ok) throw new Error(r.status);
+      if (!r.ok) throw new Error('Antwort ' + r.status);
       letzterPush = inhalt;
+      letzterVersand = Date.now();
+      letzterFehler = null;
       setStatus('live');
     } catch (e) {
+      merkeFehler('Senden', e);
       setStatus('offline');                          // beim nächsten Mal erneut versuchen
     }
   }, sofort ? 50 : 500);
@@ -843,9 +862,21 @@ function wxBadge(date) {
 function renderSyncCard() {
   const box = $('#syncBox');
   if (!box) return;
-  const lampe = { aus: ['⚪', 'aus'], verbinde: ['🟡', 'verbinde …'],
-                  live: ['🟢', 'live – alle sehen dasselbe'], offline: ['🔴', 'kein Netz, läuft lokal weiter'] };
-  const [em, txt] = lampe[syncStatus] || lampe.aus;
+  // Ampel aus dem, was wirklich passiert – nicht nur aus dem Live-Strom.
+  const jetzt = Date.now();
+  const empfangFrisch = letzterEmpfang && jetzt - letzterEmpfang < 45000;
+  const sendenKlemmt = letzterFehler && letzterFehler.was === 'Senden'
+                    && letzterFehler.zeit > letzterVersand;
+  let em, txt;
+  if (sendenKlemmt && empfangFrisch) {
+    em = '🟠'; txt = 'Empfang läuft – aber Senden klemmt';
+  } else if (syncStatus === 'live' || empfangFrisch) {
+    em = '🟢'; txt = 'live – alle sehen dasselbe';
+  } else if (syncStatus === 'verbinde') {
+    em = '🟡'; txt = 'verbinde …';
+  } else if (syncStatus === 'offline') {
+    em = '🔴'; txt = 'kein Netz, läuft lokal weiter';
+  } else { em = '⚪'; txt = 'aus'; }
 
   if (!RAUM) {
     box.innerHTML = `
@@ -879,7 +910,14 @@ function renderSyncCard() {
            : `${raumInhalt.termine} Termine, ${raumInhalt.ideen} eigene Ideen · von ${esc(raumInhalt.wer)}`)
         : 'noch nicht nachgesehen'}</span></div>
       <div><b>Zuletzt empfangen</b><span>${uhr(letzterEmpfang)} Uhr</span></div>
+      <div><b>Zuletzt gesendet</b><span>${uhr(letzterVersand)} Uhr${
+        letztePaketGroesse ? ` · Paket ${mb(letztePaketGroesse)}` : ''}</span></div>
+      ${letzterFehler ? `<div style="background:#ffe8e2"><b>Letzter Fehler</b><span>${
+        esc(letzterFehler.was)} um ${uhr(letzterFehler.zeit)}: ${esc(letzterFehler.text)}</span></div>` : ''}
     </div>
+    ${sendenKlemmt && letztePaketGroesse > 700000 ? `<div class="hint">Das Paket ist mit
+      ${mb(letztePaketGroesse)} recht groß – vermutlich stecken Fotos in eigenen Ideen.
+      Bei schwachem Netz hilft: ins WLAN gehen oder die Fotos aus den Ideen nehmen.</div>` : ''}
     <div class="btnrow">
       <button class="btn btn-main" id="syncShare">👨‍👩‍👧 Familien-Link teilen</button>
       <button class="btn" id="syncNow">⬆︎ Meinen Stand senden</button>
