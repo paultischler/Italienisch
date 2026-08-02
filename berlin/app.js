@@ -310,13 +310,15 @@ function load() {
   syncPinned();
   save();
 }
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(S)); return true; }
+function save(vomServer) {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
   catch (e) {
     // Meist der volle Speicher – Fotos sind mit Abstand das Größte darin
     toast('Speicher voll – bitte ein Foto weniger 📵');
     return false;
   }
+  if (!vomServer) syncPush();     // eigene Änderung an die anderen weitergeben
+  return true;
 }
 
 /* Avatare dürfen überschrieben werden */
@@ -335,6 +337,148 @@ const entriesOf = (date, slot) =>
   S.entries.filter(e => e.date === date && e.slot === slot)
            .sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
 const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
+
+/* ============================================================
+   4a. Live-Abgleich über Firebase
+   Der Plan liegt verschlüsselt in einem Familien-Raum. Der Schlüssel
+   steht nur im Familien-Link, nie beim Anbieter – Google sieht also
+   ausschließlich unlesbare Zeichen.
+   ============================================================ */
+
+const SYNC_KEY = 'berlin2026_raum_v1';
+const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
+  let g = localStorage.getItem('berlin2026_geraet');
+  if (!g) { g = uid() + uid(); localStorage.setItem('berlin2026_geraet', g); }
+  return g;
+})();
+
+let RAUM = null;          // { db, id, k }  – k ist der Schlüssel als Text
+let RAUMKEY = null;       // derselbe Schlüssel, für WebCrypto vorbereitet
+let quelle = null;        // offene Verbindung zum Server
+let syncStatus = 'aus';   // aus | verbinde | live | offline
+let pushTimer = null, letzterPush = '';
+
+const b64u = bytes => btoa(String.fromCharCode(...bytes))
+  .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const unb64u = t => Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+
+async function keyAus(text) {
+  return crypto.subtle.importKey('raw', unb64u(text), 'AES-GCM', false, ['encrypt', 'decrypt']);
+}
+
+async function verschluesseln(obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, RAUMKEY,
+    new TextEncoder().encode(JSON.stringify(obj)));
+  return { v: 1, von: GERAET, iv: b64u(iv), ct: b64u(new Uint8Array(ct)) };
+}
+
+async function entschluesseln(paket) {
+  const klar = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64u(paket.iv) },
+    RAUMKEY, unb64u(paket.ct));
+  return JSON.parse(new TextDecoder().decode(klar));
+}
+
+const raumUrl = () => `${RAUM.db.replace(/\/+$/, '')}/rooms/${RAUM.id}.json`;
+const teilbar = () => ({ entries: S.entries, votes: S.votes, custom: S.custom,
+                         todos: S.todos, avatars: S.avatars, unpinned: S.unpinned });
+
+function setStatus(s) { syncStatus = s; renderSyncCard(); }
+
+/* --- verbinden und zuhören --- */
+async function syncConnect() {
+  if (!RAUM) return;
+  try { RAUMKEY = await keyAus(RAUM.k); } catch (e) { setStatus('aus'); return; }
+  if (quelle) { quelle.close(); quelle = null; }
+  setStatus('verbinde');
+
+  quelle = new EventSource(raumUrl());
+  quelle.addEventListener('put', ev => uebernehmen(ev.data));
+  quelle.addEventListener('patch', ev => uebernehmen(ev.data));
+  quelle.onopen = () => { setStatus('live'); syncPush(true); };
+  quelle.onerror = () => setStatus('offline');
+}
+
+async function uebernehmen(rohdaten) {
+  setStatus('live');
+  let paket;
+  try {
+    const nachricht = JSON.parse(rohdaten);
+    paket = nachricht && nachricht.path === '/' ? nachricht.data : null;
+    if (!paket && nachricht && nachricht.data && nachricht.data.ct) paket = nachricht.data;
+  } catch (e) { return; }
+  if (!paket || !paket.ct) return;
+  if (paket.von === GERAET) return;                  // das war der eigene Nachhall
+  try {
+    const fremd = await entschluesseln(paket);
+    Object.assign(S, {
+      entries: fremd.entries || [], votes: fremd.votes || {}, custom: fremd.custom || [],
+      todos: fremd.todos || {}, avatars: fremd.avatars || {}, unpinned: fremd.unpinned || [],
+    });
+    syncPinned();
+    save(true);                                      // ohne Rückweg, sonst ginge es im Kreis
+    renderCrew(); renderAll();
+    toast('Von den anderen aktualisiert 🔄');
+  } catch (e) {
+    setStatus('live');
+    toast('Ein Paket ließ sich nicht entschlüsseln');
+  }
+}
+
+/* --- eigene Änderungen hochschicken (gebündelt) --- */
+function syncPush(sofort) {
+  if (!RAUM || !RAUMKEY) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(async () => {
+    const inhalt = JSON.stringify(teilbar());
+    if (inhalt === letzterPush) return;              // nichts Neues
+    try {
+      const paket = await verschluesseln(JSON.parse(inhalt));
+      const r = await fetch(raumUrl(), {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(paket),
+      });
+      if (!r.ok) throw new Error(r.status);
+      letzterPush = inhalt;
+      setStatus('live');
+    } catch (e) {
+      setStatus('offline');                          // beim nächsten Mal erneut versuchen
+    }
+  }, sofort ? 50 : 500);
+}
+
+/* --- Raum anlegen, betreten, verlassen --- */
+async function raumStarten(dbUrl) {
+  const db = dbUrl.trim().replace(/\/+$/, '');
+  if (!/^https:\/\/[\w.-]+\.(firebasedatabase\.app|firebaseio\.com)$/.test(db)) {
+    toast('Das sieht nicht nach einer Firebase-Adresse aus');
+    return false;
+  }
+  const schluessel = b64u(crypto.getRandomValues(new Uint8Array(16)));
+  RAUM = { db, id: b64u(crypto.getRandomValues(new Uint8Array(12))), k: schluessel };
+  localStorage.setItem(SYNC_KEY, JSON.stringify(RAUM));
+  letzterPush = '';
+  await syncConnect();
+  return true;
+}
+
+function raumBeenden() {
+  if (quelle) { quelle.close(); quelle = null; }
+  RAUM = null; RAUMKEY = null; letzterPush = '';
+  localStorage.removeItem(SYNC_KEY);
+  setStatus('aus');
+}
+
+const familienLink = () => RAUM
+  ? location.origin + location.pathname + '#f=' + b64u(new TextEncoder().encode(JSON.stringify(RAUM)))
+  : '';
+
+function syncLaden() {
+  try {
+    const roh = localStorage.getItem(SYNC_KEY);
+    if (roh) { RAUM = JSON.parse(roh); syncConnect(); }
+  } catch (e) {}
+}
 
 /* ============================================================
    4b. Wetter (Open-Meteo, ohne Schlüssel, mit Zwischenspeicher)
@@ -399,6 +543,36 @@ function wxBadge(date) {
   const nass = w.rain != null && w.rain >= 50;
   return `<span class="wx${nass ? ' wet' : ''}" title="${esc(txt)}">${em} ${w.max}°<small>/${w.min}°</small>${
     w.rain != null ? ` <b>${w.rain}%</b>` : ''}</span>`;
+}
+
+function renderSyncCard() {
+  const box = $('#syncBox');
+  if (!box) return;
+  const lampe = { aus: ['⚪', 'aus'], verbinde: ['🟡', 'verbinde …'],
+                  live: ['🟢', 'live – alle sehen dasselbe'], offline: ['🔴', 'kein Netz, läuft lokal weiter'] };
+  const [em, txt] = lampe[syncStatus] || lampe.aus;
+
+  if (!RAUM) {
+    box.innerHTML = `
+      <p class="muted">Damit alle sofort sehen, wem was gefällt, braucht die App einen
+        gemeinsamen Speicher. Einmal einrichten, dann läuft es von allein.</p>
+      <label class="field"><span>Adresse eurer Firebase-Datenbank</span>
+        <input type="url" id="syncDb" inputmode="url"
+          placeholder="https://…-default-rtdb.europe-west1.firebasedatabase.app"></label>
+      <div class="btnrow"><button class="btn btn-main" id="syncStart">🔄 Familien-Raum starten</button></div>
+      <p class="muted" style="margin-top:10px">Die Anleitung dazu hat dir Claude geschickt.
+        Wer den Familien-Link bekommt, muss nichts einrichten.</p>`;
+    return;
+  }
+  box.innerHTML = `
+    <div class="syncstate"><span>${em}</span><b>${esc(txt)}</b></div>
+    <p class="muted">Alle mit dem Familien-Link sehen Stimmen, Termine und Häkchen sofort.
+      Der Plan wird verschlüsselt übertragen – der Schlüssel steckt nur im Link.</p>
+    <div class="btnrow">
+      <button class="btn btn-main" id="syncShare">👨‍👩‍👧 Familien-Link teilen</button>
+      <button class="btn" id="syncNow">🔄 Jetzt abgleichen</button>
+      <button class="btn btn-danger" id="syncStop">Abgleich beenden</button>
+    </div>`;
 }
 
 function renderWxCard() {
@@ -1246,6 +1420,32 @@ document.addEventListener('click', ev => {
   if (ev.target.id === 'pSave') commitPlan();
 });
 
+document.addEventListener('click', async ev => {
+  const t = ev.target;
+  if (t.id === 'syncStart') {
+    if (await raumStarten($('#syncDb').value || '')) {
+      renderSyncCard(); confetti();
+      toast('Raum steht – jetzt den Familien-Link verschicken');
+    }
+    return;
+  }
+  if (t.id === 'syncShare') {
+    return shareOut({ url: familienLink(), title: 'Unser Berlin-Planer (Familien-Link)',
+                      sheetTitle: '👨‍👩‍👧 Familien-Link' });
+  }
+  if (t.id === 'syncNow') { letzterPush = ''; syncPush(true); return; }
+  if (t.id === 'syncStop') {
+    openSheet('Abgleich beenden?', `
+      <p class="muted">Euer Plan bleibt auf diesem Gerät erhalten, wird aber nicht mehr
+        mit den anderen abgeglichen.</p>
+      <div class="sheet-acts">
+        <button class="btn btn-ghost" data-close>Weiterlaufen lassen</button>
+        <button class="btn btn-danger" id="syncStopJa">Beenden</button>
+      </div>`);
+    $('#syncStopJa').onclick = () => { raumBeenden(); closeSheet(); toast('Abgleich beendet'); };
+  }
+});
+
 $('#sheetClose').onclick = closeSheet;
 $('#sheetBg').onclick = closeSheet;
 $('#btnAddIdea').onclick = () => sheetIdeaForm();
@@ -1311,6 +1511,31 @@ function mergePlan(data) {
 }
 
 function importFromHash() {
+  const f = location.hash.match(/^#f=(.+)$/);
+  if (f) {
+    try {
+      const raum = JSON.parse(new TextDecoder().decode(unb64u(f[1])));
+      history.replaceState(null, '', location.pathname);
+      if (RAUM && RAUM.id === raum.id) { toast('Ihr seid schon im selben Raum ✓'); return; }
+      openSheet('👨‍👩‍👧 Familien-Raum', `
+        <p class="muted">Jemand aus der Familie lädt euch in den gemeinsamen Plan ein.
+          Ab dann seht ihr Stimmen und Termine der anderen sofort – und sie eure.</p>
+        <div class="hint">Der Plan, der jetzt auf diesem Gerät steht, wird durch den
+          gemeinsamen ersetzt. Falls hier etwas drin ist, was noch niemand kennt:
+          erst „Plan als Text“ sichern.</div>
+        <div class="sheet-acts">
+          <button class="btn btn-ghost" data-close>Abbrechen</button>
+          <button class="btn btn-main" id="raumJa">Beitreten</button>
+        </div>`);
+      $('#raumJa').onclick = async () => {
+        RAUM = raum; localStorage.setItem(SYNC_KEY, JSON.stringify(RAUM));
+        letzterPush = JSON.stringify(teilbar());     // erst zuhören, nicht sofort überschreiben
+        await syncConnect();
+        closeSheet(); renderSyncCard(); toast('Ihr seid dabei! 🟢'); confetti();
+      };
+    } catch (e) {}
+    return;
+  }
   const m = location.hash.match(/^#p=(.+)$/);
   if (!m) return;
   try {
@@ -1356,10 +1581,12 @@ function importFromHash() {
    ============================================================ */
 
 load();
+syncLaden();
 loadWxCache();
 renderCrew();
 renderFilters();
 renderCredits();
+renderSyncCard();
 renderAll();
 wireGalleries();
 fetchWx();
