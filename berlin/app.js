@@ -409,7 +409,7 @@ const entriesForIdea = id => S.entries.filter(e => e.ideaId === id);
 
 /* Sichtbar machen, welche Fassung ein Gerät wirklich ausführt. Solange
    eines noch eine alte fährt, überschreibt es den Raum für alle. */
-const FASSUNG = 13;
+const FASSUNG = 14;
 const SYNC_KEY = 'berlin2026_raum_v1';
 const GERAET = (() => {                      // damit man den eigenen Nachhall erkennt
   let g = localStorage.getItem('berlin2026_geraet');
@@ -448,7 +448,7 @@ const raumUrl = () => `${RAUM.db.replace(/\/+$/, '')}/rooms/${RAUM.id}.json`;
 const teilbar = () => ({ entries: S.entries, votes: S.votes, custom: S.custom,
                          todos: S.todos, avatars: S.avatars, unpinned: S.unpinned,
                          stamp: S.stamp, tomb: S.tomb, fassung: FASSUNG });
-let letzteFremdFassung = null, letzterEmpfang = 0;
+let letzteFremdFassung = null, letzterEmpfang = 0, raumInhalt = null;
 
 /* Für den Vergleich: gleiche Inhalte ergeben immer dieselbe Zeichenkette,
    egal in welcher Reihenfolge sie im Speicher stehen. */
@@ -534,7 +534,13 @@ function verschmelzen(f) {
   letzterStand = schnappschuss();     // Zusammengeführtes gilt nicht als eigene Änderung
 }
 
-function setStatus(s) { syncStatus = s; renderSyncCard(); }
+function setStatus(s) {
+  // Solange das Abholen klappt, ist der Abgleich in Ordnung – auch wenn
+  // der Live-Strom gerade neu aufgebaut wird.
+  if (s === 'verbinde' && letzterEmpfang && Date.now() - letzterEmpfang < 40000) s = 'live';
+  syncStatus = s;
+  renderSyncCard();
+}
 
 /* --- verbinden und zuhören --- */
 let neuversuch = null, wartezeit = 2000;
@@ -549,7 +555,7 @@ async function syncConnect() {
   quelle = new EventSource(raumUrl());
   quelle.addEventListener('put', ev => uebernehmen(ev.data));
   quelle.addEventListener('patch', ev => uebernehmen(ev.data));
-  quelle.onopen = () => { wartezeit = 2000; setStatus('live'); };   // erst hören, nicht senden
+  quelle.onopen = () => { wartezeit = 2000; setStatus('live'); syncPull(); };
   quelle.onerror = () => { setStatus('offline'); spaeterNochmal(); };
 }
 
@@ -577,12 +583,16 @@ function syncPruefen(grund) {
   }
 }
 
-addEventListener('online', () => syncPruefen('online'));
-addEventListener('visibilitychange', () => { if (!document.hidden) syncPruefen('sichtbar'); });
+addEventListener('online', () => { syncPruefen('online'); syncPull(); });
+addEventListener('visibilitychange', () => {
+  if (!document.hidden) { syncPruefen('sichtbar'); syncPull(); }
+});
 addEventListener('focus', () => syncPruefen('sichtbar'));
 setInterval(() => syncPruefen('herzschlag'), 25000);
+// Sicherheitsnetz: alle 20 Sekunden aktiv nachsehen, solange die App offen ist
+setInterval(() => { if (!document.hidden) syncPull(); }, 20000);
 
-async function uebernehmen(rohdaten) {
+function uebernehmen(rohdaten) {
   setStatus('live');
   let paket;
   try {
@@ -590,9 +600,16 @@ async function uebernehmen(rohdaten) {
     paket = nachricht && nachricht.path === '/' ? nachricht.data : null;
     if (!paket && nachricht && nachricht.data && nachricht.data.ct) paket = nachricht.data;
   } catch (e) { return; }
+  verarbeitePaket(paket);
+}
 
+/* Ein empfangenes Paket auswerten – gleich ob es aus dem Live-Strom
+   kam oder direkt abgeholt wurde. */
+async function verarbeitePaket(paket, laut) {
   if (!paket || !paket.ct) {                 // Raum noch leer: wir legen den ersten Stand hinein
+    raumInhalt = { leer: true, zeit: Date.now() };
     letzterPush = ''; syncPush(true);
+    renderSyncCard();
     return;
   }
   if (paket.von === GERAET) {
@@ -601,7 +618,9 @@ async function uebernehmen(rohdaten) {
     letzterEmpfang = Date.now();
     try {
       const eigen = await entschluesseln(paket);
+      raumInhalt = beschreibe(eigen, 'diesem Gerät');
       if (vergleichbar(eigen) !== vergleichbar(teilbar())) { letzterPush = ''; syncPush(true); }
+      else if (laut) toast('Der Raum ist auf demselben Stand ✓');
     } catch (e) {}
     renderSyncCard();
     return;
@@ -611,7 +630,9 @@ async function uebernehmen(rohdaten) {
     const fremd = await entschluesseln(paket);
     letzteFremdFassung = fremd.fassung || 0;
     letzterEmpfang = Date.now();
+    raumInhalt = beschreibe(fremd, 'einem anderen Gerät');
     const fremdStr = vergleichbar(fremd);
+    const vorher = vergleichbar(teilbar());
     verschmelzen(fremd);
     syncPinned();
     save(true);                              // ohne Rückweg, sonst ginge es im Kreis
@@ -622,9 +643,33 @@ async function uebernehmen(rohdaten) {
     const jetztStr = vergleichbar(teilbar());
     if (jetztStr !== fremdStr) { letzterPush = ''; syncPush(true); }
     else letzterPush = kanon(teilbar());
-    toast('Von den anderen aktualisiert 🔄');
+    if (jetztStr !== vorher) toast('Von den anderen aktualisiert 🔄');
+    else if (laut) toast('Nichts Neues im Raum');
   } catch (e) {
     toast('Ein Paket ließ sich nicht entschlüsseln');
+  }
+}
+
+const beschreibe = (q, wer) => ({
+  termine: (q.entries || []).length,
+  ideen: (q.custom || []).length,
+  fassung: q.fassung || 0,
+  wer, zeit: Date.now(),
+});
+
+/* Direkt abholen, ohne auf den Live-Strom angewiesen zu sein.
+   Auf iPhones stirbt der Strom gern unbemerkt – das hier geht immer. */
+async function syncPull(laut) {
+  if (!RAUM || !RAUMKEY) return;
+  try {
+    const r = await fetch(raumUrl() + '?_=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const paket = await r.json();
+    setStatus('live');
+    await verarbeitePaket(paket, laut);
+  } catch (e) {
+    setStatus('offline');
+    if (laut) toast('Raum nicht erreichbar');
   }
 }
 
@@ -679,7 +724,7 @@ const familienLink = () => RAUM
 function syncLaden() {
   try {
     const roh = localStorage.getItem(SYNC_KEY);
-    if (roh) { RAUM = JSON.parse(roh); syncConnect(); }
+    if (roh) { RAUM = JSON.parse(roh); syncConnect().then(() => syncPull()); }
   } catch (e) {}
 }
 
@@ -781,12 +826,17 @@ function renderSyncCard() {
       <div><b>Fassung</b><span>${FASSUNG}${letzteFremdFassung !== null
         ? ` · andere: ${letzteFremdFassung || 'alt'}` : ''}</span></div>
       <div><b>Raum</b><span>${esc(RAUM.id.slice(0, 8))}…</span></div>
-      <div><b>Inhalt</b><span>${S.entries.length} Termine, ${(S.custom || []).length} eigene Ideen</span></div>
+      <div><b>Auf diesem Gerät</b><span>${S.entries.length} Termine, ${(S.custom || []).length} eigene Ideen</span></div>
+      <div><b>Im Raum</b><span>${raumInhalt
+        ? (raumInhalt.leer ? 'noch leer'
+           : `${raumInhalt.termine} Termine, ${raumInhalt.ideen} eigene Ideen · von ${esc(raumInhalt.wer)}`)
+        : 'noch nicht nachgesehen'}</span></div>
       <div><b>Zuletzt empfangen</b><span>${uhr(letzterEmpfang)} Uhr</span></div>
     </div>
     <div class="btnrow">
       <button class="btn btn-main" id="syncShare">👨‍👩‍👧 Familien-Link teilen</button>
-      <button class="btn" id="syncNow">🔄 Meinen Stand senden</button>
+      <button class="btn" id="syncNow">⬆︎ Meinen Stand senden</button>
+      <button class="btn" id="syncGet">⬇︎ Raum abholen</button>
       <button class="btn" id="syncFresh">🔃 App erneuern</button>
       <button class="btn btn-danger" id="syncStop">Abgleich beenden</button>
     </div>`;
@@ -1651,6 +1701,7 @@ document.addEventListener('click', async ev => {
                       sheetTitle: '👨‍👩‍👧 Familien-Link' });
   }
   if (t.id === 'syncNow') { letzterPush = ''; syncPush(true); toast('Stand gesendet'); return; }
+  if (t.id === 'syncGet') { toast('Hole den Raum …'); await syncPull(true); return; }
   if (t.id === 'syncFresh') {
     toast('Hole die neueste Fassung …');
     try {
