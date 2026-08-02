@@ -299,18 +299,80 @@ const todayIso = () => iso(new Date());
    ============================================================ */
 
 const KEY = 'berlin2026_plan_v1';
-let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, unpinned: [], seeded: false };
+let S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, unpinned: [], seeded: false,
+          /* Merkzeiten: wann wurde was zuletzt geändert. Nur dadurch lassen sich
+             zwei Geräte zusammenführen, ohne dass eines das andere überfährt. */
+          stamp: { votes: {}, entries: {}, custom: {}, todos: {}, avatars: 0 },
+          tomb:  { entries: {}, custom: {} } };
+
+function frischeFelder() {
+  S.stamp = Object.assign({ votes: {}, entries: {}, custom: {}, todos: {}, avatars: 0 }, S.stamp);
+  S.tomb = Object.assign({ entries: {}, custom: {} }, S.tomb);
+  S.unpinned = S.unpinned || [];
+}
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) S = Object.assign(S, JSON.parse(raw));
   } catch (e) { /* kaputter Speicher – dann eben frisch */ }
+  frischeFelder();
   if (!S.seeded) { seedFixed(); S.seeded = true; }
   syncPinned();
+  letzterStand = schnappschuss();
   save();
 }
+
+/* --- Merkzeiten pflegen -------------------------------------------------
+   Statt jede einzelne Änderung im Code zu markieren, wird beim Speichern
+   verglichen, was sich gegenüber dem letzten Stand geändert hat. */
+let letzterStand = null;
+
+function schnappschuss() {
+  return {
+    votes: JSON.stringify(S.votes || {}),
+    votesObj: JSON.parse(JSON.stringify(S.votes || {})),
+    entries: Object.fromEntries((S.entries || []).map(e => [e.id, JSON.stringify(e)])),
+    custom: Object.fromEntries((S.custom || []).map(i => [i.id, JSON.stringify(i)])),
+    todos: JSON.parse(JSON.stringify(S.todos || {})),
+    avatars: JSON.stringify(S.avatars || {}),
+  };
+}
+
+function stempeln() {
+  const alt = letzterStand || schnappschuss();
+  const neu = schnappschuss();
+  const jetzt = Date.now();
+
+  // Stimmen: jede einzelne Zelle für sich
+  const zellen = new Set();
+  [alt.votesObj, neu.votesObj].forEach(q => Object.entries(q).forEach(([i, v]) =>
+    Object.keys(v).forEach(p => zellen.add(i + '|' + p))));
+  zellen.forEach(z => {
+    const [i, p] = z.split('|');
+    const a = (alt.votesObj[i] || {})[p], b = (neu.votesObj[i] || {})[p];
+    if (a !== b) S.stamp.votes[z] = jetzt;
+  });
+
+  // Termine und eigene Ideen: neu, geändert oder gelöscht
+  ['entries', 'custom'].forEach(art => {
+    Object.keys(neu[art]).forEach(id => {
+      if (alt[art][id] !== neu[art][id]) { S.stamp[art][id] = jetzt; delete S.tomb[art][id]; }
+    });
+    Object.keys(alt[art]).forEach(id => {
+      if (!(id in neu[art])) { S.tomb[art][id] = jetzt; delete S.stamp[art][id]; }
+    });
+  });
+
+  Object.keys(Object.assign({}, alt.todos, neu.todos)).forEach(k => {
+    if (alt.todos[k] !== neu.todos[k]) S.stamp.todos[k] = jetzt;
+  });
+  if (alt.avatars !== neu.avatars) S.stamp.avatars = jetzt;
+
+  letzterStand = neu;
+}
 function save(vomServer) {
+  if (!vomServer) stempeln();      // eigene Änderungen mit der Uhrzeit versehen
   try { localStorage.setItem(KEY, JSON.stringify(S)); }
   catch (e) {
     // Meist der volle Speicher – Fotos sind mit Abstand das Größte darin
@@ -326,7 +388,7 @@ const avatarOf = p => (S.avatars && S.avatars[p.id]) || p.emoji;
 function seedFixed() {
   IDEAS.filter(i => i.fixed).forEach(i => {
     if (S.entries.some(e => e.ideaId === i.id)) return;
-    S.entries.push({ id: uid(), ideaId: i.id, date: i.fixed.date, slot: i.fixed.slot,
+    S.entries.push({ id: 'fix-' + i.id, ideaId: i.id, date: i.fixed.date, slot: i.fixed.slot,
                      time: i.fixed.time, note: '', done: false, fixed: true });
   });
 }
@@ -381,7 +443,92 @@ async function entschluesseln(paket) {
 
 const raumUrl = () => `${RAUM.db.replace(/\/+$/, '')}/rooms/${RAUM.id}.json`;
 const teilbar = () => ({ entries: S.entries, votes: S.votes, custom: S.custom,
-                         todos: S.todos, avatars: S.avatars, unpinned: S.unpinned });
+                         todos: S.todos, avatars: S.avatars, unpinned: S.unpinned,
+                         stamp: S.stamp, tomb: S.tomb });
+
+/* Für den Vergleich: gleiche Inhalte ergeben immer dieselbe Zeichenkette,
+   egal in welcher Reihenfolge sie im Speicher stehen. */
+function kanon(x) {
+  if (Array.isArray(x)) return '[' + x.map(kanon).join(',') + ']';
+  if (x && typeof x === 'object') {
+    return '{' + Object.keys(x).sort().map(k => JSON.stringify(k) + ':' + kanon(x[k])).join(',') + '}';
+  }
+  return JSON.stringify(x === undefined ? null : x);
+}
+const nachId = (a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+function vergleichbar(q) {
+  // Nur der sichtbare Inhalt zählt. Merkzeiten und Grabsteine reisen zwar mit,
+  // sollen aber keinen Schreibvorgang auslösen – sonst schicken sich zwei
+  // Geräte ewig Verwaltungskram hin und her.
+  return kanon({
+    entries: (q.entries || []).slice().sort(nachId),
+    custom: (q.custom || []).slice().sort(nachId),
+    votes: q.votes || {}, todos: q.todos || {}, avatars: q.avatars || {},
+    unpinned: (q.unpinned || []).slice().sort(),
+  });
+}
+
+/* Zwei Stände zusammenführen. Für jedes einzelne Stück gewinnt die
+   jüngere Änderung – auch eine Löschung. Niemand überfährt mehr den
+   anderen, nur weil er sich zuletzt verbunden hat. */
+function verschmelzen(f) {
+  const fs = Object.assign({ votes: {}, entries: {}, custom: {}, todos: {}, avatars: 0 }, f.stamp);
+  const ft = Object.assign({ entries: {}, custom: {} }, f.tomb);
+  const zeit = (q, k) => (q && q[k]) || 0;
+
+  // Grabsteine beider Seiten vereinen – die jüngere Löschung zählt
+  ['entries', 'custom'].forEach(art => Object.entries(ft[art]).forEach(([id, t]) => {
+    if (t > zeit(S.tomb[art], id)) S.tomb[art][id] = t;
+  }));
+
+  ['entries', 'custom'].forEach(art => {
+    const meins = new Map((S[art] || []).map(x => [x.id, x]));
+    (f[art] || []).forEach(x => {
+      const tf = zeit(fs[art], x.id), tl = zeit(S.stamp[art], x.id);
+      if (zeit(S.tomb[art], x.id) > tf) return;        // drüben gelöscht, Löschung jünger
+      if (!meins.has(x.id) || tf > tl) { meins.set(x.id, x); S.stamp[art][x.id] = Math.max(tf, tl); }
+    });
+    // eigene Stücke fallen lassen, die der andere später gelöscht hat
+    Array.from(meins.keys()).forEach(id => {
+      if (zeit(S.tomb[art], id) > zeit(S.stamp[art], id)) meins.delete(id);
+    });
+    S[art] = Array.from(meins.values());
+  });
+
+  // Doppelgänger aus alten Fassungen einsammeln: gleicher Inhalt, andere Kennung
+  const gesehen = new Map();
+  S.entries.forEach(e => {
+    const kern = [e.ideaId, e.date, e.slot, e.time || '', e.label || ''].join('|');
+    const vorhanden = gesehen.get(kern);
+    if (!vorhanden) { gesehen.set(kern, e); return; }
+    const behalten = vorhanden.id < e.id ? vorhanden : e;    // stabile Wahl auf allen Geräten
+    gesehen.set(kern, behalten);
+  });
+  S.entries = Array.from(gesehen.values());
+
+  Object.entries(fs.votes).forEach(([zelle, t]) => {
+    if (t <= zeit(S.stamp.votes, zelle)) return;
+    const [idee, wer] = zelle.split('|');
+    const wert = ((f.votes || {})[idee] || {})[wer];
+    S.votes[idee] = S.votes[idee] || {};
+    if (wert === undefined) delete S.votes[idee][wer]; else S.votes[idee][wer] = wert;
+    S.stamp.votes[zelle] = t;
+  });
+
+  Object.entries(fs.todos).forEach(([k, t]) => {
+    if (t <= zeit(S.stamp.todos, k)) return;
+    S.todos[k] = (f.todos || {})[k];
+    S.stamp.todos[k] = t;
+  });
+
+  if ((fs.avatars || 0) > (S.stamp.avatars || 0)) {
+    S.avatars = f.avatars || {};
+    S.stamp.avatars = fs.avatars;
+  }
+
+  S.unpinned = Array.from(new Set((S.unpinned || []).concat(f.unpinned || [])));
+  letzterStand = schnappschuss();     // Zusammengeführtes gilt nicht als eigene Änderung
+}
 
 function setStatus(s) { syncStatus = s; renderSyncCard(); }
 
@@ -395,7 +542,7 @@ async function syncConnect() {
   quelle = new EventSource(raumUrl());
   quelle.addEventListener('put', ev => uebernehmen(ev.data));
   quelle.addEventListener('patch', ev => uebernehmen(ev.data));
-  quelle.onopen = () => { setStatus('live'); syncPush(true); };
+  quelle.onopen = () => setStatus('live');   // NICHT hochschicken – erst hören!
   quelle.onerror = () => setStatus('offline');
 }
 
@@ -407,20 +554,28 @@ async function uebernehmen(rohdaten) {
     paket = nachricht && nachricht.path === '/' ? nachricht.data : null;
     if (!paket && nachricht && nachricht.data && nachricht.data.ct) paket = nachricht.data;
   } catch (e) { return; }
-  if (!paket || !paket.ct) return;
-  if (paket.von === GERAET) return;                  // das war der eigene Nachhall
+
+  if (!paket || !paket.ct) {                 // Raum noch leer: wir legen den ersten Stand hinein
+    letzterPush = ''; syncPush(true);
+    return;
+  }
+  if (paket.von === GERAET) return;          // das war der eigene Nachhall
+
   try {
     const fremd = await entschluesseln(paket);
-    Object.assign(S, {
-      entries: fremd.entries || [], votes: fremd.votes || {}, custom: fremd.custom || [],
-      todos: fremd.todos || {}, avatars: fremd.avatars || {}, unpinned: fremd.unpinned || [],
-    });
+    const fremdStr = vergleichbar(fremd);
+    verschmelzen(fremd);
     syncPinned();
-    save(true);                                      // ohne Rückweg, sonst ginge es im Kreis
-    renderCrew(); renderAll();
+    save(true);                              // ohne Rückweg, sonst ginge es im Kreis
+    renderCrew(); renderAll(); renderSyncCard();
+
+    // Nur zurückschreiben, wenn wir etwas wissen, das drüben fehlt.
+    // Sonst würden sich zwei Geräte gegenseitig endlos anstupsen.
+    const jetztStr = vergleichbar(teilbar());
+    if (jetztStr !== fremdStr) { letzterPush = ''; syncPush(true); }
+    else letzterPush = kanon(teilbar());
     toast('Von den anderen aktualisiert 🔄');
   } catch (e) {
-    setStatus('live');
     toast('Ein Paket ließ sich nicht entschlüsseln');
   }
 }
@@ -430,10 +585,10 @@ function syncPush(sofort) {
   if (!RAUM || !RAUMKEY) return;
   clearTimeout(pushTimer);
   pushTimer = setTimeout(async () => {
-    const inhalt = JSON.stringify(teilbar());
+    const inhalt = kanon(teilbar());
     if (inhalt === letzterPush) return;              // nichts Neues
     try {
-      const paket = await verschluesseln(JSON.parse(inhalt));
+      const paket = await verschluesseln(teilbar());
       const r = await fetch(raumUrl(), {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(paket),
@@ -1145,7 +1300,7 @@ function syncPinned() {
     if (S.unpinned.includes(i.id)) return;        // von Hand entfernt – bleibt entfernt
     if (schon.length) { schon.forEach(e => { e.date = tag; }); return; }   // Datum geändert
     if (S.entries.some(e => e.ideaId === i.id)) return;                    // schon selbst geplant
-    S.entries.push({ id: uid(), ideaId: i.id, date: tag, slot: i.slot || 'tag', time: '',
+    S.entries.push({ id: 'pin-' + i.id, ideaId: i.id, date: tag, slot: i.slot || 'tag', time: '',
                      note: '', done: false, fixed: true, pinned: true });
   });
 }
@@ -1473,6 +1628,7 @@ $('#btnReset').onclick = () => {
   $('#rYes').onclick = () => {
     localStorage.removeItem(KEY);
     S = { v: 1, entries: [], votes: {}, custom: [], todos: {}, avatars: {}, unpinned: [], seeded: false };
+    frischeFelder(); letzterStand = schnappschuss();
     seedFixed(); S.seeded = true; save();
     closeSheet(); renderAll(); showView('plan'); toast('Alles auf Anfang');
   };
@@ -1520,16 +1676,15 @@ function importFromHash() {
       openSheet('👨‍👩‍👧 Familien-Raum', `
         <p class="muted">Jemand aus der Familie lädt euch in den gemeinsamen Plan ein.
           Ab dann seht ihr Stimmen und Termine der anderen sofort – und sie eure.</p>
-        <div class="hint">Der Plan, der jetzt auf diesem Gerät steht, wird durch den
-          gemeinsamen ersetzt. Falls hier etwas drin ist, was noch niemand kennt:
-          erst „Plan als Text“ sichern.</div>
+        <div class="hint">Euer bisheriger Stand geht nicht verloren – er wird mit dem
+          gemeinsamen zusammengeführt.</div>
         <div class="sheet-acts">
           <button class="btn btn-ghost" data-close>Abbrechen</button>
           <button class="btn btn-main" id="raumJa">Beitreten</button>
         </div>`);
       $('#raumJa').onclick = async () => {
         RAUM = raum; localStorage.setItem(SYNC_KEY, JSON.stringify(RAUM));
-        letzterPush = JSON.stringify(teilbar());     // erst zuhören, nicht sofort überschreiben
+        letzterPush = '';
         await syncConnect();
         closeSheet(); renderSyncCard(); toast('Ihr seid dabei! 🟢'); confetti();
       };
