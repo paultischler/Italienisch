@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 
 /// Fünf Wörter aus dem Grundwortschatz, je drei Antworten, acht Sekunden Zeit. Kein Tippen.

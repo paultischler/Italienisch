@@ -25,11 +25,14 @@ targets:
         WKApplication: true
         WKWatchOnly: true
         NSUserNotificationsUsageDescription: Erinnert einmal am Tag an fällige Karten.
-    entitlements:
-      path: ImparaWatch/ImparaWatch.entitlements
-      properties:
-        com.apple.security.application-groups:
-          - group.de.tischler.impara
+    # App Group entfernt: 'group.de.tischler.impara' ist im Entwicklerkonto nicht
+    # angelegt, daher schlug die Signierung fehl. Zum Aktivieren die Gruppe im
+    # Developer-Portal registrieren und hier in beiden Zielen eintragen:
+    #   entitlements:
+    #     path: ImparaWatch/ImparaWatch.entitlements
+    #     properties:
+    #       com.apple.security.application-groups:
+    #         - group.de.tischler.impara
     dependencies:
       - target: ImparaWidget
         embed: true
@@ -45,11 +48,37 @@ targets:
         CFBundleDisplayName: Impara
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
-    entitlements:
-      path: ImparaWidget/ImparaWidget.entitlements
-      properties:
-        com.apple.security.application-groups:
-          - group.de.tischler.impara
+    # App Group entfernt: 'group.de.tischler.impara' ist im Entwicklerkonto nicht
+    # angelegt, daher schlug die Signierung fehl. Zum Aktivieren die Gruppe im
+    # Developer-Portal registrieren und hier in beiden Zielen eintragen:
+    #   entitlements:
+    #     path: ImparaWidget/ImparaWidget.entitlements
+    #     properties:
+    #       com.apple.security.application-groups:
+    #         - group.de.tischler.impara
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: de.tischler.impara.ImparaWatch.widget
+  ImparaWatchUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - path: ImparaWatchUITests
+    dependencies:
+      - target: ImparaWatch
+    settings:
+      base:
+        TEST_TARGET_NAME: ImparaWatch
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ImparaWatch:
+    build:
+      targets:
+        ImparaWatch: all
+        ImparaWatchUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ImparaWatchUITests

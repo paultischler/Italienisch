@@ -21,7 +21,7 @@ final class Store: ObservableObject {
         var sessions: [SessionLog]
     }
 
-    static let sessionSize = 5
+    nonisolated static let sessionSize = 5
 
     private var fileURL: URL {
         let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
