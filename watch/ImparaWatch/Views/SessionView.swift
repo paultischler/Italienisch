@@ -91,8 +91,10 @@ struct SessionView: View {
             }
         }
         // Die Ansicht rollt nicht, damit die Krone zum Aufdecken frei bleibt;
-        // deshalb muss sie sich selbst unter der Navigationsleiste halten.
+        // deshalb muss sie sich selbst unter der Navigationsleiste halten
+        // und seitlich Abstand vom Rand halten.
         .padding(.top, 22)
+        .padding(.horizontal, 6)
         .contentShape(Rectangle())
         .onTapGesture { if !revealed { reveal() } }
         .focusable()
