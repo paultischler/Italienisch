@@ -22,15 +22,19 @@ final class FlowUITests: XCTestCase {
         sleep(2)
         step("02-card-front")
 
+        let grade = app.buttons["checkmark"]
+        XCTAssertFalse(grade.exists, "Bewertungstasten dürfen vor dem Aufdecken nicht da sein")
+
         for round in 1...5 {
-            center().tap()                      // aufdecken
-            sleep(1)
-            if round == 1 { step("03-card-back") }
-            let buttons = app.buttons.allElementsBoundByIndex
-            log("Runde \(round) Tasten: " + buttons.map { "'\($0.label)'" }.joined(separator: ", "))
-            guard let grade = buttons.last, buttons.count >= 2 else {
-                XCTFail("Bewertungstasten fehlen in Runde \(round)"); return
+            if round == 1 {
+                // Erste Karte über die Krone aufdecken, der Rest per Tippen.
+                XCUIDevice.shared.rotateDigitalCrown(delta: 1.0)
+                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Krone deckt die Karte nicht auf")
+            } else {
+                center().tap()
+                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Tippen deckt Karte \(round) nicht auf")
             }
+            if round == 1 { step("03-card-back") }
             grade.tap()
             sleep(1)
         }
@@ -48,10 +52,10 @@ final class FlowUITests: XCTestCase {
         sleep(2)
         step("05-blitz")
         for round in 1...5 {
-            let options = app.buttons.allElementsBoundByIndex
-            log("Blitz \(round) Tasten: " + options.map { "'\($0.label)'" }.joined(separator: ", "))
-            guard let answer = options.last else { XCTFail("Keine Antworten in Blitz \(round)"); return }
-            answer.tap()
+            let options = app.buttons.allElementsBoundByIndex.filter { $0.identifier != "BackButton" }
+            XCTAssertEqual(options.count, 3, "Blitz \(round) zeigt nicht drei Antworten")
+            log("Blitz \(round): " + options.map { "'\($0.label)'" }.joined(separator: ", "))
+            options[2].tap()
             sleep(2)
         }
         sleep(1)

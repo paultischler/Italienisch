@@ -75,4 +75,4 @@ Beim ersten Start lädt die App Beispieldaten (20 Karten, davon 12 fällig). Fü
 
 ## Was fehlt
 
-Sync mit dem Firebase-Raum der Web-App, die iOS-Hülle für den App Store, Start der Runde direkt aus der Mitteilung, Belegung der Aktionstaste (das geht über die Einstellungen der Uhr, sobald die App installiert ist), die App Group für das Widget und ein App-Icon. Kleinigkeit fürs Auge: in der Kartenrunde und in der Blitzrunde überlagern sich die Kopfzeile der Ansicht und der Navigationstitel.
+Sync mit dem Firebase-Raum der Web-App, die iOS-Hülle für den App Store, Start der Runde direkt aus der Mitteilung, Belegung der Aktionstaste (das geht über die Einstellungen der Uhr, sobald die App installiert ist), die App Group für das Widget und ein App-Icon.

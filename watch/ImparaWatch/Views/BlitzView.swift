@@ -41,35 +41,37 @@ struct BlitzView: View {
     private var round: Round { rounds[index] }
 
     private var roundView: some View {
-        VStack(spacing: 6) {
-            HStack {
-                Text("\(index + 1) / \(rounds.count)")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Text("\(secondsLeft)")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .frame(width: 24, height: 24)
-                    .overlay(Circle().stroke(secondsLeft <= 3 ? Color.brick : Color.gold, lineWidth: 2))
-            }
-            Text(round.word.de)
-                .font(.system(.title3, design: .rounded, weight: .heavy))
-                .multilineTextAlignment(.center)
-                .minimumScaleFactor(0.6)
-                .lineLimit(2)
-                .padding(.vertical, 2)
-
-            ForEach(round.options, id: \.self) { option in
-                Button { answer(option) } label: {
-                    Text(option)
-                        .font(.footnote.weight(.semibold))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        ScrollView {
+            VStack(spacing: 6) {
+                HStack {
+                    Text("\(index + 1) / \(rounds.count)")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text("\(secondsLeft)")
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .frame(width: 24, height: 24)
+                        .overlay(Circle().stroke(secondsLeft <= 3 ? Color.brick : Color.gold, lineWidth: 2))
                 }
-                .buttonStyle(.bordered)
-                .tint(tint(for: option))
-                .disabled(chosen != nil)
+                Text(round.word.de)
+                    .font(.system(.title3, design: .rounded, weight: .heavy))
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(2)
+                    .padding(.vertical, 2)
+
+                ForEach(round.options, id: \.self) { option in
+                    Button { answer(option) } label: {
+                        Text(option)
+                            .font(.footnote.weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(tint(for: option))
+                    .disabled(chosen != nil)
+                }
             }
         }
     }
