@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch Wireframes</title>
+<style>
+  :root{
+    --page:#f3f0ec; --ink:#2d2926; --ink2:#6b6260; --ink3:#9e9691;
+    --case:#3a3633; --screen:#000; --line:#55504b; --fill:#26221f;
+    --txt:#f4f1ec; --txt2:#a39c96;
+    --accent:#c4724a; --green:#4a8c6a; --red:#c44b3f; --gold:#c49234;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 -apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;padding:32px 24px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--ink2);margin:0 0 28px;max-width:70ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 22px;max-width:1240px}
+  figure{margin:0}
+  figcaption{margin-top:12px;font-size:13px;color:var(--ink2)}
+  figcaption b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+  .n{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:20px;margin-right:6px;vertical-align:1px}
+
+  /* watch frame, 1:2 of 410x502 px scaled x1.2 */
+  .watch{position:relative;width:246px;height:301px;margin:0 auto}
+  .case{position:absolute;inset:-14px;border-radius:66px;background:var(--case);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+  .crown{position:absolute;right:-24px;top:112px;width:12px;height:44px;border-radius:5px;background:#57524d}
+  .btn-side{position:absolute;right:-22px;top:168px;width:9px;height:38px;border-radius:4px;background:#57524d}
+  .action{position:absolute;left:-24px;top:118px;width:12px;height:52px;border-radius:5px;background:var(--accent)}
+  .screen{position:absolute;inset:0;border-radius:52px;background:var(--screen);color:var(--txt);overflow:hidden;padding:26px 20px 18px;display:flex;flex-direction:column}
+  .time{position:absolute;top:12px;right:30px;font-size:11px;font-weight:700;color:var(--txt2)}
+  .title{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+
+  .row{display:flex;gap:8px;align-items:center}
+  .grow{flex:1}
+  .box{border:1.5px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--fill)}
+  .btnw{border-radius:14px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border:1.5px solid var(--line);background:var(--fill)}
+  .btnw.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btnw.ok{background:var(--green);border-color:var(--green);color:#fff}
+  .btnw.no{background:var(--red);border-color:var(--red);color:#fff}
+  .btnw.ghost{background:transparent}
+  .muted{color:var(--txt2);font-size:12px}
+  .dots{display:flex;gap:6px;justify-content:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .dots i.on{background:var(--accent)}
+  .dots i.ok{background:var(--green)}
+  .dots i.no{background:var(--red)}
+  .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;border:1.5px solid var(--line);color:var(--txt2)}
+  .q{font-size:26px;font-weight:800;line-height:1.15;text-align:center;margin:auto 0}
+  .a{font-size:24px;font-weight:800;line-height:1.15;text-align:center;color:#fff}
+  .ex{font-size:12px;color:var(--txt2);text-align:center;font-style:italic;margin-top:6px}
+  .ring{width:92px;height:92px;border-radius:50%;margin:2px auto 6px;position:relative;
+    background:conic-gradient(var(--accent) 0 62%,var(--fill) 62% 100%)}
+  .ring:after{content:"";position:absolute;inset:11px;border-radius:50%;background:#000}
+  .ring span{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;font-weight:800;font-size:26px;line-height:1}
+  .ring span small{font-size:10px;font-weight:600;color:var(--txt2);margin-top:2px}
+  .opt{border-radius:12px;height:36px;display:flex;align-items:center;padding:0 12px;border:1.5px solid var(--line);background:var(--fill);font-weight:600;font-size:14px}
+  .opt.sel{border-color:var(--green);background:rgba(74,140,106,.25)}
+  .timer{width:28px;height:28px;border-radius:50%;border:2.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+  .big{font-size:40px;font-weight:800;text-align:center;line-height:1}
+  .dim .screen{color:#7d776f}
+  .dim .screen .q{color:#8f8880}
+  .dim .screen .title{color:#7a5a48}
+  .dim .screen .badge{color:#5a554f;border-color:#3a3632}
+  .dim .screen .dots i.on{background:#7a5a48}
+  /* watch face with complication */
+  .face .screen{padding:18px 18px 14px;justify-content:space-between;align-items:center}
+  .clock{font-size:56px;font-weight:200;letter-spacing:-2px;line-height:1;margin-top:20px}
+  .comp{width:100%;border-radius:16px;border:1.5px solid var(--line);background:var(--fill);padding:8px 12px;display:flex;gap:10px;align-items:center}
+  .comp .mini{width:34px;height:34px;border-radius:50%;background:conic-gradient(var(--accent) 0 62%,#3a3632 62% 100%);position:relative;flex:none}
+  .comp .mini:after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--fill)}
+  .comp .mini b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;z-index:1}
+  .notif{width:100%;border-radius:18px;background:var(--fill);border:1.5px solid var(--line);padding:10px 12px}
+  .legend{margin-top:36px;max-width:70ch;color:var(--ink2);font-size:13px}
+  .legend span{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+</style>
+</head>
+<body>
+<h1>Impara Italiano auf der Apple Watch Ultra</h1>
+<p class="sub">Wireframes im Maßstab 1:2 eines Ultra-Displays (410 × 502 px). Farbe nur dort, wo sie Bedienung bedeutet: Terrakotta für Start und Fortschritt, Grün und Rot für die Bewertung. Alles andere ist Graustufen und in der Umsetzung schwarz.</p>
+
+<div class="grid">
+
+<figure>
+  <div class="watch">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:42</div>
+      <div class="title">Impara</div>
+      <div class="ring"><span>12<small>fällig</small></span></div>
+      <div class="row" style="justify-content:center;margin-bottom:10px"><span class="muted">🔥 7 Tage · heute noch offen</span></div>
+      <div class="btnw pri">5 fällige</div>
+      <div style="height:8px"></div>
+      <div class="btnw">Blitzrunde</div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">1</span>Start</b>Ring zeigt fällige Karten, darunter der Streak. Eine Hauptaktion, eine Nebenaktion. Die orange Aktionstaste links am Gehäuse startet direkt „5 fällige“.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:42</div>
+      <div class="row"><span class="badge">Phase 3</span><span class="grow"></span><span class="muted">2 / 5</span></div>
+      <div class="dots" style="margin-top:10px"><i class="ok"></i><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="q">die Bahnhofs­halle</div>
+      <div class="muted" style="text-align:center">Tippen zum Aufdecken</div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">2</span>Karte, Vorderseite</b>Frage groß und zentriert, Phase und Fortschritt klein am Rand. Antippen oder Krone drehen deckt auf. Diese Ansicht ist auch die Always-On-Ansicht (siehe 8).</figcaption>
+</figure>
+
+<figure>
+  <div class="watch">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:42</div>
+      <div class="row"><span class="badge">Phase 3</span><span class="grow"></span><span class="muted">2 / 5</span></div>
+      <div style="margin:auto 0">
+        <div class="muted" style="text-align:center;font-size:11px">die Bahnhofshalle</div>
+        <div class="a">l’atrio della stazione</div>
+        <div class="ex">Ci vediamo nell’atrio della stazione.</div>
+      </div>
+      <div class="row"><div class="btnw no grow">✗</div><div class="btnw ok grow">✓</div></div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">3</span>Karte, Rückseite</b>Antwort und Beispielsatz. Zwei Tasten, feste Plätze: Falsch links, Richtig rechts. Bewertung verbucht sich wie in der Web-App, mit Haptik statt Ton.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:42</div>
+      <div class="row"><span class="title">Blitz</span><span class="grow"></span><span class="muted">3 / 5</span><div class="timer">6</div></div>
+      <div class="q" style="font-size:22px;margin:10px 0 8px">das Frühstück</div>
+      <div class="opt sel">la colazione</div>
+      <div style="height:6px"></div>
+      <div class="opt">la cena</div>
+      <div style="height:6px"></div>
+      <div class="opt">il pranzo</div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">4</span>Blitzrunde</b>Fünf Wörter aus dem Grundwortschatz, je drei Antworten zur Auswahl, 8 Sekunden Zeit. Kein Tippen, kein Diktat. Ablösung für das Vokabelspiel der Web-App.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:43</div>
+      <div class="title" style="text-align:center">Fertig</div>
+      <div class="big" style="margin:12px 0 4px">4<span style="font-size:20px;color:var(--txt2)"> / 5</span></div>
+      <div class="dots" style="margin-bottom:8px"><i class="ok"></i><i class="ok"></i><i class="no"></i><i class="ok"></i><i class="ok"></i></div>
+      <div class="muted" style="text-align:center;margin-bottom:auto">🔥 8 Tage · 7 noch fällig</div>
+      <div class="btnw pri">Noch 5</div>
+      <div style="height:8px"></div>
+      <div class="btnw ghost">Fertig</div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">5</span>Ergebnis</b>Nach genau fünf Karten. Streak springt sofort um, Rest der fälligen Karten steht dabei. Weiter nur auf Wunsch.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch face">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="clock">10:42</div>
+      <div class="muted" style="font-size:11px">Sa 20. Sept.</div>
+      <div class="comp">
+        <div class="mini"><b>12</b></div>
+        <div style="line-height:1.2"><div style="font-size:12px;font-weight:700">il pomeriggio</div><div class="muted" style="font-size:10px">tippen zum Umdrehen</div></div>
+      </div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">6</span>Zifferblatt und Smart Stack</b>Komplikation mit Ring der fälligen Karten und dem Wort des Moments. Tippen dreht das Wort um, langes Drücken öffnet die App.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch face">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="clock" style="font-size:28px;margin-top:6px">12:30</div>
+      <div class="notif">
+        <div class="row" style="margin-bottom:4px"><span class="title" style="font-size:10px">Impara</span><span class="grow"></span><span class="muted" style="font-size:10px">jetzt</span></div>
+        <div style="font-size:14px;font-weight:700">12 Karten fällig</div>
+        <div class="muted" style="margin-bottom:8px">Eine Minute?</div>
+        <div class="btnw pri" style="height:32px;font-size:13px">5 fällige starten</div>
+        <div style="height:6px"></div>
+        <div class="btnw ghost" style="height:32px;font-size:13px">Später</div>
+      </div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">7</span>Mitteilung</b>Höchstens eine am Tag zur festen Uhrzeit, nur wenn mindestens fünf Karten fällig sind. Startet die Runde direkt aus der Mitteilung.</figcaption>
+</figure>
+
+<figure>
+  <div class="watch dim">
+    <div class="case"></div><div class="crown"></div><div class="btn-side"></div><div class="action"></div>
+    <div class="screen">
+      <div class="time">10:42</div>
+      <div class="row"><span class="badge">Phase 3</span><span class="grow"></span><span class="muted">2 / 5</span></div>
+      <div class="dots" style="margin-top:10px"><i class="ok"></i><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="q">die Bahnhofs­halle</div>
+      <div class="muted" style="text-align:center">&nbsp;</div>
+    </div>
+  </div>
+  <figcaption><b><span class="n">8</span>Always-On</b>Handgelenk gesenkt: Die aktuelle Vorderseite bleibt gedimmt stehen. Ein Blick auf die Uhr ist eine Wiederholung.</figcaption>
+</figure>
+
+</div>
+
+<p class="legend"><span style="background:#c4724a"></span>Terrakotta: Start, Fortschritt, Aktionstaste &nbsp; <span style="background:#4a8c6a"></span>Grün: Richtig &nbsp; <span style="background:#c44b3f"></span>Rot: Falsch &nbsp; <span style="background:#c49234"></span>Gold: Zeit</p>
+</body>
+</html>
