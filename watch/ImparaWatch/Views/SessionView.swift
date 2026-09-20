@@ -24,6 +24,8 @@ struct SessionView: View {
             }
         }
         .navigationTitle("Fällig")
+        // Titel in der Leiste neben der Uhrzeit statt in einer eigenen Zeile.
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if cards.isEmpty && !finished { restart() }
         }
@@ -32,17 +34,19 @@ struct SessionView: View {
     private var card: Card { cards[index] }
 
     private var cardView: some View {
-        VStack(spacing: 6) {
-            HStack {
+        VStack(spacing: 4) {
+            // Eine Kopfzeile: Phase, Fortschrittspunkte, Zähler.
+            HStack(spacing: 6) {
                 PhaseBadge(phase: store.phase6[card.id]?.phase)
-                Spacer()
+                Spacer(minLength: 2)
+                ProgressDots(count: cards.count, results: results, current: index)
+                Spacer(minLength: 2)
                 Text("\(index + 1) / \(cards.count)")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-            ProgressDots(count: cards.count, results: results, current: index)
 
-            Spacer(minLength: 4)
+            Spacer(minLength: 2)
 
             if revealed && !dimmed {
                 Text(card.front)
@@ -53,12 +57,16 @@ struct SessionView: View {
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.7)
                 if !card.example.isEmpty {
+                    // Der Beispielsatz bekommt seine Zeilen garantiert; eher schrumpft die Antwort.
                     Text(card.example)
                         .font(.caption2)
                         .italic()
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .layoutPriority(1)
+                        .padding(.top, 2)
                 }
             } else {
                 Text(card.front)
@@ -67,7 +75,7 @@ struct SessionView: View {
                     .minimumScaleFactor(0.6)
             }
 
-            Spacer(minLength: 4)
+            Spacer(minLength: 2)
 
             if dimmed {
                 // Always-On: nur die Vorderseite, keine Tasten.
@@ -92,8 +100,9 @@ struct SessionView: View {
         }
         // Die Ansicht rollt nicht, damit die Krone zum Aufdecken frei bleibt;
         // deshalb muss sie sich selbst unter der Navigationsleiste halten
-        // und seitlich Abstand vom Rand halten.
-        .padding(.top, 22)
+        // und seitlich Abstand vom Rand halten. Mit Inline-Titel ist die
+        // Leiste flacher als vorher, daher weniger Abstand oben.
+        .padding(.top, 12)
         .padding(.horizontal, 6)
         .contentShape(Rectangle())
         .onTapGesture { if !revealed { reveal() } }

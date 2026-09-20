@@ -38,7 +38,7 @@ struct ProgressDots: View {
     let current: Int
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 5) {
             ForEach(0..<count, id: \.self) { i in
                 Circle()
                     .fill(color(for: i))
