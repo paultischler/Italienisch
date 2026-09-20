@@ -100,9 +100,10 @@ struct SessionView: View {
         }
         // Die Ansicht rollt nicht, damit die Krone zum Aufdecken frei bleibt;
         // deshalb muss sie sich selbst unter der Navigationsleiste halten
-        // und seitlich Abstand vom Rand halten. Mit Inline-Titel ist die
-        // Leiste flacher als vorher, daher weniger Abstand oben.
-        .padding(.top, 12)
+        // und seitlich Abstand vom Rand halten. Der Inline-Titel macht die
+        // Leiste nicht flacher: sie bleibt 66pt hoch, Zurück-Pfeil und Titel
+        // enden bei 58pt. Gemessen mit dem UI-Test, siehe README.
+        .padding(.top, 28)
         .padding(.horizontal, 6)
         .contentShape(Rectangle())
         .onTapGesture { if !revealed { reveal() } }
