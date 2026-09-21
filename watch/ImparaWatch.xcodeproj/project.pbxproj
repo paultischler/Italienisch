@@ -22,6 +22,7 @@
 		AA94B93CE1B23E1CA72FE736 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC20473A57F4BA5176086D /* ResultView.swift */; };
 		B906260957105C3CF58E2EE0 /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = E520CA545158898B39F79BCF /* Reminders.swift */; };
 		C2DA4A85DE61C8B576DF672E /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */; };
+		CAB35B7F9330110E03997A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9923B003F8969E789E20D8E9 /* Assets.xcassets */; };
 		D1012795EC7BB24C08D6476E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC1BE3888F7E2598D19D7C3 /* Store.swift */; };
 		EAA5020B6F914DCCE3C45CF6 /* sample-backup.json in Resources */ = {isa = PBXBuildFile; fileRef = 729A9C7F2F5C61053E7177C0 /* sample-backup.json */; };
 		F1D482E4ADEDF58D235669DD /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E497746B9B121772140906B /* SharedData.swift */; };
@@ -76,6 +77,7 @@
 		729A9C7F2F5C61053E7177C0 /* sample-backup.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "sample-backup.json"; sourceTree = "<group>"; };
 		7446EBEADBA26858208760E7 /* ImparaWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImparaWatchApp.swift; sourceTree = "<group>"; };
 		80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		9923B003F8969E789E20D8E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBC1BE3888F7E2598D19D7C3 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		BBF90ED21212C6B39E246060 /* ImparaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImparaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2BC20473A57F4BA5176086D /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		68B10C3E36AF620DD5149866 /* ImparaWatch */ = {
 			isa = PBXGroup;
 			children = (
+				9923B003F8969E789E20D8E9 /* Assets.xcassets */,
 				80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */,
 				7446EBEADBA26858208760E7 /* ImparaWatchApp.swift */,
 				350C396D9EE57C88B3CF3504 /* Info.plist */,
@@ -286,6 +289,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAB35B7F9330110E03997A98 /* Assets.xcassets in Resources */,
 				5B96AE5500B96EE42971F10C /* Grundwortschatz.json in Resources */,
 				B2C3D4E5F60718293A4B5C6D /* Grammatik.json in Resources */,
 				E5F60718293A4B5C6D7E8F90 /* impara-backup.json in Resources */,

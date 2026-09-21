@@ -66,7 +66,7 @@ struct BlitzView: View {
                             .font(.footnote.weight(.semibold))
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
                     .buttonStyle(.bordered)
                     .tint(tint(for: option))

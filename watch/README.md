@@ -85,4 +85,4 @@ Ab watchOS 11 löst die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusamme
 
 ## Was fehlt
 
-Sync mit dem Firebase-Raum der Web-App, die iOS-Hülle für den App Store, Start der Runde direkt aus der Mitteilung, Belegung der Aktionstaste (das geht über die Einstellungen der Uhr, sobald die App installiert ist), die App Group für das Widget und ein App-Icon.
+Sync mit dem Firebase-Raum der Web-App, die iOS-Hülle für den App Store, Start der Runde direkt aus der Mitteilung, Belegung der Aktionstaste (das geht über die Einstellungen der Uhr, sobald die App installiert ist) und die App Group für das Widget.
