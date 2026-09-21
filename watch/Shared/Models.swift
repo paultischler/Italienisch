@@ -101,16 +101,42 @@ enum Leitner {
 
 // MARK: - Backup-Datei der Web-App (Statistiken > Backup & Geräteübertragung)
 
-/// Das Export-Paket enthält die localStorage-Werte als JSON-Strings: "c" Karten, "p" Phase-6-Stand.
+/// Das Export-Paket enthält die localStorage-Werte als JSON-Strings:
+/// "c" Karten, "p" Phase-6-Stand, "s" abgeschlossene Lernsitzungen (für den Streak).
 struct WebBackup: Decodable {
+    let exportedAt: String?
     let cards: [Card]
     let phase6: [Int: Phase6State]
+    let sessions: [WebSession]
 
-    enum CodingKeys: String, CodingKey { case c, p }
+    struct WebSession: Decodable {
+        let completedAt: Date?
+        let totalCards: Int
+        let correctFirstTry: Int
+
+        enum CodingKeys: String, CodingKey {
+            case completedAt = "completed_at"
+            case totalCards = "total_cards"
+            case correctFirstTry = "correct_first_try"
+        }
+
+        init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            completedAt = ISO.date(try c.decodeIfPresent(String.self, forKey: .completedAt))
+            totalCards = try c.decodeIfPresent(Int.self, forKey: .totalCards) ?? 0
+            correctFirstTry = try c.decodeIfPresent(Int.self, forKey: .correctFirstTry) ?? 0
+        }
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case exportedAt = "_exported"
+        case c, p, s
+    }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let dec = JSONDecoder()
+        exportedAt = try c.decodeIfPresent(String.self, forKey: .exportedAt)
         let cardsJSON = try c.decodeIfPresent(String.self, forKey: .c) ?? "[]"
         cards = try dec.decode([Card].self, from: Data(cardsJSON.utf8))
         let p6JSON = try c.decodeIfPresent(String.self, forKey: .p) ?? "{}"
@@ -120,6 +146,8 @@ struct WebBackup: Decodable {
             if let id = Int(key) { map[id] = value }
         }
         phase6 = map
+        let sessionsJSON = try c.decodeIfPresent(String.self, forKey: .s) ?? "[]"
+        sessions = (try? dec.decode([WebSession].self, from: Data(sessionsJSON.utf8))) ?? []
     }
 }
 
@@ -136,21 +164,37 @@ struct VocabCategory: Codable {
 }
 
 enum Vocabulary {
-    static let categories: [VocabCategory] = {
-        guard let url = Bundle.main.url(forResource: "Grundwortschatz", withExtension: "json"),
+    /// Grundwortschatz (Grundwortschatz.json, 9 Kategorien) aus dem Vokabelspiel der Web-App.
+    static let categories: [VocabCategory] = load("Grundwortschatz")
+
+    /// Grammatik (Grammatik.json: Modalverben, Präpositionen, Präsenz, Vergangenheit).
+    static let grammarCategories: [VocabCategory] = load("Grammatik")
+
+    /// Beide Bestände zusammen, so wie „Beides“ im Vokabelspiel.
+    static var allCategories: [VocabCategory] { categories + grammarCategories }
+
+    static var allWords: [VocabWord] { categories.flatMap(\.words) }
+
+    private static func load(_ name: String) -> [VocabCategory] {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let cats = try? JSONDecoder().decode([VocabCategory].self, from: data) else {
             return []
         }
         return cats
-    }()
-
-    static var allWords: [VocabWord] { categories.flatMap(\.words) }
+    }
 }
 
-// MARK: - ISO-8601 wie JavaScript's toISOString()
+// MARK: - ISO-8601 wie JavaScript's toISOString(), plus das ältere Format "2026-08-07 19:58:45"
 
 enum ISO {
+    private static let legacy: DateFormatter = {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return f
+    }()
+
     private static let withFraction: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -164,7 +208,7 @@ enum ISO {
 
     static func date(_ s: String?) -> Date? {
         guard let s, !s.isEmpty else { return nil }
-        return withFraction.date(from: s) ?? plain.date(from: s)
+        return withFraction.date(from: s) ?? plain.date(from: s) ?? legacy.date(from: s)
     }
 
     static func string(_ d: Date) -> String { withFraction.string(from: d) }

@@ -35,6 +35,7 @@ struct ResultView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.terracotta)
+                .doubleTapAction()
 
                 Button(action: done) {
                     Text("Fertig").frame(maxWidth: .infinity)

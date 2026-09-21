@@ -26,6 +26,9 @@
 		EAA5020B6F914DCCE3C45CF6 /* sample-backup.json in Resources */ = {isa = PBXBuildFile; fileRef = 729A9C7F2F5C61053E7177C0 /* sample-backup.json */; };
 		F1D482E4ADEDF58D235669DD /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E497746B9B121772140906B /* SharedData.swift */; };
 		F1DA19A452BFD483E3A6F824 /* ImparaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63002E1207A0E09EA4C39B74 /* ImparaWidget.swift */; };
+		B2C3D4E5F60718293A4B5C6D /* Grammatik.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* Grammatik.json */; };
+		C3D4E5F60718293A4B5C6D7E /* Grammatik.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5C /* Grammatik.json */; };
+		E5F60718293A4B5C6D7E8F90 /* impara-backup.json in Resources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293A4B5C6D7E8F /* impara-backup.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +83,8 @@
 		E520CA545158898B39F79BCF /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
 		E82203CCD53B299CF218D588 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
 		E85DE79780195A3033F2DE0E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5C /* Grammatik.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Grammatik.json; sourceTree = "<group>"; };
+		D4E5F60718293A4B5C6D7E8F /* impara-backup.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "impara-backup.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -96,6 +101,7 @@
 		2716BC79756FC8E3259F0299 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D4E5F60718293A4B5C6D7E8F /* impara-backup.json */,
 				729A9C7F2F5C61053E7177C0 /* sample-backup.json */,
 			);
 			path = Resources;
@@ -168,6 +174,7 @@
 		E9E20AA74DBDAE9D470F19CB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3D4E5F60718293A4B5C /* Grammatik.json */,
 				0028CDADB3CEFA051564F011 /* Grundwortschatz.json */,
 			);
 			path = Resources;
@@ -280,6 +287,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B96AE5500B96EE42971F10C /* Grundwortschatz.json in Resources */,
+				B2C3D4E5F60718293A4B5C6D /* Grammatik.json in Resources */,
+				E5F60718293A4B5C6D7E8F90 /* impara-backup.json in Resources */,
 				EAA5020B6F914DCCE3C45CF6 /* sample-backup.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E8F0873EB581EE2900289CC /* Grundwortschatz.json in Resources */,
+				C3D4E5F60718293A4B5C6D7E /* Grammatik.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

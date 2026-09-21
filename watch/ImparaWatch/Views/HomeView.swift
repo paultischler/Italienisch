@@ -23,6 +23,7 @@ struct HomeView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(.terracotta)
                     .disabled(store.cards.isEmpty)
+                    .doubleTapAction()
 
                     NavigationLink {
                         BlitzView()

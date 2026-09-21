@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-/// Fünf Wörter aus dem Grundwortschatz, je drei Antworten, acht Sekunden Zeit. Kein Tippen.
+/// Fünf Wörter aus Grundwortschatz und Grammatik, je drei Antworten, acht Sekunden Zeit. Kein Tippen.
 struct BlitzView: View {
     @EnvironmentObject private var store: Store
     @Environment(\.dismiss) private var dismiss
@@ -122,9 +122,11 @@ struct BlitzView: View {
         }
     }
 
-    /// Zieht fünf Wörter; die falschen Antworten stammen aus derselben Kategorie.
+    /// Zieht fünf Wörter aus allen Kategorien (Grundwortschatz und Grammatik);
+    /// die falschen Antworten stammen aus derselben Kategorie, bei Konjugationen also
+    /// aus demselben Verb-Block.
     static func makeRounds() -> [Round] {
-        let categories = Vocabulary.categories.filter { $0.words.count >= 3 }
+        let categories = Vocabulary.allCategories.filter { $0.words.count >= 3 }
         guard !categories.isEmpty else { return [] }
         var rounds: [Round] = []
         var used = Set<String>()

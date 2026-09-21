@@ -1,5 +1,18 @@
 import SwiftUI
 
+extension View {
+    /// Die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusammen) löst diese Taste aus.
+    /// Braucht watchOS 11; auf älteren Systemen passiert nichts. Pro Bildschirm nur eine Taste.
+    @ViewBuilder
+    func doubleTapAction() -> some View {
+        if #available(watchOS 11.0, *) {
+            self.handGestureShortcut(.primaryAction)
+        } else {
+            self
+        }
+    }
+}
+
 /// Ring mit der Zahl der fälligen Karten (Startbildschirm).
 struct DueRing: View {
     let due: Int

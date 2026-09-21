@@ -10,7 +10,7 @@ final class Store: ObservableObject {
 
     struct SessionLog: Codable, Hashable {
         let date: Date
-        let kind: String      // "due" oder "blitz"
+        let kind: String      // "due", "blitz" oder "web" (aus dem Backup übernommen)
         let total: Int
         let correct: Int
     }
@@ -19,7 +19,11 @@ final class Store: ObservableObject {
         var cards: [Card]
         var phase6: [String: Phase6State]
         var sessions: [SessionLog]
+        /// "_exported" des zuletzt übernommenen Backups; ein neueres im Bundle wird beim Start eingespielt.
+        var importedExport: String?
     }
+
+    private var importedExport: String?
 
     nonisolated static let sessionSize = 5
 
@@ -110,11 +114,36 @@ final class Store: ObservableObject {
     // MARK: Import
 
     /// Liest ein Backup der Web-App (Statistiken > Backup & Geräteübertragung).
-    /// Der Phase-6-Stand aus der Datei überschreibt den lokalen Stand pro Karte.
+    /// Karten kommen komplett aus der Datei. Beim Phase-6-Stand gewinnt pro Karte
+    /// der jüngere Eintrag, damit Bewertungen auf der Uhr nicht verloren gehen.
     func importBackup(data: Data) throws {
         let backup = try JSONDecoder().decode(WebBackup.self, from: data)
+        // Lokaler Stand zählt nur für Karten, die es vorher schon mit gleichem Inhalt gab.
+        // So überschreibt der Stand der Beispielkarten nie echte Karten mit derselben ID.
+        let oldByID = Dictionary(cards.map { ($0.id, $0) }, uniquingKeysWith: { $1 })
+        let newByID = Dictionary(backup.cards.map { ($0.id, $0) }, uniquingKeysWith: { $1 })
+        var merged = backup.phase6
+        for (id, local) in phase6 {
+            guard let old = oldByID[id], let new = newByID[id],
+                  old.front == new.front, old.back == new.back else { continue }
+            if let incoming = merged[id] {
+                let localDate = local.lastReviewedAt ?? .distantPast
+                let incomingDate = incoming.lastReviewedAt ?? .distantPast
+                merged[id] = incomingDate >= localDate ? incoming : local
+            } else {
+                merged[id] = local
+            }
+        }
         cards = backup.cards
-        phase6.merge(backup.phase6) { _, incoming in incoming }
+        phase6 = merged
+        // Sitzungen der Web-App für den Streak übernehmen, ohne Duplikate.
+        let known = Set(sessions.map(\.date))
+        for s in backup.sessions {
+            guard let date = s.completedAt, !known.contains(date) else { continue }
+            sessions.append(SessionLog(date: date, kind: "web", total: s.totalCards, correct: s.correctFirstTry))
+        }
+        sessions.sort { $0.date < $1.date }
+        importedExport = backup.exportedAt
         save()
         refresh()
     }
@@ -129,15 +158,24 @@ final class Store: ObservableObject {
                 Int(key).map { ($0, value) }
             })
             sessions = p.sessions
-            return
+            importedExport = p.importedExport
         }
-        // Erster Start: echtes Backup aus dem Bundle, sonst Beispieldaten.
+        importBundledBackupIfNewer()
+    }
+
+    /// Erster Start: echtes Backup aus dem Bundle, sonst Beispieldaten.
+    /// Spätere Starts: ein Backup mit neuerem "_exported" wird eingespielt (etwa nach einem Update der App).
+    private func importBundledBackupIfNewer() {
         for name in ["impara-backup", "sample-backup"] {
-            if let url = Bundle.main.url(forResource: name, withExtension: "json"),
-               let data = try? Data(contentsOf: url),
-               (try? importBackup(data: data)) != nil {
-                return
+            guard let url = Bundle.main.url(forResource: name, withExtension: "json"),
+                  let data = try? Data(contentsOf: url),
+                  let backup = try? JSONDecoder().decode(WebBackup.self, from: data) else { continue }
+            let isFirstStart = cards.isEmpty
+            let isNewer = backup.exportedAt != nil && backup.exportedAt != importedExport
+            if isFirstStart || isNewer {
+                try? importBackup(data: data)
             }
+            return
         }
     }
 
@@ -145,7 +183,8 @@ final class Store: ObservableObject {
         let p = Persisted(
             cards: cards,
             phase6: Dictionary(uniqueKeysWithValues: phase6.map { (String($0.key), $0.value) }),
-            sessions: sessions
+            sessions: sessions,
+            importedExport: importedExport
         )
         if let data = try? JSONEncoder().encode(p) {
             try? data.write(to: fileURL, options: .atomic)

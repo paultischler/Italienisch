@@ -56,18 +56,28 @@ xcrun xcresulttool export attachments --path ergebnis.xcresult --output-path bil
 
 ## Eigene Karten
 
-Beim ersten Start lädt die App Beispieldaten (20 Karten, davon 12 fällig). Für die eigenen Karten in der Web-App unter Statistiken > Backup & Geräteübertragung exportieren, die Datei in `impara-backup.json` umbenennen und nach `ImparaWatch/Resources/` legen. Beim nächsten frischen Start (App im Simulator löschen) liest die App diese Datei statt der Beispieldaten. Die Bewertungen bleiben lokal auf der Uhr; die Sync-Anbindung an den Firebase-Raum ist der nächste Schritt.
+Im Bundle liegt `ImparaWatch/Resources/impara-backup.json`, ein Export der Web-App (Statistiken > Backup & Geräteübertragung, Stand 21. September 2026: 33 Lektionen, 226 Karten). Die App liest ihn beim ersten Start und danach immer dann, wenn das Feld `_exported` der Datei neuer ist als beim letzten Import. Ein neues Backup einspielen heißt also: Datei ersetzen, App neu bauen und installieren. Der Phase-6-Stand wird pro Karte zusammengeführt, der jüngere Eintrag gewinnt; Bewertungen auf der Uhr gehen dabei nicht verloren. Die Sync-Anbindung an den Firebase-Raum ist der nächste Schritt.
+
+Ohne diese Datei fällt die App auf `sample-backup.json` zurück (20 Beispielkarten).
+
+## Blitzrunde
+
+Zieht aus dem Grundwortschatz (`Shared/Resources/Grundwortschatz.json`, 334 Wörter in 9 Kategorien) und der Grammatik (`Shared/Resources/Grammatik.json`: Modalverben, Präpositionen, Präsenz, Vergangenheit, 148 Einträge). Beide Dateien sind aus `app.js` exportiert. Die falschen Antworten kommen aus derselben Kategorie.
+
+## Doppeltipp
+
+Ab watchOS 11 löst die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusammen) pro Bildschirm eine Taste aus: auf dem Start „5 fällige“, auf der Kartenvorderseite das Aufdecken, auf der Rückseite „Richtig“, im Ergebnis „Noch 5“. Damit lässt sich eine Runde einhändig durchgehen; nur „Falsch“ braucht einen Fingertipp auf die rote Taste. Die Blitzrunde hat keine Doppeltipp-Belegung, weil dort drei gleichwertige Antworten zur Wahl stehen. Wer alles einhändig will, schaltet zusätzlich AssistiveTouch ein (Einstellungen > Bedienungshilfen > AssistiveTouch > Handgesten); damit lassen sich auch ✗ und die Blitz-Antworten per Kneifen und Faustschluss ansteuern.
 
 ## Dateien
 
 | Datei | Inhalt |
 |---|---|
-| `Shared/Models.swift` | Karte, Phase-6-Stand, Leitner-Regeln (identisch mit `dbUpdatePhase6` in `app.js`), Backup-Decoder, Grundwortschatz |
+| `Shared/Models.swift` | Karte, Phase-6-Stand, Leitner-Regeln (identisch mit `dbUpdatePhase6` in `app.js`), Backup-Decoder, Grundwortschatz und Grammatik |
 | `Shared/SharedData.swift` | Datenbrücke zum Widget, Farben der Web-App |
 | `ImparaWatch/Store.swift` | Laden, Speichern, fällige Karten, Streak, Sitzungsprotokoll |
 | `ImparaWatch/Views/HomeView.swift` | Startbildschirm mit Ring und zwei Tasten |
 | `ImparaWatch/Views/SessionView.swift` | Kartenrunde: Tippen oder Krone deckt auf, zwei Tasten bewerten, Always-On zeigt nur die Vorderseite |
-| `ImparaWatch/Views/BlitzView.swift` | Blitzrunde: fünf Wörter, drei Antworten, acht Sekunden |
+| `ImparaWatch/Views/BlitzView.swift` | Blitzrunde: fünf Wörter aus Grundwortschatz und Grammatik, drei Antworten, acht Sekunden |
 | `ImparaWatch/Views/ResultView.swift` | Ergebnis mit „Noch 5“ und „Fertig“ |
 | `ImparaWatch/Reminders.swift` | Eine Mitteilung pro Tag um 12:30, nur ab fünf fälligen Karten |
 | `ImparaWidget/ImparaWidget.swift` | Komplikation: Ring mit fälligen Karten, Wort pro Stunde, Tippen dreht um |

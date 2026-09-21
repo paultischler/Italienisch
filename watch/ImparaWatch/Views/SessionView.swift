@@ -68,6 +68,17 @@ struct SessionView: View {
                         .layoutPriority(1)
                         .padding(.top, 2)
                 }
+                if !card.notes.isEmpty {
+                    // Notizen der Karte (z. B. die Regel hinter der Präposition).
+                    Text(card.notes)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(card.example.isEmpty ? 3 : 2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .layoutPriority(1)
+                        .padding(.top, 2)
+                }
             } else {
                 Text(card.front)
                     .font(.system(.title2, design: .rounded, weight: .heavy))
@@ -90,12 +101,18 @@ struct SessionView: View {
                         Image(systemName: "checkmark").font(.title3.bold()).frame(maxWidth: .infinity)
                     }
                     .tint(.sage)
+                    .doubleTapAction()   // Doppeltipp = Richtig
                 }
                 .buttonStyle(.borderedProminent)
             } else {
-                Text("Tippen zum Aufdecken")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                // Als Taste, damit der Doppeltipp die Karte aufdecken kann.
+                Button { reveal() } label: {
+                    Text("Tippen zum Aufdecken")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+                .doubleTapAction()   // Doppeltipp = Aufdecken
             }
         }
         // Die Ansicht rollt nicht, damit die Krone zum Aufdecken frei bleibt;
