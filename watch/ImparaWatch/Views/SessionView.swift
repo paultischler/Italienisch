@@ -34,38 +34,56 @@ struct SessionView: View {
     private var card: Card { cards[index] }
 
     private var cardView: some View {
-        VStack(spacing: 4) {
-            // Eine Kopfzeile: Phase, Fortschrittspunkte, Zähler.
-            HStack(spacing: 6) {
-                PhaseBadge(phase: store.phase6[card.id]?.phase)
-                Spacer(minLength: 2)
-                ProgressDots(count: cards.count, results: results, current: index)
-                Spacer(minLength: 2)
-                Text("\(index + 1) / \(cards.count)")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer(minLength: 2)
-
+        Group {
             if revealed && !dimmed {
+                revealedView
+            } else {
+                coveredView
+            }
+        }
+    }
+
+    /// Kopfzeile: Phase, Fortschrittspunkte, Zähler.
+    private var header: some View {
+        HStack(spacing: 6) {
+            PhaseBadge(phase: store.phase6[card.id]?.phase)
+            Spacer(minLength: 2)
+            ProgressDots(count: cards.count, results: results, current: index)
+            Spacer(minLength: 2)
+            Text("\(index + 1) / \(cards.count)")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    /// Rückseite. Sie rollt, damit lange Karten vollständig dastehen: kein
+    /// lineLimit, kein Verkleinern, jeder Text bekommt mit fixedSize seine
+    /// volle Höhe. Zum Lesen dreht man die Krone, die hier nicht mehr zum
+    /// Aufdecken gebraucht wird. Die ScrollView setzt den Inhalt selbst unter
+    /// die Navigationsleiste, ein eigener oberer Abstand entfällt.
+    private var revealedView: some View {
+        ScrollView {
+            VStack(spacing: 4) {
+                header
+
                 Text(card.front)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 Text(card.back)
                     .font(.system(.title3, design: .rounded, weight: .heavy))
                     .multilineTextAlignment(.center)
-                    .minimumScaleFactor(0.7)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 if !card.example.isEmpty {
-                    // Der Beispielsatz bekommt seine Zeilen garantiert; eher schrumpft die Antwort.
                     Text(card.example)
                         .font(.caption2)
                         .italic()
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                        .lineLimit(3)
                         .fixedSize(horizontal: false, vertical: true)
-                        .layoutPriority(1)
                         .padding(.top, 2)
                 }
                 if !card.notes.isEmpty {
@@ -74,24 +92,10 @@ struct SessionView: View {
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                        .lineLimit(card.example.isEmpty ? 3 : 2)
                         .fixedSize(horizontal: false, vertical: true)
-                        .layoutPriority(1)
                         .padding(.top, 2)
                 }
-            } else {
-                Text(card.front)
-                    .font(.system(.title2, design: .rounded, weight: .heavy))
-                    .multilineTextAlignment(.center)
-                    .minimumScaleFactor(0.6)
-            }
 
-            Spacer(minLength: 2)
-
-            if dimmed {
-                // Always-On: nur die Vorderseite, keine Tasten.
-                Color.clear.frame(height: 1)
-            } else if revealed {
                 HStack(spacing: 8) {
                     Button { grade(false) } label: {
                         Image(systemName: "xmark").font(.title3.bold()).frame(maxWidth: .infinity)
@@ -104,6 +108,32 @@ struct SessionView: View {
                     .doubleTapAction()   // Doppeltipp = Richtig
                 }
                 .buttonStyle(.borderedProminent)
+                .padding(.top, 6)
+            }
+        }
+        .padding(.horizontal, 6)
+    }
+
+    /// Vorderseite, auch im Always-On-Zustand. Sie rollt nicht, damit die Krone
+    /// zum Aufdecken frei bleibt; deshalb hält sie sich mit eigenem Abstand
+    /// unter der Navigationsleiste: die bleibt 66pt hoch, Zurück-Pfeil und
+    /// Titel enden bei 58pt. Gemessen mit dem UI-Test, siehe README.
+    private var coveredView: some View {
+        VStack(spacing: 4) {
+            header
+
+            Spacer(minLength: 2)
+
+            Text(card.front)
+                .font(.system(.title2, design: .rounded, weight: .heavy))
+                .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.5)
+
+            Spacer(minLength: 2)
+
+            if dimmed {
+                // Always-On: nur die Vorderseite, keine Tasten.
+                Color.clear.frame(height: 1)
             } else {
                 // Als Taste, damit der Doppeltipp die Karte aufdecken kann.
                 Button { reveal() } label: {
@@ -115,11 +145,6 @@ struct SessionView: View {
                 .doubleTapAction()   // Doppeltipp = Aufdecken
             }
         }
-        // Die Ansicht rollt nicht, damit die Krone zum Aufdecken frei bleibt;
-        // deshalb muss sie sich selbst unter der Navigationsleiste halten
-        // und seitlich Abstand vom Rand halten. Der Inline-Titel macht die
-        // Leiste nicht flacher: sie bleibt 66pt hoch, Zurück-Pfeil und Titel
-        // enden bei 58pt. Gemessen mit dem UI-Test, siehe README.
         .padding(.top, 28)
         .padding(.horizontal, 6)
         .contentShape(Rectangle())

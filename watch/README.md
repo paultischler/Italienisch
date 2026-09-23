@@ -76,7 +76,7 @@ Ab watchOS 11 löst die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusamme
 | `Shared/SharedData.swift` | Datenbrücke zum Widget, Farben der Web-App |
 | `ImparaWatch/Store.swift` | Laden, Speichern, fällige Karten, Streak, Sitzungsprotokoll |
 | `ImparaWatch/Views/HomeView.swift` | Startbildschirm mit Ring und zwei Tasten |
-| `ImparaWatch/Views/SessionView.swift` | Kartenrunde: Tippen oder Krone deckt auf, zwei Tasten bewerten, Always-On zeigt nur die Vorderseite |
+| `ImparaWatch/Views/SessionView.swift` | Kartenrunde: Vorderseite rollt nicht, dort deckt Tippen oder Krone auf; die Rückseite rollt, damit lange Karten ungekürzt dastehen und die Krone durch den Text blättert; zwei Tasten bewerten, Always-On zeigt nur die Vorderseite |
 | `ImparaWatch/Views/BlitzView.swift` | Blitzrunde: fünf Wörter aus Grundwortschatz und Grammatik, drei Antworten, acht Sekunden |
 | `ImparaWatch/Views/ResultView.swift` | Ergebnis mit „Noch 5“ und „Fertig“ |
 | `ImparaWatch/Reminders.swift` | Eine Mitteilung pro Tag um 12:30, nur ab fünf fälligen Karten |

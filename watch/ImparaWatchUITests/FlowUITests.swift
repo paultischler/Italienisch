@@ -26,15 +26,17 @@ final class FlowUITests: XCTestCase {
         XCTAssertFalse(grade.exists, "Bewertungstasten dürfen vor dem Aufdecken nicht da sein")
 
         for round in 1...5 {
-            if round == 1 {
-                // Erste Karte über die Krone aufdecken, der Rest per Tippen.
+            // Karte 1 und 3 über die Krone aufdecken, die anderen per Tippen.
+            // Die Rückseite rollt inzwischen; der Kronen-Fokus der Vorderseite
+            // muss auch nach dem ersten Umschalten erhalten bleiben.
+            if round == 1 || round == 3 {
                 XCUIDevice.shared.rotateDigitalCrown(delta: 1.0)
-                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Krone deckt die Karte nicht auf")
+                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Krone deckt Karte \(round) nicht auf")
             } else {
                 center().tap()
                 XCTAssertTrue(grade.waitForExistence(timeout: 5), "Tippen deckt Karte \(round) nicht auf")
             }
-            if round == 1 { step("03-card-back") }
+            step("03-card-back-\(round)")
             grade.tap()
             sleep(1)
         }
