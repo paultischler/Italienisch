@@ -1,0 +1,87 @@
+# XcodeGen-Spezifikation. Erzeugt ImparaWatch.xcodeproj mit `xcodegen generate`.
+# Alternative ohne XcodeGen: siehe README.md.
+name: ImparaWatch
+options:
+  bundleIdPrefix: de.tischler.impara
+  deploymentTarget:
+    watchOS: "10.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+    # DEVELOPMENT_TEAM: in Xcode unter Signing & Capabilities eintragen
+targets:
+  ImparaWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: ImparaWatch
+      - path: Shared
+    info:
+      path: ImparaWatch/Info.plist
+      properties:
+        CFBundleDisplayName: Impara
+        WKApplication: true
+        WKWatchOnly: true
+        NSUserNotificationsUsageDescription: Erinnert einmal am Tag an fällige Karten.
+    # App Group entfernt: 'group.de.tischler.impara' ist im Entwicklerkonto nicht
+    # angelegt, daher schlug die Signierung fehl. Zum Aktivieren die Gruppe im
+    # Developer-Portal registrieren und hier in beiden Zielen eintragen:
+    #   entitlements:
+    #     path: ImparaWatch/ImparaWatch.entitlements
+    #     properties:
+    #       com.apple.security.application-groups:
+    #         - group.de.tischler.impara
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    dependencies:
+      - target: ImparaWidget
+        embed: true
+  ImparaWidget:
+    type: app-extension
+    platform: watchOS
+    sources:
+      - path: ImparaWidget
+      - path: Shared
+    info:
+      path: ImparaWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Impara
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    # App Group entfernt: 'group.de.tischler.impara' ist im Entwicklerkonto nicht
+    # angelegt, daher schlug die Signierung fehl. Zum Aktivieren die Gruppe im
+    # Developer-Portal registrieren und hier in beiden Zielen eintragen:
+    #   entitlements:
+    #     path: ImparaWidget/ImparaWidget.entitlements
+    #     properties:
+    #       com.apple.security.application-groups:
+    #         - group.de.tischler.impara
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.tischler.impara.ImparaWatch.widget
+  ImparaWatchUITests:
+    type: bundle.ui-testing
+    platform: watchOS
+    sources:
+      - path: ImparaWatchUITests
+    dependencies:
+      - target: ImparaWatch
+    settings:
+      base:
+        TEST_TARGET_NAME: ImparaWatch
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ImparaWatch:
+    build:
+      targets:
+        ImparaWatch: all
+        ImparaWatchUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ImparaWatchUITests

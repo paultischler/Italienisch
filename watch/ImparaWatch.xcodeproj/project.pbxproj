@@ -1,0 +1,619 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09962AAF556010E9B553760D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85DE79780195A3033F2DE0E /* Models.swift */; };
+		1592B106BE8CF68BA26758EC /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E497746B9B121772140906B /* SharedData.swift */; };
+		1C1B5A02ED18EB0538FFEBF7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66257F6F58FF6B7FDAD91630 /* HomeView.swift */; };
+		1D1A8F87FB2D58D061C9FDB3 /* ImparaWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446EBEADBA26858208760E7 /* ImparaWatchApp.swift */; };
+		21616CE06B390E8D3E2D9293 /* Grammatik.json in Resources */ = {isa = PBXBuildFile; fileRef = 11543779F45511C5F2A374D6 /* Grammatik.json */; };
+		438A5E573BD43FB6691D5D65 /* BlitzView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C406EB4CC41F8329CCF481C7 /* BlitzView.swift */; };
+		49029145A822A9C7789FE602 /* SessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82203CCD53B299CF218D588 /* SessionView.swift */; };
+		4A64E419364B97CE5531FC18 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85DE79780195A3033F2DE0E /* Models.swift */; };
+		5B96AE5500B96EE42971F10C /* Grundwortschatz.json in Resources */ = {isa = PBXBuildFile; fileRef = 0028CDADB3CEFA051564F011 /* Grundwortschatz.json */; };
+		70F8A218FEE9CC64D4F17085 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7337F8C7A3F289C853B5F1 /* Components.swift */; };
+		7E8F0873EB581EE2900289CC /* Grundwortschatz.json in Resources */ = {isa = PBXBuildFile; fileRef = 0028CDADB3CEFA051564F011 /* Grundwortschatz.json */; };
+		8E3426AE77A1C9F0D6FA89EB /* FlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9D4B94AF8AC3B896C51C00 /* FlowUITests.swift */; };
+		9D65EC35607E76346FA34F22 /* ImparaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3ED80F571EB3E394691F2F4F /* ImparaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA94B93CE1B23E1CA72FE736 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BC20473A57F4BA5176086D /* ResultView.swift */; };
+		B906260957105C3CF58E2EE0 /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = E520CA545158898B39F79BCF /* Reminders.swift */; };
+		C2DA4A85DE61C8B576DF672E /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */; };
+		CAB35B7F9330110E03997A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9923B003F8969E789E20D8E9 /* Assets.xcassets */; };
+		D0F9A609E5616AFEEA845CEF /* impara-backup.json in Resources */ = {isa = PBXBuildFile; fileRef = CE39F4F6C80AF2988DDF688E /* impara-backup.json */; };
+		D1012795EC7BB24C08D6476E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC1BE3888F7E2598D19D7C3 /* Store.swift */; };
+		D3ED71A7D98423A9B5043AB0 /* Grammatik.json in Resources */ = {isa = PBXBuildFile; fileRef = 11543779F45511C5F2A374D6 /* Grammatik.json */; };
+		EAA5020B6F914DCCE3C45CF6 /* sample-backup.json in Resources */ = {isa = PBXBuildFile; fileRef = 729A9C7F2F5C61053E7177C0 /* sample-backup.json */; };
+		F1D482E4ADEDF58D235669DD /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E497746B9B121772140906B /* SharedData.swift */; };
+		F1DA19A452BFD483E3A6F824 /* ImparaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63002E1207A0E09EA4C39B74 /* ImparaWidget.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B7C459C0947B95EB7181BE0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607C1DF737E413FDE56FFDFD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2DB979CCC5F36EC6D6770DAA;
+			remoteInfo = ImparaWatch;
+		};
+		AB8CCA6CC56240EE0D99C8C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607C1DF737E413FDE56FFDFD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4937DD8EFD09A9EB8F9B759F;
+			remoteInfo = ImparaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AB67994F9106DC6B4063DA9C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9D65EC35607E76346FA34F22 /* ImparaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0028CDADB3CEFA051564F011 /* Grundwortschatz.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Grundwortschatz.json; sourceTree = "<group>"; };
+		11543779F45511C5F2A374D6 /* Grammatik.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Grammatik.json; sourceTree = "<group>"; };
+		1E497746B9B121772140906B /* SharedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedData.swift; sourceTree = "<group>"; };
+		2A7337F8C7A3F289C853B5F1 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		2C13EDBB13EA6D6DAAC8579D /* ImparaWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImparaWatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E9D4B94AF8AC3B896C51C00 /* FlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowUITests.swift; sourceTree = "<group>"; };
+		350C396D9EE57C88B3CF3504 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3ED80F571EB3E394691F2F4F /* ImparaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ImparaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C20C6A81463653F115F057D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		63002E1207A0E09EA4C39B74 /* ImparaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImparaWidget.swift; sourceTree = "<group>"; };
+		66257F6F58FF6B7FDAD91630 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		729A9C7F2F5C61053E7177C0 /* sample-backup.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "sample-backup.json"; sourceTree = "<group>"; };
+		7446EBEADBA26858208760E7 /* ImparaWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImparaWatchApp.swift; sourceTree = "<group>"; };
+		80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		9923B003F8969E789E20D8E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BBC1BE3888F7E2598D19D7C3 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		BBF90ED21212C6B39E246060 /* ImparaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImparaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2BC20473A57F4BA5176086D /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		C406EB4CC41F8329CCF481C7 /* BlitzView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlitzView.swift; sourceTree = "<group>"; };
+		CE39F4F6C80AF2988DDF688E /* impara-backup.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "impara-backup.json"; sourceTree = "<group>"; };
+		E520CA545158898B39F79BCF /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
+		E82203CCD53B299CF218D588 /* SessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionView.swift; sourceTree = "<group>"; };
+		E85DE79780195A3033F2DE0E /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		22F84B38D8B966280C91F52F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BBF90ED21212C6B39E246060 /* ImparaWatch.app */,
+				2C13EDBB13EA6D6DAAC8579D /* ImparaWatchUITests.xctest */,
+				3ED80F571EB3E394691F2F4F /* ImparaWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2716BC79756FC8E3259F0299 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CE39F4F6C80AF2988DDF688E /* impara-backup.json */,
+				729A9C7F2F5C61053E7177C0 /* sample-backup.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		348CB2F2118827E6291B0854 = {
+			isa = PBXGroup;
+			children = (
+				68B10C3E36AF620DD5149866 /* ImparaWatch */,
+				9A1D343127E07D0AF24E9494 /* ImparaWatchUITests */,
+				3C3EFC1B27F7B06A59DC6F23 /* ImparaWidget */,
+				7708C2A8AABAF8E0F3C6E3CF /* Shared */,
+				22F84B38D8B966280C91F52F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3C3EFC1B27F7B06A59DC6F23 /* ImparaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				63002E1207A0E09EA4C39B74 /* ImparaWidget.swift */,
+				4C20C6A81463653F115F057D /* Info.plist */,
+			);
+			path = ImparaWidget;
+			sourceTree = "<group>";
+		};
+		68B10C3E36AF620DD5149866 /* ImparaWatch */ = {
+			isa = PBXGroup;
+			children = (
+				9923B003F8969E789E20D8E9 /* Assets.xcassets */,
+				80E53BFF63FCE63D1F3ACFEE /* Haptics.swift */,
+				7446EBEADBA26858208760E7 /* ImparaWatchApp.swift */,
+				350C396D9EE57C88B3CF3504 /* Info.plist */,
+				E520CA545158898B39F79BCF /* Reminders.swift */,
+				BBC1BE3888F7E2598D19D7C3 /* Store.swift */,
+				2716BC79756FC8E3259F0299 /* Resources */,
+				8A631078EA327338649CC16E /* Views */,
+			);
+			path = ImparaWatch;
+			sourceTree = "<group>";
+		};
+		7708C2A8AABAF8E0F3C6E3CF /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E85DE79780195A3033F2DE0E /* Models.swift */,
+				1E497746B9B121772140906B /* SharedData.swift */,
+				E9E20AA74DBDAE9D470F19CB /* Resources */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		8A631078EA327338649CC16E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C406EB4CC41F8329CCF481C7 /* BlitzView.swift */,
+				2A7337F8C7A3F289C853B5F1 /* Components.swift */,
+				66257F6F58FF6B7FDAD91630 /* HomeView.swift */,
+				C2BC20473A57F4BA5176086D /* ResultView.swift */,
+				E82203CCD53B299CF218D588 /* SessionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9A1D343127E07D0AF24E9494 /* ImparaWatchUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2E9D4B94AF8AC3B896C51C00 /* FlowUITests.swift */,
+			);
+			path = ImparaWatchUITests;
+			sourceTree = "<group>";
+		};
+		E9E20AA74DBDAE9D470F19CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				11543779F45511C5F2A374D6 /* Grammatik.json */,
+				0028CDADB3CEFA051564F011 /* Grundwortschatz.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2DB979CCC5F36EC6D6770DAA /* ImparaWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BCBE90E5F40571E817A4FB58 /* Build configuration list for PBXNativeTarget "ImparaWatch" */;
+			buildPhases = (
+				3C609E768534A334E0EE5A52 /* Sources */,
+				4AD05F37A1811F7460D820A0 /* Resources */,
+				AB67994F9106DC6B4063DA9C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A45FE7B168C18A83B922E19A /* PBXTargetDependency */,
+			);
+			name = ImparaWatch;
+			packageProductDependencies = (
+			);
+			productName = ImparaWatch;
+			productReference = BBF90ED21212C6B39E246060 /* ImparaWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4937DD8EFD09A9EB8F9B759F /* ImparaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F066F90DD197F77DA514B828 /* Build configuration list for PBXNativeTarget "ImparaWidget" */;
+			buildPhases = (
+				3AF59DEFA2F9B669D6C75F3D /* Sources */,
+				BCFF85AE612168AADEC7D351 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ImparaWidget;
+			packageProductDependencies = (
+			);
+			productName = ImparaWidget;
+			productReference = 3ED80F571EB3E394691F2F4F /* ImparaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FCFD7AC023507AA4A3CEAB3C /* ImparaWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 519C7463F18FBD5DD97A2F26 /* Build configuration list for PBXNativeTarget "ImparaWatchUITests" */;
+			buildPhases = (
+				58C801956DF37C129E901AB9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2BA40EADF46484E65107EDBA /* PBXTargetDependency */,
+			);
+			name = ImparaWatchUITests;
+			packageProductDependencies = (
+			);
+			productName = ImparaWatchUITests;
+			productReference = 2C13EDBB13EA6D6DAAC8579D /* ImparaWatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		607C1DF737E413FDE56FFDFD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					2DB979CCC5F36EC6D6770DAA = {
+						ProvisioningStyle = Automatic;
+					};
+					4937DD8EFD09A9EB8F9B759F = {
+						ProvisioningStyle = Automatic;
+					};
+					FCFD7AC023507AA4A3CEAB3C = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = 2DB979CCC5F36EC6D6770DAA;
+					};
+				};
+			};
+			buildConfigurationList = 24AFAA6FC9DD9698BDA8DA23 /* Build configuration list for PBXProject "ImparaWatch" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 348CB2F2118827E6291B0854;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 22F84B38D8B966280C91F52F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2DB979CCC5F36EC6D6770DAA /* ImparaWatch */,
+				4937DD8EFD09A9EB8F9B759F /* ImparaWidget */,
+				FCFD7AC023507AA4A3CEAB3C /* ImparaWatchUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4AD05F37A1811F7460D820A0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CAB35B7F9330110E03997A98 /* Assets.xcassets in Resources */,
+				D3ED71A7D98423A9B5043AB0 /* Grammatik.json in Resources */,
+				5B96AE5500B96EE42971F10C /* Grundwortschatz.json in Resources */,
+				D0F9A609E5616AFEEA845CEF /* impara-backup.json in Resources */,
+				EAA5020B6F914DCCE3C45CF6 /* sample-backup.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BCFF85AE612168AADEC7D351 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				21616CE06B390E8D3E2D9293 /* Grammatik.json in Resources */,
+				7E8F0873EB581EE2900289CC /* Grundwortschatz.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3AF59DEFA2F9B669D6C75F3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1DA19A452BFD483E3A6F824 /* ImparaWidget.swift in Sources */,
+				09962AAF556010E9B553760D /* Models.swift in Sources */,
+				1592B106BE8CF68BA26758EC /* SharedData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C609E768534A334E0EE5A52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				438A5E573BD43FB6691D5D65 /* BlitzView.swift in Sources */,
+				70F8A218FEE9CC64D4F17085 /* Components.swift in Sources */,
+				C2DA4A85DE61C8B576DF672E /* Haptics.swift in Sources */,
+				1C1B5A02ED18EB0538FFEBF7 /* HomeView.swift in Sources */,
+				1D1A8F87FB2D58D061C9FDB3 /* ImparaWatchApp.swift in Sources */,
+				4A64E419364B97CE5531FC18 /* Models.swift in Sources */,
+				B906260957105C3CF58E2EE0 /* Reminders.swift in Sources */,
+				AA94B93CE1B23E1CA72FE736 /* ResultView.swift in Sources */,
+				49029145A822A9C7789FE602 /* SessionView.swift in Sources */,
+				F1D482E4ADEDF58D235669DD /* SharedData.swift in Sources */,
+				D1012795EC7BB24C08D6476E /* Store.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		58C801956DF37C129E901AB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E3426AE77A1C9F0D6FA89EB /* FlowUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2BA40EADF46484E65107EDBA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2DB979CCC5F36EC6D6770DAA /* ImparaWatch */;
+			targetProxy = 7B7C459C0947B95EB7181BE0 /* PBXContainerItemProxy */;
+		};
+		A45FE7B168C18A83B922E19A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4937DD8EFD09A9EB8F9B759F /* ImparaWidget */;
+			targetProxy = AB8CCA6CC56240EE0D99C8C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0038F0C955C9000019519256 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ImparaWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		05379682AAE91A89AB1B3D85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ImparaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatch.widget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		1C1038BAF21A562D660EE1B3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		432035650E146ECBE6AE0134 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ImparaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatch.widget;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		9470EB4F08028250DC35086B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatchUITests;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = ImparaWatch;
+			};
+			name = Debug;
+		};
+		9F7BE0C1CE343B383674B2F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ImparaWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		B539192F98626883E1448169 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		C411CEEE06AF5CB2083CA30B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.tischler.impara.ImparaWatchUITests;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = ImparaWatch;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		24AFAA6FC9DD9698BDA8DA23 /* Build configuration list for PBXProject "ImparaWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B539192F98626883E1448169 /* Debug */,
+				1C1038BAF21A562D660EE1B3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		519C7463F18FBD5DD97A2F26 /* Build configuration list for PBXNativeTarget "ImparaWatchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9470EB4F08028250DC35086B /* Debug */,
+				C411CEEE06AF5CB2083CA30B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BCBE90E5F40571E817A4FB58 /* Build configuration list for PBXNativeTarget "ImparaWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F7BE0C1CE343B383674B2F8 /* Debug */,
+				0038F0C955C9000019519256 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F066F90DD197F77DA514B828 /* Build configuration list for PBXNativeTarget "ImparaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05379682AAE91A89AB1B3D85 /* Debug */,
+				432035650E146ECBE6AE0134 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 607C1DF737E413FDE56FFDFD /* Project object */;
+}

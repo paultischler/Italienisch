@@ -1,0 +1,1383 @@
+[
+ {
+  "name": "Personen & Familie",
+  "words": [
+   {
+    "de": "die Familie",
+    "it": "la famiglia"
+   },
+   {
+    "de": "der Vater",
+    "it": "il padre"
+   },
+   {
+    "de": "die Mutter",
+    "it": "la madre"
+   },
+   {
+    "de": "der Sohn",
+    "it": "il figlio"
+   },
+   {
+    "de": "die Tochter",
+    "it": "la figlia"
+   },
+   {
+    "de": "der Bruder",
+    "it": "il fratello"
+   },
+   {
+    "de": "die Schwester",
+    "it": "la sorella"
+   },
+   {
+    "de": "der Ehemann",
+    "it": "il marito"
+   },
+   {
+    "de": "die Ehefrau",
+    "it": "la moglie"
+   },
+   {
+    "de": "der Großvater",
+    "it": "il nonno"
+   },
+   {
+    "de": "die Großmutter",
+    "it": "la nonna"
+   },
+   {
+    "de": "der Onkel",
+    "it": "lo zio"
+   },
+   {
+    "de": "die Tante",
+    "it": "la zia"
+   },
+   {
+    "de": "der Cousin",
+    "it": "il cugino"
+   },
+   {
+    "de": "die Cousine",
+    "it": "la cugina"
+   },
+   {
+    "de": "das Kind (Junge)",
+    "it": "il bambino"
+   },
+   {
+    "de": "das Kind (Mädchen)",
+    "it": "la bambina"
+   },
+   {
+    "de": "der Freund",
+    "it": "l'amico"
+   },
+   {
+    "de": "die Freundin",
+    "it": "l'amica"
+   },
+   {
+    "de": "der Nachbar",
+    "it": "il vicino"
+   },
+   {
+    "de": "die Nachbarin",
+    "it": "la vicina"
+   },
+   {
+    "de": "die Person",
+    "it": "la persona"
+   },
+   {
+    "de": "der Mann",
+    "it": "l'uomo"
+   },
+   {
+    "de": "die Frau",
+    "it": "la donna"
+   },
+   {
+    "de": "das Baby",
+    "it": "il bambino piccolo"
+   },
+   {
+    "de": "der Schwiegervater",
+    "it": "il suocero"
+   },
+   {
+    "de": "die Schwiegermutter",
+    "it": "la suocera"
+   },
+   {
+    "de": "der Neffe",
+    "it": "il nipote"
+   },
+   {
+    "de": "die Nichte",
+    "it": "la nipote"
+   },
+   {
+    "de": "das Pärchen",
+    "it": "la coppia"
+   },
+   {
+    "de": "der Bekannte",
+    "it": "il conoscente"
+   },
+   {
+    "de": "der Kollege",
+    "it": "il collega"
+   },
+   {
+    "de": "der Zwilling",
+    "it": "il gemello"
+   },
+   {
+    "de": "der Einzelkind",
+    "it": "il figlio unico"
+   },
+   {
+    "de": "die Verwandten",
+    "it": "i parenti"
+   },
+   {
+    "de": "die Geschwister",
+    "it": "i fratelli"
+   },
+   {
+    "de": "der Vorname",
+    "it": "il nome"
+   },
+   {
+    "de": "der Nachname",
+    "it": "il cognome"
+   }
+  ]
+ },
+ {
+  "name": "Essen & Trinken",
+  "words": [
+   {
+    "de": "das Wasser",
+    "it": "l'acqua"
+   },
+   {
+    "de": "der Wein",
+    "it": "il vino"
+   },
+   {
+    "de": "das Bier",
+    "it": "la birra"
+   },
+   {
+    "de": "der Kaffee",
+    "it": "il caffè"
+   },
+   {
+    "de": "der Tee",
+    "it": "il tè"
+   },
+   {
+    "de": "das Brot",
+    "it": "il pane"
+   },
+   {
+    "de": "die Pasta",
+    "it": "la pasta"
+   },
+   {
+    "de": "die Pizza",
+    "it": "la pizza"
+   },
+   {
+    "de": "das Fleisch",
+    "it": "la carne"
+   },
+   {
+    "de": "der Fisch",
+    "it": "il pesce"
+   },
+   {
+    "de": "das Gemüse",
+    "it": "la verdura"
+   },
+   {
+    "de": "das Obst",
+    "it": "la frutta"
+   },
+   {
+    "de": "der Käse",
+    "it": "il formaggio"
+   },
+   {
+    "de": "das Ei",
+    "it": "l'uovo"
+   },
+   {
+    "de": "die Milch",
+    "it": "il latte"
+   },
+   {
+    "de": "die Butter",
+    "it": "il burro"
+   },
+   {
+    "de": "der Zucker",
+    "it": "lo zucchero"
+   },
+   {
+    "de": "das Salz",
+    "it": "il sale"
+   },
+   {
+    "de": "der Pfeffer",
+    "it": "il pepe"
+   },
+   {
+    "de": "die Tomate",
+    "it": "il pomodoro"
+   },
+   {
+    "de": "die Kartoffel",
+    "it": "la patata"
+   },
+   {
+    "de": "der Apfel",
+    "it": "la mela"
+   },
+   {
+    "de": "die Orange",
+    "it": "l'arancia"
+   },
+   {
+    "de": "die Zitrone",
+    "it": "il limone"
+   },
+   {
+    "de": "das Eis",
+    "it": "il gelato"
+   },
+   {
+    "de": "die Suppe",
+    "it": "la zuppa"
+   },
+   {
+    "de": "der Salat",
+    "it": "l'insalata"
+   },
+   {
+    "de": "das Frühstück",
+    "it": "la colazione"
+   },
+   {
+    "de": "das Mittagessen",
+    "it": "il pranzo"
+   },
+   {
+    "de": "das Abendessen",
+    "it": "la cena"
+   },
+   {
+    "de": "der Saft",
+    "it": "il succo"
+   },
+   {
+    "de": "die Schokolade",
+    "it": "il cioccolato"
+   },
+   {
+    "de": "der Kuchen",
+    "it": "la torta"
+   },
+   {
+    "de": "das Risotto",
+    "it": "il risotto"
+   },
+   {
+    "de": "der Espresso",
+    "it": "l'espresso"
+   },
+   {
+    "de": "das Mineralwasser",
+    "it": "l'acqua minerale"
+   },
+   {
+    "de": "die Vorspeise",
+    "it": "l'antipasto"
+   },
+   {
+    "de": "das Dessert",
+    "it": "il dolce"
+   }
+  ]
+ },
+ {
+  "name": "Reisen & Verkehr",
+  "words": [
+   {
+    "de": "das Auto",
+    "it": "l'automobile"
+   },
+   {
+    "de": "der Zug",
+    "it": "il treno"
+   },
+   {
+    "de": "das Flugzeug",
+    "it": "l'aereo"
+   },
+   {
+    "de": "das Schiff",
+    "it": "la nave"
+   },
+   {
+    "de": "der Bus",
+    "it": "il bus"
+   },
+   {
+    "de": "das Fahrrad",
+    "it": "la bicicletta"
+   },
+   {
+    "de": "der Bahnhof",
+    "it": "la stazione"
+   },
+   {
+    "de": "der Flughafen",
+    "it": "l'aeroporto"
+   },
+   {
+    "de": "das Hotel",
+    "it": "l'hotel"
+   },
+   {
+    "de": "das Ticket",
+    "it": "il biglietto"
+   },
+   {
+    "de": "die Reise",
+    "it": "il viaggio"
+   },
+   {
+    "de": "der Urlaub",
+    "it": "le vacanze"
+   },
+   {
+    "de": "die Karte (Landkarte)",
+    "it": "la mappa"
+   },
+   {
+    "de": "die Straße",
+    "it": "la strada"
+   },
+   {
+    "de": "die Brücke",
+    "it": "il ponte"
+   },
+   {
+    "de": "der Hafen",
+    "it": "il porto"
+   },
+   {
+    "de": "die U-Bahn",
+    "it": "la metropolitana"
+   },
+   {
+    "de": "das Taxi",
+    "it": "il taxi"
+   },
+   {
+    "de": "der Pass",
+    "it": "il passaporto"
+   },
+   {
+    "de": "der Koffer",
+    "it": "la valigia"
+   },
+   {
+    "de": "der Rucksack",
+    "it": "lo zaino"
+   },
+   {
+    "de": "die Grenze",
+    "it": "il confine"
+   },
+   {
+    "de": "die Ankunft",
+    "it": "l'arrivo"
+   },
+   {
+    "de": "die Abfahrt",
+    "it": "la partenza"
+   },
+   {
+    "de": "der Umstieg",
+    "it": "il cambio"
+   },
+   {
+    "de": "die Autobahn",
+    "it": "l'autostrada"
+   },
+   {
+    "de": "das Motorrad",
+    "it": "la moto"
+   },
+   {
+    "de": "die Tankstelle",
+    "it": "il distributore"
+   },
+   {
+    "de": "das Gepäck",
+    "it": "il bagaglio"
+   },
+   {
+    "de": "der Reiseführer",
+    "it": "la guida turistica"
+   },
+   {
+    "de": "die Fahrkarte",
+    "it": "il biglietto del treno"
+   },
+   {
+    "de": "der Stau",
+    "it": "il traffico"
+   },
+   {
+    "de": "der Parkplatz",
+    "it": "il parcheggio"
+   },
+   {
+    "de": "die Haltestelle",
+    "it": "la fermata"
+   },
+   {
+    "de": "der Ausflug",
+    "it": "l'escursione"
+   },
+   {
+    "de": "das Zimmer",
+    "it": "la camera"
+   },
+   {
+    "de": "die Rezeption",
+    "it": "la reception"
+   },
+   {
+    "de": "die Sehenswürdigkeit",
+    "it": "il monumento"
+   }
+  ]
+ },
+ {
+  "name": "Haus & Wohnen",
+  "words": [
+   {
+    "de": "das Haus",
+    "it": "la casa"
+   },
+   {
+    "de": "die Wohnung",
+    "it": "l'appartamento"
+   },
+   {
+    "de": "das Zimmer",
+    "it": "la stanza"
+   },
+   {
+    "de": "die Küche",
+    "it": "la cucina"
+   },
+   {
+    "de": "das Badezimmer",
+    "it": "il bagno"
+   },
+   {
+    "de": "das Schlafzimmer",
+    "it": "la camera da letto"
+   },
+   {
+    "de": "das Wohnzimmer",
+    "it": "il salotto"
+   },
+   {
+    "de": "die Tür",
+    "it": "la porta"
+   },
+   {
+    "de": "das Fenster",
+    "it": "la finestra"
+   },
+   {
+    "de": "die Treppe",
+    "it": "la scala"
+   },
+   {
+    "de": "der Garten",
+    "it": "il giardino"
+   },
+   {
+    "de": "der Balkon",
+    "it": "il balcone"
+   },
+   {
+    "de": "der Tisch",
+    "it": "il tavolo"
+   },
+   {
+    "de": "der Stuhl",
+    "it": "la sedia"
+   },
+   {
+    "de": "das Bett",
+    "it": "il letto"
+   },
+   {
+    "de": "der Schrank",
+    "it": "l'armadio"
+   },
+   {
+    "de": "das Sofa",
+    "it": "il divano"
+   },
+   {
+    "de": "der Kühlschrank",
+    "it": "il frigorifero"
+   },
+   {
+    "de": "der Herd",
+    "it": "il fornello"
+   },
+   {
+    "de": "die Waschmaschine",
+    "it": "la lavatrice"
+   },
+   {
+    "de": "die Lampe",
+    "it": "la lampada"
+   },
+   {
+    "de": "der Spiegel",
+    "it": "lo specchio"
+   },
+   {
+    "de": "das Dach",
+    "it": "il tetto"
+   },
+   {
+    "de": "der Keller",
+    "it": "la cantina"
+   },
+   {
+    "de": "die Garage",
+    "it": "il garage"
+   },
+   {
+    "de": "die Miete",
+    "it": "l'affitto"
+   },
+   {
+    "de": "der Vermieter",
+    "it": "il proprietario"
+   },
+   {
+    "de": "der Nachbar",
+    "it": "il vicino di casa"
+   },
+   {
+    "de": "die Etage",
+    "it": "il piano"
+   },
+   {
+    "de": "der Aufzug",
+    "it": "l'ascensore"
+   },
+   {
+    "de": "der Teppich",
+    "it": "il tappeto"
+   },
+   {
+    "de": "der Vorhang",
+    "it": "la tenda"
+   },
+   {
+    "de": "das Handtuch",
+    "it": "l'asciugamano"
+   },
+   {
+    "de": "die Dusche",
+    "it": "la doccia"
+   },
+   {
+    "de": "die Badewanne",
+    "it": "la vasca da bagno"
+   },
+   {
+    "de": "der Eingang",
+    "it": "l'ingresso"
+   },
+   {
+    "de": "das Schloss",
+    "it": "la serratura"
+   },
+   {
+    "de": "der Schlüssel",
+    "it": "la chiave"
+   }
+  ]
+ },
+ {
+  "name": "Arbeit & Beruf",
+  "words": [
+   {
+    "de": "die Arbeit",
+    "it": "il lavoro"
+   },
+   {
+    "de": "das Büro",
+    "it": "l'ufficio"
+   },
+   {
+    "de": "der Chef",
+    "it": "il capo"
+   },
+   {
+    "de": "der Kollege",
+    "it": "il collega"
+   },
+   {
+    "de": "das Meeting",
+    "it": "la riunione"
+   },
+   {
+    "de": "der Vertrag",
+    "it": "il contratto"
+   },
+   {
+    "de": "das Gehalt",
+    "it": "lo stipendio"
+   },
+   {
+    "de": "der Urlaub (Arbeit)",
+    "it": "le ferie"
+   },
+   {
+    "de": "die Stelle",
+    "it": "il posto di lavoro"
+   },
+   {
+    "de": "der Arzt",
+    "it": "il medico"
+   },
+   {
+    "de": "der Lehrer",
+    "it": "l'insegnante"
+   },
+   {
+    "de": "der Anwalt",
+    "it": "l'avvocato"
+   },
+   {
+    "de": "der Ingenieur",
+    "it": "l'ingegnere"
+   },
+   {
+    "de": "der Verkäufer",
+    "it": "il commesso"
+   },
+   {
+    "de": "der Koch",
+    "it": "il cuoco"
+   },
+   {
+    "de": "die Firma",
+    "it": "l'azienda"
+   },
+   {
+    "de": "die Bewerbung",
+    "it": "la candidatura"
+   },
+   {
+    "de": "das Interview",
+    "it": "il colloquio"
+   },
+   {
+    "de": "die Erfahrung",
+    "it": "l'esperienza"
+   },
+   {
+    "de": "die Ausbildung",
+    "it": "la formazione"
+   },
+   {
+    "de": "das Projekt",
+    "it": "il progetto"
+   },
+   {
+    "de": "die Deadline",
+    "it": "la scadenza"
+   },
+   {
+    "de": "der Kunde",
+    "it": "il cliente"
+   },
+   {
+    "de": "die Rechnung",
+    "it": "la fattura"
+   },
+   {
+    "de": "der Computer",
+    "it": "il computer"
+   },
+   {
+    "de": "die E-Mail",
+    "it": "l'email"
+   },
+   {
+    "de": "der Drucker",
+    "it": "la stampante"
+   },
+   {
+    "de": "die Besprechung",
+    "it": "la conferenza"
+   },
+   {
+    "de": "der Praktikant",
+    "it": "il tirocinante"
+   },
+   {
+    "de": "die Kündigung",
+    "it": "il licenziamento"
+   },
+   {
+    "de": "der Architekt",
+    "it": "l'architetto"
+   },
+   {
+    "de": "der Buchhalter",
+    "it": "il contabile"
+   },
+   {
+    "de": "die Sekretärin",
+    "it": "la segretaria"
+   },
+   {
+    "de": "der Polizist",
+    "it": "il poliziotto"
+   },
+   {
+    "de": "der Feuerwehrmann",
+    "it": "il pompiere"
+   },
+   {
+    "de": "der Krankenpfleger",
+    "it": "l'infermiere"
+   },
+   {
+    "de": "die Überstunde",
+    "it": "l'ora di straordinario"
+   },
+   {
+    "de": "die Beförderung",
+    "it": "la promozione"
+   }
+  ]
+ },
+ {
+  "name": "Körper & Gesundheit",
+  "words": [
+   {
+    "de": "der Kopf",
+    "it": "la testa"
+   },
+   {
+    "de": "das Gesicht",
+    "it": "il viso"
+   },
+   {
+    "de": "das Auge",
+    "it": "l'occhio"
+   },
+   {
+    "de": "die Nase",
+    "it": "il naso"
+   },
+   {
+    "de": "der Mund",
+    "it": "la bocca"
+   },
+   {
+    "de": "das Ohr",
+    "it": "l'orecchio"
+   },
+   {
+    "de": "der Hals",
+    "it": "il collo"
+   },
+   {
+    "de": "die Schulter",
+    "it": "la spalla"
+   },
+   {
+    "de": "der Arm",
+    "it": "il braccio"
+   },
+   {
+    "de": "die Hand",
+    "it": "la mano"
+   },
+   {
+    "de": "der Finger",
+    "it": "il dito"
+   },
+   {
+    "de": "der Rücken",
+    "it": "la schiena"
+   },
+   {
+    "de": "der Bauch",
+    "it": "la pancia"
+   },
+   {
+    "de": "das Bein",
+    "it": "la gamba"
+   },
+   {
+    "de": "der Fuß",
+    "it": "il piede"
+   },
+   {
+    "de": "das Herz",
+    "it": "il cuore"
+   },
+   {
+    "de": "die Lunge",
+    "it": "il polmone"
+   },
+   {
+    "de": "das Blut",
+    "it": "il sangue"
+   },
+   {
+    "de": "der Schmerz",
+    "it": "il dolore"
+   },
+   {
+    "de": "das Fieber",
+    "it": "la febbre"
+   },
+   {
+    "de": "die Erkältung",
+    "it": "il raffreddore"
+   },
+   {
+    "de": "das Krankenhaus",
+    "it": "l'ospedale"
+   },
+   {
+    "de": "der Arzt",
+    "it": "il dottore"
+   },
+   {
+    "de": "die Apotheke",
+    "it": "la farmacia"
+   },
+   {
+    "de": "das Medikament",
+    "it": "la medicina"
+   },
+   {
+    "de": "die Allergie",
+    "it": "l'allergia"
+   },
+   {
+    "de": "der Knochen",
+    "it": "l'osso"
+   },
+   {
+    "de": "der Muskel",
+    "it": "il muscolo"
+   },
+   {
+    "de": "die Haut",
+    "it": "la pelle"
+   },
+   {
+    "de": "das Haar",
+    "it": "il capello"
+   },
+   {
+    "de": "der Zahn",
+    "it": "il dente"
+   },
+   {
+    "de": "der Arzttermin",
+    "it": "l'appuntamento dal medico"
+   },
+   {
+    "de": "die Operation",
+    "it": "l'operazione"
+   },
+   {
+    "de": "das Rezept",
+    "it": "la ricetta"
+   },
+   {
+    "de": "die Verletzung",
+    "it": "il ferito"
+   },
+   {
+    "de": "der Sport",
+    "it": "lo sport"
+   },
+   {
+    "de": "die Diät",
+    "it": "la dieta"
+   },
+   {
+    "de": "der Schlaf",
+    "it": "il sonno"
+   }
+  ]
+ },
+ {
+  "name": "Natur & Wetter",
+  "words": [
+   {
+    "de": "die Sonne",
+    "it": "il sole"
+   },
+   {
+    "de": "der Mond",
+    "it": "la luna"
+   },
+   {
+    "de": "der Stern",
+    "it": "la stella"
+   },
+   {
+    "de": "der Himmel",
+    "it": "il cielo"
+   },
+   {
+    "de": "die Wolke",
+    "it": "la nuvola"
+   },
+   {
+    "de": "der Regen",
+    "it": "la pioggia"
+   },
+   {
+    "de": "der Schnee",
+    "it": "la neve"
+   },
+   {
+    "de": "der Wind",
+    "it": "il vento"
+   },
+   {
+    "de": "das Gewitter",
+    "it": "il temporale"
+   },
+   {
+    "de": "der Blitz",
+    "it": "il fulmine"
+   },
+   {
+    "de": "die Hitze",
+    "it": "il caldo"
+   },
+   {
+    "de": "die Kälte",
+    "it": "il freddo"
+   },
+   {
+    "de": "der Berg",
+    "it": "la montagna"
+   },
+   {
+    "de": "das Meer",
+    "it": "il mare"
+   },
+   {
+    "de": "der See",
+    "it": "il lago"
+   },
+   {
+    "de": "der Fluss",
+    "it": "il fiume"
+   },
+   {
+    "de": "der Wald",
+    "it": "il bosco"
+   },
+   {
+    "de": "das Feld",
+    "it": "il campo"
+   },
+   {
+    "de": "die Wiese",
+    "it": "il prato"
+   },
+   {
+    "de": "der Strand",
+    "it": "la spiaggia"
+   },
+   {
+    "de": "die Insel",
+    "it": "l'isola"
+   },
+   {
+    "de": "der Baum",
+    "it": "l'albero"
+   },
+   {
+    "de": "die Blume",
+    "it": "il fiore"
+   },
+   {
+    "de": "das Tier",
+    "it": "l'animale"
+   },
+   {
+    "de": "der Hund",
+    "it": "il cane"
+   },
+   {
+    "de": "die Katze",
+    "it": "il gatto"
+   },
+   {
+    "de": "der Vogel",
+    "it": "l'uccello"
+   },
+   {
+    "de": "der Fisch",
+    "it": "il pesce"
+   },
+   {
+    "de": "die Temperaturen",
+    "it": "le temperature"
+   },
+   {
+    "de": "der Frühling",
+    "it": "la primavera"
+   },
+   {
+    "de": "der Sommer",
+    "it": "l'estate"
+   },
+   {
+    "de": "der Herbst",
+    "it": "l'autunno"
+   },
+   {
+    "de": "der Winter",
+    "it": "l'inverno"
+   },
+   {
+    "de": "die Natur",
+    "it": "la natura"
+   },
+   {
+    "de": "die Umwelt",
+    "it": "l'ambiente"
+   },
+   {
+    "de": "das Erdbeben",
+    "it": "il terremoto"
+   },
+   {
+    "de": "der Vulkan",
+    "it": "il vulcano"
+   },
+   {
+    "de": "die Wüste",
+    "it": "il deserto"
+   }
+  ]
+ },
+ {
+  "name": "Alltag & Freizeit",
+  "words": [
+   {
+    "de": "der Morgen",
+    "it": "il mattino"
+   },
+   {
+    "de": "der Mittag",
+    "it": "il mezzogiorno"
+   },
+   {
+    "de": "der Abend",
+    "it": "la sera"
+   },
+   {
+    "de": "die Nacht",
+    "it": "la notte"
+   },
+   {
+    "de": "heute",
+    "it": "oggi"
+   },
+   {
+    "de": "gestern",
+    "it": "ieri"
+   },
+   {
+    "de": "morgen",
+    "it": "domani"
+   },
+   {
+    "de": "die Woche",
+    "it": "la settimana"
+   },
+   {
+    "de": "der Monat",
+    "it": "il mese"
+   },
+   {
+    "de": "das Jahr",
+    "it": "l'anno"
+   },
+   {
+    "de": "die Uhr",
+    "it": "l'orologio"
+   },
+   {
+    "de": "die Minute",
+    "it": "il minuto"
+   },
+   {
+    "de": "die Stunde",
+    "it": "l'ora"
+   },
+   {
+    "de": "das Handy",
+    "it": "il cellulare"
+   },
+   {
+    "de": "der Fernseher",
+    "it": "la televisione"
+   },
+   {
+    "de": "das Internet",
+    "it": "internet"
+   },
+   {
+    "de": "das Buch",
+    "it": "il libro"
+   },
+   {
+    "de": "die Zeitung",
+    "it": "il giornale"
+   },
+   {
+    "de": "der Film",
+    "it": "il film"
+   },
+   {
+    "de": "die Musik",
+    "it": "la musica"
+   },
+   {
+    "de": "der Sport",
+    "it": "lo sport"
+   },
+   {
+    "de": "das Spiel",
+    "it": "il gioco"
+   },
+   {
+    "de": "der Markt",
+    "it": "il mercato"
+   },
+   {
+    "de": "der Supermarkt",
+    "it": "il supermercato"
+   },
+   {
+    "de": "die Schule",
+    "it": "la scuola"
+   },
+   {
+    "de": "die Universität",
+    "it": "l'università"
+   },
+   {
+    "de": "die Bibliothek",
+    "it": "la biblioteca"
+   },
+   {
+    "de": "das Museum",
+    "it": "il museo"
+   },
+   {
+    "de": "das Kino",
+    "it": "il cinema"
+   },
+   {
+    "de": "das Theater",
+    "it": "il teatro"
+   },
+   {
+    "de": "das Restaurant",
+    "it": "il ristorante"
+   },
+   {
+    "de": "der Friseur",
+    "it": "il parrucchiere"
+   },
+   {
+    "de": "die Post",
+    "it": "la posta"
+   },
+   {
+    "de": "die Bank",
+    "it": "la banca"
+   },
+   {
+    "de": "die Kirche",
+    "it": "la chiesa"
+   },
+   {
+    "de": "der Park",
+    "it": "il parco"
+   },
+   {
+    "de": "die Reise",
+    "it": "il viaggio"
+   },
+   {
+    "de": "das Foto",
+    "it": "la foto"
+   }
+  ]
+ },
+ {
+  "name": "Adverbien & Ausdrücke",
+  "words": [
+   {
+    "de": "manchmal",
+    "it": "a volte"
+   },
+   {
+    "de": "normalerweise",
+    "it": "di solito"
+   },
+   {
+    "de": "immer",
+    "it": "sempre"
+   },
+   {
+    "de": "nie",
+    "it": "mai"
+   },
+   {
+    "de": "oft",
+    "it": "spesso"
+   },
+   {
+    "de": "selten",
+    "it": "raramente"
+   },
+   {
+    "de": "jeden Tag",
+    "it": "ogni giorno"
+   },
+   {
+    "de": "ab und zu",
+    "it": "ogni tanto"
+   },
+   {
+    "de": "sofort",
+    "it": "subito"
+   },
+   {
+    "de": "bald",
+    "it": "presto"
+   },
+   {
+    "de": "endlich",
+    "it": "finalmente"
+   },
+   {
+    "de": "schon",
+    "it": "già"
+   },
+   {
+    "de": "noch nicht",
+    "it": "non ancora"
+   },
+   {
+    "de": "vielleicht",
+    "it": "forse"
+   },
+   {
+    "de": "wahrscheinlich",
+    "it": "probabilmente"
+   },
+   {
+    "de": "natürlich",
+    "it": "naturalmente"
+   },
+   {
+    "de": "leider",
+    "it": "purtroppo"
+   },
+   {
+    "de": "zum Glück",
+    "it": "per fortuna"
+   },
+   {
+    "de": "ungefähr",
+    "it": "circa"
+   },
+   {
+    "de": "fast",
+    "it": "quasi"
+   },
+   {
+    "de": "genug",
+    "it": "abbastanza"
+   },
+   {
+    "de": "ein bisschen",
+    "it": "un po'"
+   },
+   {
+    "de": "besonders",
+    "it": "soprattutto"
+   },
+   {
+    "de": "zusammen",
+    "it": "insieme"
+   },
+   {
+    "de": "alleine",
+    "it": "da solo"
+   },
+   {
+    "de": "trotzdem",
+    "it": "comunque"
+   },
+   {
+    "de": "außerdem",
+    "it": "inoltre"
+   },
+   {
+    "de": "also / deshalb",
+    "it": "quindi"
+   },
+   {
+    "de": "wenigstens",
+    "it": "almeno"
+   },
+   {
+    "de": "übrigens",
+    "it": "tra l'altro"
+   }
+  ]
+ }
+]
