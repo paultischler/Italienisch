@@ -26,17 +26,34 @@ final class FlowUITests: XCTestCase {
         XCTAssertFalse(grade.exists, "Bewertungstasten dürfen vor dem Aufdecken nicht da sein")
 
         for round in 1...5 {
-            // Karte 1 und 3 über die Krone aufdecken, die anderen per Tippen.
-            // Die Rückseite rollt inzwischen; der Kronen-Fokus der Vorderseite
-            // muss auch nach dem ersten Umschalten erhalten bleiben.
-            if round == 1 || round == 3 {
+            if round == 1 {
+                // Die Krone darf die Karte NICHT aufdecken.
                 XCUIDevice.shared.rotateDigitalCrown(delta: 1.0)
-                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Krone deckt Karte \(round) nicht auf")
+                sleep(2)
+                XCTAssertFalse(grade.exists, "Krone hat die Karte aufgedeckt, soll sie aber nicht")
+                center().tap()
+            } else if round == 3 {
+                // Doppeltipp deckt auf.
+                XCUIDevice.shared.perform(handGesture: .doubleTap)
             } else {
                 center().tap()
-                XCTAssertTrue(grade.waitForExistence(timeout: 5), "Tippen deckt Karte \(round) nicht auf")
             }
+            XCTAssertTrue(grade.waitForExistence(timeout: 5), "Karte \(round) nicht aufgedeckt")
             step("03-card-back-\(round)")
+
+            // Karte 4 ist höher als der Bildschirm. Die Krone muss sofort
+            // rollen, ohne dass vorher jemand mit dem Finger gewischt hat.
+            if round == 4 {
+                let before = grade.frame.maxY
+                XCTAssertGreaterThan(before, 257, "Karte 4 sollte über den Rand laufen")
+                XCUIDevice.shared.rotateDigitalCrown(delta: 1.0)
+                sleep(2)
+                let after = grade.frame.maxY
+                step("03-card-back-4-gerollt")
+                XCTAssertLessThan(after, before - 20,
+                                  "Krone rollt die Rückseite nicht (vorher \(before), nachher \(after))")
+            }
+
             grade.tap()
             sleep(1)
         }

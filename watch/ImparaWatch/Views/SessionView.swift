@@ -10,8 +10,10 @@ struct SessionView: View {
     @State private var index = 0
     @State private var revealed = false
     @State private var results: [Bool] = []
-    @State private var crown = 0.0
     @State private var finished = false
+    /// Die Rückseite muss den Fokus selbst nehmen, sonst rollt die Krone
+    /// erst, nachdem man einmal mit dem Finger gewischt hat.
+    @FocusState private var backFocused: Bool
 
     var body: some View {
         Group {
@@ -112,12 +114,15 @@ struct SessionView: View {
             }
         }
         .padding(.horizontal, 6)
+        .focused($backFocused)
+        .onAppear { backFocused = true }
     }
 
-    /// Vorderseite, auch im Always-On-Zustand. Sie rollt nicht, damit die Krone
-    /// zum Aufdecken frei bleibt; deshalb hält sie sich mit eigenem Abstand
-    /// unter der Navigationsleiste: die bleibt 66pt hoch, Zurück-Pfeil und
-    /// Titel enden bei 58pt. Gemessen mit dem UI-Test, siehe README.
+    /// Vorderseite, auch im Always-On-Zustand. Aufgedeckt wird nur durch Tippen
+    /// aufs Display oder Doppeltipp — die Krone tut hier bewusst nichts, damit
+    /// sie ganz der Rückseite gehört. Die Ansicht rollt nicht und hält sich
+    /// deshalb mit eigenem Abstand unter der Navigationsleiste: die bleibt 66pt
+    /// hoch, Zurück-Pfeil und Titel enden bei 58pt. Siehe README.
     private var coveredView: some View {
         VStack(spacing: 4) {
             header
@@ -149,12 +154,6 @@ struct SessionView: View {
         .padding(.horizontal, 6)
         .contentShape(Rectangle())
         .onTapGesture { if !revealed { reveal() } }
-        .focusable()
-        .digitalCrownRotation($crown, from: 0, through: 1, by: 0.25, sensitivity: .medium,
-                              isContinuous: false, isHapticFeedbackEnabled: false)
-        .onChange(of: crown) { _, value in
-            if value >= 0.5 && !revealed { reveal() }
-        }
     }
 
     private func restart() {
@@ -162,7 +161,6 @@ struct SessionView: View {
         index = 0
         results = []
         revealed = false
-        crown = 0
         finished = false
     }
 
@@ -178,7 +176,6 @@ struct SessionView: View {
         if index + 1 < cards.count {
             index += 1
             revealed = false
-            crown = 0
         } else {
             store.logSession(kind: "due", total: cards.count, correct: results.filter { $0 }.count)
             Haptics.finished()
