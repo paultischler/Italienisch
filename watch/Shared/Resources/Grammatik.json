@@ -1,0 +1,614 @@
+[
+ {
+  "name": "Modalverben",
+  "words": [
+   {
+    "de": "ich will (volere)",
+    "it": "voglio"
+   },
+   {
+    "de": "du willst (volere)",
+    "it": "vuoi"
+   },
+   {
+    "de": "er/sie will (volere)",
+    "it": "vuole"
+   },
+   {
+    "de": "wir wollen (volere)",
+    "it": "vogliamo"
+   },
+   {
+    "de": "ihr wollt (volere)",
+    "it": "volete"
+   },
+   {
+    "de": "sie wollen (volere)",
+    "it": "vogliono"
+   },
+   {
+    "de": "ich kann (potere)",
+    "it": "posso"
+   },
+   {
+    "de": "du kannst (potere)",
+    "it": "puoi"
+   },
+   {
+    "de": "er/sie kann (potere)",
+    "it": "può"
+   },
+   {
+    "de": "wir können (potere)",
+    "it": "possiamo"
+   },
+   {
+    "de": "ihr könnt (potere)",
+    "it": "potete"
+   },
+   {
+    "de": "sie können (potere)",
+    "it": "possono"
+   },
+   {
+    "de": "ich muss (dovere)",
+    "it": "devo"
+   },
+   {
+    "de": "du musst (dovere)",
+    "it": "devi"
+   },
+   {
+    "de": "er/sie muss (dovere)",
+    "it": "deve"
+   },
+   {
+    "de": "wir müssen (dovere)",
+    "it": "dobbiamo"
+   },
+   {
+    "de": "ihr müsst (dovere)",
+    "it": "dovete"
+   },
+   {
+    "de": "sie müssen (dovere)",
+    "it": "devono"
+   },
+   {
+    "de": "ich weiß/kann (sapere)",
+    "it": "so"
+   },
+   {
+    "de": "du weißt/kannst (sapere)",
+    "it": "sai"
+   },
+   {
+    "de": "er/sie weiß/kann (sapere)",
+    "it": "sa"
+   },
+   {
+    "de": "wir wissen/können (sapere)",
+    "it": "sappiamo"
+   },
+   {
+    "de": "ihr wisst/könnt (sapere)",
+    "it": "sapete"
+   },
+   {
+    "de": "sie wissen/können (sapere)",
+    "it": "sanno"
+   }
+  ]
+ },
+ {
+  "name": "Präpositionen",
+  "words": [
+   {
+    "de": "a + il =",
+    "it": "al"
+   },
+   {
+    "de": "a + lo =",
+    "it": "allo"
+   },
+   {
+    "de": "a + la =",
+    "it": "alla"
+   },
+   {
+    "de": "a + i =",
+    "it": "ai"
+   },
+   {
+    "de": "a + gli =",
+    "it": "agli"
+   },
+   {
+    "de": "a + le =",
+    "it": "alle"
+   },
+   {
+    "de": "di + il =",
+    "it": "del"
+   },
+   {
+    "de": "di + lo =",
+    "it": "dello"
+   },
+   {
+    "de": "di + la =",
+    "it": "della"
+   },
+   {
+    "de": "di + i =",
+    "it": "dei"
+   },
+   {
+    "de": "di + gli =",
+    "it": "degli"
+   },
+   {
+    "de": "di + le =",
+    "it": "delle"
+   },
+   {
+    "de": "in + il =",
+    "it": "nel"
+   },
+   {
+    "de": "in + lo =",
+    "it": "nello"
+   },
+   {
+    "de": "in + la =",
+    "it": "nella"
+   },
+   {
+    "de": "in + i =",
+    "it": "nei"
+   },
+   {
+    "de": "in + gli =",
+    "it": "negli"
+   },
+   {
+    "de": "in + le =",
+    "it": "nelle"
+   },
+   {
+    "de": "da + il =",
+    "it": "dal"
+   },
+   {
+    "de": "da + la =",
+    "it": "dalla"
+   },
+   {
+    "de": "da + i =",
+    "it": "dai"
+   },
+   {
+    "de": "da + le =",
+    "it": "dalle"
+   },
+   {
+    "de": "su + il =",
+    "it": "sul"
+   },
+   {
+    "de": "su + la =",
+    "it": "sulla"
+   },
+   {
+    "de": "su + i =",
+    "it": "sui"
+   },
+   {
+    "de": "su + le =",
+    "it": "sulle"
+   },
+   {
+    "de": "Vado ___ cinema.",
+    "it": "al"
+   },
+   {
+    "de": "Andiamo ___ ristorante.",
+    "it": "al"
+   },
+   {
+    "de": "Il gatto dorme ___ divano.",
+    "it": "sul"
+   },
+   {
+    "de": "I libri sono ___ tavolo.",
+    "it": "sul"
+   },
+   {
+    "de": "La chiave è ___ borsa.",
+    "it": "nella"
+   },
+   {
+    "de": "Abito ___ città.",
+    "it": "nella"
+   },
+   {
+    "de": "La festa è ___ giardino.",
+    "it": "nel"
+   },
+   {
+    "de": "Parlo ___ professore.",
+    "it": "del"
+   },
+   {
+    "de": "Il colore ___ cielo.",
+    "it": "del"
+   },
+   {
+    "de": "È la macchina ___ vicini.",
+    "it": "dei"
+   },
+   {
+    "de": "Esco ___ casa.",
+    "it": "dalla"
+   },
+   {
+    "de": "Vengo ___ montagne.",
+    "it": "dalle"
+   },
+   {
+    "de": "Penso ___ vacanze.",
+    "it": "alle"
+   },
+   {
+    "de": "Metto i piatti ___ tavoli.",
+    "it": "sui"
+   }
+  ]
+ },
+ {
+  "name": "Präsenz",
+  "words": [
+   {
+    "de": "ich spreche (parlare)",
+    "it": "parlo"
+   },
+   {
+    "de": "du sprichst (parlare)",
+    "it": "parli"
+   },
+   {
+    "de": "er/sie spricht (parlare)",
+    "it": "parla"
+   },
+   {
+    "de": "wir sprechen (parlare)",
+    "it": "parliamo"
+   },
+   {
+    "de": "ihr sprecht (parlare)",
+    "it": "parlate"
+   },
+   {
+    "de": "sie sprechen (parlare)",
+    "it": "parlano"
+   },
+   {
+    "de": "ich schreibe (scrivere)",
+    "it": "scrivo"
+   },
+   {
+    "de": "du schreibst (scrivere)",
+    "it": "scrivi"
+   },
+   {
+    "de": "er/sie schreibt (scrivere)",
+    "it": "scrive"
+   },
+   {
+    "de": "wir schreiben (scrivere)",
+    "it": "scriviamo"
+   },
+   {
+    "de": "ihr schreibt (scrivere)",
+    "it": "scrivete"
+   },
+   {
+    "de": "sie schreiben (scrivere)",
+    "it": "scrivono"
+   },
+   {
+    "de": "ich schlafe (dormire)",
+    "it": "dormo"
+   },
+   {
+    "de": "du schläfst (dormire)",
+    "it": "dormi"
+   },
+   {
+    "de": "er/sie schläft (dormire)",
+    "it": "dorme"
+   },
+   {
+    "de": "wir schlafen (dormire)",
+    "it": "dormiamo"
+   },
+   {
+    "de": "ihr schlaft (dormire)",
+    "it": "dormite"
+   },
+   {
+    "de": "sie schlafen (dormire)",
+    "it": "dormono"
+   },
+   {
+    "de": "ich verstehe (capire)",
+    "it": "capisco"
+   },
+   {
+    "de": "du verstehst (capire)",
+    "it": "capisci"
+   },
+   {
+    "de": "er/sie versteht (capire)",
+    "it": "capisce"
+   },
+   {
+    "de": "wir verstehen (capire)",
+    "it": "capiamo"
+   },
+   {
+    "de": "sie verstehen (capire)",
+    "it": "capiscono"
+   },
+   {
+    "de": "ich bin (essere)",
+    "it": "sono"
+   },
+   {
+    "de": "du bist (essere)",
+    "it": "sei"
+   },
+   {
+    "de": "er/sie ist (essere)",
+    "it": "è"
+   },
+   {
+    "de": "wir sind (essere)",
+    "it": "siamo"
+   },
+   {
+    "de": "ihr seid (essere)",
+    "it": "siete"
+   },
+   {
+    "de": "sie sind (essere)",
+    "it": "sono"
+   },
+   {
+    "de": "ich habe (avere)",
+    "it": "ho"
+   },
+   {
+    "de": "du hast (avere)",
+    "it": "hai"
+   },
+   {
+    "de": "er/sie hat (avere)",
+    "it": "ha"
+   },
+   {
+    "de": "wir haben (avere)",
+    "it": "abbiamo"
+   },
+   {
+    "de": "ihr habt (avere)",
+    "it": "avete"
+   },
+   {
+    "de": "sie haben (avere)",
+    "it": "hanno"
+   },
+   {
+    "de": "ich gehe (andare)",
+    "it": "vado"
+   },
+   {
+    "de": "du gehst (andare)",
+    "it": "vai"
+   },
+   {
+    "de": "er/sie geht (andare)",
+    "it": "va"
+   },
+   {
+    "de": "wir gehen (andare)",
+    "it": "andiamo"
+   },
+   {
+    "de": "ihr geht (andare)",
+    "it": "andate"
+   },
+   {
+    "de": "sie gehen (andare)",
+    "it": "vanno"
+   },
+   {
+    "de": "ich mache (fare)",
+    "it": "faccio"
+   },
+   {
+    "de": "du machst (fare)",
+    "it": "fai"
+   },
+   {
+    "de": "er/sie macht (fare)",
+    "it": "fa"
+   },
+   {
+    "de": "wir machen (fare)",
+    "it": "facciamo"
+   },
+   {
+    "de": "ihr macht (fare)",
+    "it": "fate"
+   },
+   {
+    "de": "sie machen (fare)",
+    "it": "fanno"
+   },
+   {
+    "de": "ich komme (venire)",
+    "it": "vengo"
+   },
+   {
+    "de": "du kommst (venire)",
+    "it": "vieni"
+   },
+   {
+    "de": "er/sie kommt (venire)",
+    "it": "viene"
+   },
+   {
+    "de": "wir kommen (venire)",
+    "it": "veniamo"
+   },
+   {
+    "de": "sie kommen (venire)",
+    "it": "vengono"
+   }
+  ]
+ },
+ {
+  "name": "Vergangenheit",
+  "words": [
+   {
+    "de": "ich habe gesprochen (parlare)",
+    "it": "ho parlato"
+   },
+   {
+    "de": "du hast gesprochen (parlare)",
+    "it": "hai parlato"
+   },
+   {
+    "de": "er/sie hat gesprochen (parlare)",
+    "it": "ha parlato"
+   },
+   {
+    "de": "wir haben gesprochen (parlare)",
+    "it": "abbiamo parlato"
+   },
+   {
+    "de": "ihr habt gesprochen (parlare)",
+    "it": "avete parlato"
+   },
+   {
+    "de": "sie haben gesprochen (parlare)",
+    "it": "hanno parlato"
+   },
+   {
+    "de": "ich habe geschrieben (scrivere)",
+    "it": "ho scritto"
+   },
+   {
+    "de": "du hast geschrieben (scrivere)",
+    "it": "hai scritto"
+   },
+   {
+    "de": "er/sie hat geschrieben (scrivere)",
+    "it": "ha scritto"
+   },
+   {
+    "de": "wir haben geschrieben (scrivere)",
+    "it": "abbiamo scritto"
+   },
+   {
+    "de": "ich habe geschlafen (dormire)",
+    "it": "ho dormito"
+   },
+   {
+    "de": "du hast geschlafen (dormire)",
+    "it": "hai dormito"
+   },
+   {
+    "de": "er/sie hat geschlafen (dormire)",
+    "it": "ha dormito"
+   },
+   {
+    "de": "ich habe gemacht (fare)",
+    "it": "ho fatto"
+   },
+   {
+    "de": "du hast gemacht (fare)",
+    "it": "hai fatto"
+   },
+   {
+    "de": "er/sie hat gemacht (fare)",
+    "it": "ha fatto"
+   },
+   {
+    "de": "wir haben gemacht (fare)",
+    "it": "abbiamo fatto"
+   },
+   {
+    "de": "ich bin gegangen (andare)",
+    "it": "sono andato"
+   },
+   {
+    "de": "du bist gegangen (andare)",
+    "it": "sei andato"
+   },
+   {
+    "de": "er ist gegangen (andare)",
+    "it": "è andato"
+   },
+   {
+    "de": "sie ist gegangen (andare)",
+    "it": "è andata"
+   },
+   {
+    "de": "wir sind gegangen (andare)",
+    "it": "siamo andati"
+   },
+   {
+    "de": "ich bin gewesen (essere)",
+    "it": "sono stato"
+   },
+   {
+    "de": "du bist gewesen (essere)",
+    "it": "sei stato"
+   },
+   {
+    "de": "er/sie ist gewesen (essere)",
+    "it": "è stato"
+   },
+   {
+    "de": "wir sind gewesen (essere)",
+    "it": "siamo stati"
+   },
+   {
+    "de": "ich bin gekommen (venire)",
+    "it": "sono venuto"
+   },
+   {
+    "de": "du bist gekommen (venire)",
+    "it": "sei venuto"
+   },
+   {
+    "de": "er/sie ist gekommen (venire)",
+    "it": "è venuto"
+   },
+   {
+    "de": "ich habe gehabt (avere)",
+    "it": "ho avuto"
+   },
+   {
+    "de": "du hast gehabt (avere)",
+    "it": "hai avuto"
+   },
+   {
+    "de": "er/sie hat gehabt (avere)",
+    "it": "ha avuto"
+   }
+  ]
+ }
+]
