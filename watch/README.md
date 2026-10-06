@@ -41,7 +41,7 @@ xcrun devicectl device install app --device <UDID> \
   <DerivedData>/Build/Products/Debug-watchos/ImparaWatch.app
 ```
 
-Xcode 27 liefert keine eigene Simulator.app mehr, man kann also nicht einfach mit der Maus im Uhren-Simulator klicken. Die Bedienung prüft stattdessen der UI-Test in `ImparaWatchUITests`: er deckt eine Karte auf, bewertet fünf Karten, spielt eine Blitzrunde und legt zu jedem Schritt einen Screenshot ab.
+Xcode 27 liefert keine eigene Simulator.app mehr, man kann also nicht einfach mit der Maus im Uhren-Simulator klicken. Die Bedienung prüft stattdessen der UI-Test in `ImparaWatchUITests`: er deckt eine Karte auf, bewertet fünf Karten, spielt eine Blitzrunde, öffnet die Lösungen, startet „Falsche wiederholen“ und legt zu jedem Schritt einen Screenshot ab. Die Kronen-Prüfung läuft an der ersten Rückseite, die über den Bildschirm hinausgeht; welche das ist, hängt vom gespeicherten Lernstand ab.
 
 ```
 xcodebuild -project ImparaWatch.xcodeproj -scheme ImparaWatch \

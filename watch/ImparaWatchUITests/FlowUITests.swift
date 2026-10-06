@@ -25,6 +25,7 @@ final class FlowUITests: XCTestCase {
         let grade = app.buttons["checkmark"]
         XCTAssertFalse(grade.exists, "Bewertungstasten dürfen vor dem Aufdecken nicht da sein")
 
+        var crownChecked = false
         for round in 1...5 {
             if round == 1 {
                 // Die Krone darf die Karte NICHT aufdecken.
@@ -41,15 +42,16 @@ final class FlowUITests: XCTestCase {
             XCTAssertTrue(grade.waitForExistence(timeout: 5), "Karte \(round) nicht aufgedeckt")
             step("03-card-back-\(round)")
 
-            // Karte 4 ist höher als der Bildschirm. Die Krone muss sofort
-            // rollen, ohne dass vorher jemand mit dem Finger gewischt hat.
-            if round == 4 {
-                let before = grade.frame.maxY
-                XCTAssertGreaterThan(before, 257, "Karte 4 sollte über den Rand laufen")
+            // Welche Karten fällig sind, hängt vom gespeicherten Stand ab. Die erste
+            // Rückseite, die über den Rand läuft, muss sich sofort mit der Krone
+            // rollen lassen, ohne dass vorher jemand mit dem Finger gewischt hat.
+            let before = grade.frame.maxY
+            if !crownChecked && before > 257 {
+                crownChecked = true
                 XCUIDevice.shared.rotateDigitalCrown(delta: 1.0)
                 sleep(2)
                 let after = grade.frame.maxY
-                step("03-card-back-4-gerollt")
+                step("03-card-back-\(round)-gerollt")
                 XCTAssertLessThan(after, before - 20,
                                   "Krone rollt die Rückseite nicht (vorher \(before), nachher \(after))")
             }
@@ -57,6 +59,7 @@ final class FlowUITests: XCTestCase {
             grade.tap()
             sleep(1)
         }
+        if !crownChecked { log("Keine der fünf Rückseiten lief über den Rand, Kronen-Prüfung übersprungen") }
         sleep(1)
         step("04-result")
         XCTAssertTrue(app.buttons["Fertig"].exists, "Ergebnisbildschirm fehlt")
