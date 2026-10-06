@@ -75,11 +75,33 @@ final class FlowUITests: XCTestCase {
             XCTAssertEqual(options.count, 3, "Blitz \(round) zeigt nicht drei Antworten")
             log("Blitz \(round): " + options.map { "'\($0.label)'" }.joined(separator: ", "))
             options[2].tap()
-            sleep(2)
+            if round == 1 {
+                // Färbung muss sichtbar sein, bevor die nächste Frage kommt.
+                usleep(400_000)
+                step("05b-blitz-feedback")
+            }
+            sleep(3)
         }
         sleep(1)
         step("06-blitz-result")
         XCTAssertTrue(app.buttons["Fertig"].exists, "Blitz-Ergebnis fehlt")
+
+        // --- Lösungsliste ---
+        let solutions = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Lösungen'")).firstMatch
+        XCTAssertTrue(solutions.exists, "Taste Lösungen fehlt")
+        solutions.tap()
+        sleep(2)
+        step("07-blitz-solutions")
+        app.buttons["BackButton"].firstMatch.tap()
+        sleep(2)
+
+        // --- Falsche wiederholen (nur wenn es Fehler gab) ---
+        let retry = app.buttons.matching(NSPredicate(format: "label CONTAINS 'wiederholen'")).firstMatch
+        if retry.exists {
+            retry.tap()
+            sleep(2)
+            step("08-blitz-retry")
+        }
     }
 
     // MARK: Hilfen

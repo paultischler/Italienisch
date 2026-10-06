@@ -64,9 +64,11 @@ Ohne diese Datei fällt die App auf `sample-backup.json` zurück (20 Beispielkar
 
 Zieht aus dem Grundwortschatz (`Shared/Resources/Grundwortschatz.json`, 334 Wörter in 9 Kategorien) und der Grammatik (`Shared/Resources/Grammatik.json`: Modalverben, Präpositionen, Präsenz, Vergangenheit, 148 Einträge). Beide Dateien sind aus `app.js` exportiert. Die falschen Antworten kommen aus derselben Kategorie.
 
+Nach dem Antippen färbt sich die richtige Antwort grün, eine falsch gewählte rot, oben rechts erscheint ein Haken oder ein Kreuz. Nach einer falschen Antwort bleibt die Färbung knapp zwei Sekunden stehen, damit die Lösung lesbar ist. Der Ergebnisbildschirm bietet „Falsche wiederholen“ (eine neue Runde nur mit den falsch beantworteten Wörtern, Antworten neu gemischt), „Lösungen“ (alle Fragen mit Lösung und der eigenen falschen Antwort) und „Ancora“ für fünf neue Wörter. Der Doppeltipp löst „Falsche wiederholen“ aus, wenn es Fehler gab, sonst „Ancora“.
+
 ## Doppeltipp
 
-Ab watchOS 11 löst die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusammen) pro Bildschirm eine Taste aus: auf dem Start „5 fällige“, auf der Kartenvorderseite das Aufdecken, auf der Rückseite „Richtig“, im Ergebnis „Noch 5“. Damit lässt sich eine Runde einhändig durchgehen; nur „Falsch“ braucht einen Fingertipp auf die rote Taste. Die Blitzrunde hat keine Doppeltipp-Belegung, weil dort drei gleichwertige Antworten zur Wahl stehen. Wer alles einhändig will, schaltet zusätzlich AssistiveTouch ein (Einstellungen > Bedienungshilfen > AssistiveTouch > Handgesten); damit lassen sich auch ✗ und die Blitz-Antworten per Kneifen und Faustschluss ansteuern.
+Ab watchOS 11 löst die Doppeltipp-Geste (Zeigefinger und Daumen zweimal zusammen) pro Bildschirm eine Taste aus: auf dem Start „5 fällige“, auf der Kartenvorderseite das Aufdecken, auf der Rückseite „Richtig“, im Ergebnis „Noch 5“. Damit lässt sich eine Runde einhändig durchgehen; nur „Falsch“ braucht einen Fingertipp auf die rote Taste. Während der Blitzfragen gibt es keine Doppeltipp-Belegung, weil dort drei gleichwertige Antworten zur Wahl stehen; im Ergebnis der Blitzrunde löst er „Falsche wiederholen“ bzw. „Ancora“ aus. Wer alles einhändig will, schaltet zusätzlich AssistiveTouch ein (Einstellungen > Bedienungshilfen > AssistiveTouch > Handgesten); damit lassen sich auch ✗ und die Blitz-Antworten per Kneifen und Faustschluss ansteuern.
 
 ## Dateien
 
